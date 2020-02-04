@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">MyAppX</string>
+    <string name="login_user">用户名</string>
+    <string name="login_password">密码</string>
+    <string name="login_sure">登录</string>
+    <string name="login_exit">退出</string>
+    <string name="login_tip_user">请输入用户名</string>
+    <string name="login_tip_password">请输入密码</string>
+    <string name="login_Wrong">用户名或则密码错误</string>
+    <string name="login_null">用户名和密码不能为空</string>
+    <string name="login_effect">用户名和密码只能有大小写字母和数字组成</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">当地天气</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <dimen name="App_title">32sp</dimen>
+    <dimen name="App_big">44sp</dimen>
+    <dimen name="card_title">24sp</dimen>
+    <dimen name="card_text">16sp</dimen>
+    <dimen name="card_one">48dp</dimen>
+    <dimen name="card_three">88dp</dimen>
+
+
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="bar_height">200dp</dimen>
+</resources>
