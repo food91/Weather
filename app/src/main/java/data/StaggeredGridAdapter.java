@@ -92,7 +92,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
-
+2`12`1
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int h= (int) (Math.random()%600+200);
