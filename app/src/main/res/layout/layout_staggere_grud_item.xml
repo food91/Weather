@@ -25,36 +25,36 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
 
+            >
             <TextView
-                android:id="@+id/city_text"
+                android:id="@+id/city_text_two"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="湖南"
+                android:textSize="@dimen/card_title" />
+            <TextView
+                android:id="@+id/weatherday_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/weatherday_textview"
                 android:layout_margin="8dp"
-                android:textSize="@dimen/card_title"
-                android:text="深圳" />
+                android:layout_toEndOf="@id/city_text_two"
+                android:text="提示"
+                android:textSize="@dimen/card_text" />
 
             <TextView
                 android:id="@+id/wind_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/city_text"
-                android:layout_below="@id/city_text"
+                android:layout_alignStart="@id/weatherday_textview"
+                android:layout_toEndOf="@id/city_text_two"
+                android:layout_below="@id/weatherday_textview"
                 android:text="大风"
-                android:textSize="@dimen/card_text"
-                android:layout_margin="8dp"
-                />
+                android:textSize="@dimen/card_text" />
 
-            <TextView
-                android:id="@+id/weatherday_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/App_big"
-                android:text="16"
-                android:layout_margin="8dp"
-                />
 
         </RelativeLayout>
 

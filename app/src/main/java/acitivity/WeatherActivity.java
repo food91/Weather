@@ -21,6 +21,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -51,6 +52,7 @@ public class WeatherActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private WeatherControl weatherControl;
     private StaggeredGridAdapter staggeredGridAdapter;
+    private GridLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class WeatherActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawer.openDrawer(Gravity.LEFT);
+                drawer.openDrawer(Gravity.START);
             }
         });
     }
@@ -97,9 +99,21 @@ public class WeatherActivity extends AppCompatActivity {
         appBarLayout.setExpanded(false);
         recyclerView=findViewById(R.id.weather_recyclerview);
         staggeredGridAdapter=new StaggeredGridAdapter(this);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+
         recyclerView.setAdapter(staggeredGridAdapter);
         try {
+            mLayoutManager = new GridLayoutManager(this, 2);
+            mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if(position%12!=0){
+                        return 1;
+                    }else {
+                        return 2;
+                    }
+                }
+            });
+            recyclerView.setLayoutManager(mLayoutManager);
             weatherControl=new WeatherControl(staggeredGridAdapter,this);
             weatherControl.GetCityInfo();
         } catch (IOException e) {

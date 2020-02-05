@@ -13,8 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import control.UtilX;
 import control.WeatherControl;
 import control.WeatherGerHttp;
@@ -39,9 +42,11 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     private RecyclerView.ViewHolder holder;
     private int position;
 
+
     public void AddWeatherData(WeaterData weaterData){
 
         weatherData.add(weaterData);
+
 
     }
 
@@ -50,36 +55,32 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view;
+        View view=null;
         if(viewType==VIEW_TWO){
             view =LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.layout_staggere_goun_one_item,
                     parent,
                     false);
-            return view;
-        }
-        else if(viewType==VIEW_TWO){
-            view =LayoutInflater.from(parent.getContext()).
+            return new ItemViewHolder_One(view);
+
+        }else{
+            view = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.layout_staggere_grud_item,
                             parent,
                             false);
-            return view;
-        }else if(viewType==VIEW_THREE){
-            return null;
+            return new ItemViewHolder_two(view);
         }
+
     }
 
 
     @Override
     public int getItemViewType(int position) {
-         if(position%3==0){
+         if(position%12!=0){
             return VIEW_ONE;
-        }else if(position%3==1){
-            return VIEW_TWO;
-        }else if(position%3==2){
-            return VIEW_THREE;
-        }
-        return super.getItemViewType(position);
+        }else {
+             return VIEW_TWO;
+         }
     }
 
     public StaggeredGridAdapter(Context mContext) {
@@ -89,16 +90,19 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(outMetrics);
         widthPixels = outMetrics.widthPixels;
+
+
     }
 
 
-2`12`1
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        int h= (int) (Math.random()%600+200);
+        int h= (int) (Math.random()%800+450);
         int w= (int) (Math.random()%widthPixels/2+300);
         int data= (int) (position+1)%30;
+        ViewGroup.LayoutParams parm = holder.itemView.getLayoutParams();
         if(holder instanceof ItemViewHolder_One){
+            w=widthPixels;
             ItemViewHolder_One itemViewHolder= (ItemViewHolder_One) holder;
             WeatherControl.GetImageViewHttpCacheStrategy(mContext,itemViewHolder.iv_weather,h,w,data);
             itemViewHolder.textView_city.setText(weatherData.get(position).getCity());
@@ -108,13 +112,19 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
             num[2]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
             itemViewHolder.textView_centigrade_text.setText(UtilX.minint(num)+"--"+UtilX.maxint(num));
             itemViewHolder.textView_weathertip.setText(weatherData.get(position).getData().get(0).getAir_tips());
+
         }
         if(holder instanceof ItemViewHolder_two){
             ItemViewHolder_two itemViewHolder= (ItemViewHolder_two) holder;
             WeatherControl.GetImageViewHttpCacheStrategy(mContext,itemViewHolder.mImageView, h, w,data);
-            itemViewHolder.data=data;
-            itemViewHolder.cityTextView.setText(weatherData.get(position).getCity());
-            itemViewHolder.dataTextView.setText(weatherData.get(position).getData().get(0).getAir_tips());
+            int[] num=new int[3];
+            num[0]= UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem());
+            num[1]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem2());
+            num[2]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
+            itemViewHolder.weatherTextView.setText(UtilX.minint(num)+"--"+UtilX.maxint(num));
+            Logger.d("data=="+weatherData.get(position).getData().get(0).getAir_tips());
+            itemViewHolder.ciytText.setText(weatherData.get(position).getCity());
+            itemViewHolder.dataTextView.setText(weatherData.get(position).getData().get(0).getWea());
         }
     }
 
@@ -131,15 +141,22 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     class ItemViewHolder_two extends RecyclerView.ViewHolder{
-        private TextView cityTextView;
+
+        private TextView weatherTextView;
+
+        @BindView(R.id.city_text_two)
+         TextView ciytText;
+
         @BindView(R.id.wind_text)
-        private TextView dataTextView;
+         TextView dataTextView;
         private int data;
         ImageView mImageView = (ImageView) itemView.findViewById(R.id.iv);
 
         public ItemViewHolder_two(@NonNull View itemView) {
             super(itemView);
-            cityTextView=itemView.findViewById(R.id.weatherday_textview);
+            ButterKnife.bind(this, itemView);
+            weatherTextView=itemView.findViewById(R.id.weatherday_textview);
+
             data=-1;
         }
     }
@@ -159,8 +176,8 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView textView_centigrade_text;
         public ItemViewHolder_One(@NonNull View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
-
 
 }

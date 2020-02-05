@@ -94,6 +94,8 @@ public class WeatherControl {
         }).start();
     }
 
+
+
     public static void GetImageViewHttpCacheStrategy(final Context context, final ImageView imageView, final int h, final int w,int rondom){
 
         String connect;

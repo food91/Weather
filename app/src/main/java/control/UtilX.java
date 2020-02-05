@@ -44,12 +44,12 @@ public class UtilX {
     public static int maxint(int[] a) {
 
         int max = a[0];
-        for (int i = 1; i < a.length.i++) {
+        for (int i = 1; i < a.length;i++) {
             if (a[i] > max) {
                 max = a[i];
             }
-            return max;
         }
+        return max;
     }
 
     /**
@@ -60,7 +60,7 @@ public class UtilX {
      */
     public static int minint ( int[] a){
             int min = a[0];
-            for (int i = 1; i < a.length.i++) {
+            for (int i = 1; i < a.length;i++) {
                 if (a[i] < min) {
                     min = a[i];
                 }
