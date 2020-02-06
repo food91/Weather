@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="300dp"
     app:collapsedTitleGravity="left"
+    android:orientation="vertical"
     android:focusable="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -30,7 +31,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@mipmap/weather"
-
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 />
@@ -47,12 +47,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/weather_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
+    <fragment
+        android:id="@+id/weather_fragment"
+        android:layout_width="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:name="fragment.WeatherFragment"
+        android:layout_height="wrap_content"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

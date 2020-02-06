@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="湖南"
-                android:textSize="@dimen/card_title" />
+                android:textSize="@dimen/card_text" />
             <TextView
                 android:id="@+id/weatherday_textview"
                 android:layout_width="match_parent"

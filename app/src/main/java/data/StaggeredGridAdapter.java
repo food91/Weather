@@ -30,6 +30,9 @@ import control.WeatherControl;
 import control.WeatherGerHttp;
 
 
+/**
+ * The type Staggered grid adapter.
+ */
 public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private Context mContext;
@@ -43,6 +46,11 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     private int position;
 
 
+    /**
+     * Add weather data.
+     *
+     * @param weaterData the weater data
+     */
     public void AddWeatherData(WeaterData weaterData){
 
         weatherData.add(weaterData);
@@ -83,14 +91,22 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
          }
     }
 
+    /**
+     * Instantiates a new Staggered grid adapter.
+     * 加载Context
+     * 获取屏幕宽
+     *
+     * @param mContext the m context
+     */
     public StaggeredGridAdapter(Context mContext) {
+
         this.mContext = mContext;
         weatherData=new ArrayList<WeaterData>();
         DisplayMetrics outMetrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(outMetrics);
         widthPixels = outMetrics.widthPixels;
-
+        Logger.d("StaggeredGridAdapter");
 
     }
 
@@ -140,18 +156,35 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
+    /**
+     * The type Item view holder two.
+     */
     class ItemViewHolder_two extends RecyclerView.ViewHolder{
 
         private TextView weatherTextView;
 
+        /**
+         * The Ciyt text.
+         */
         @BindView(R.id.city_text_two)
          TextView ciytText;
 
+        /**
+         * The Data text view.
+         */
         @BindView(R.id.wind_text)
          TextView dataTextView;
         private int data;
+        /**
+         * The M image view.
+         */
         ImageView mImageView = (ImageView) itemView.findViewById(R.id.iv);
 
+        /**
+         * Instantiates a new Item view holder two.
+         *
+         * @param itemView the item view
+         */
         public ItemViewHolder_two(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -161,19 +194,40 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
+    /**
+     * The type Item view holder one.
+     */
     class ItemViewHolder_One extends  RecyclerView.ViewHolder{
 
+        /**
+         * The Iv weather.
+         */
         @BindView(R.id.iv_weather)
         ImageView iv_weather;
 
+        /**
+         * The Text view weathertip.
+         */
         @BindView(R.id.tip_weather)
         TextView textView_weathertip;
 
+        /**
+         * The Text view city.
+         */
         @BindView(R.id.city_text)
         TextView textView_city;
 
+        /**
+         * The Text view centigrade text.
+         */
         @BindView(R.id.centigrade_text)
         TextView textView_centigrade_text;
+
+        /**
+         * Instantiates a new Item view holder one.
+         *
+         * @param itemView the item view
+         */
         public ItemViewHolder_One(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
