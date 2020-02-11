@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:id="@+id/toolbar_normal"
+
+
+
+<com.google.android.material.appbar.AppBarLayout
+    android:id="@+id/app_bar"
+    app:expanded="false"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
-    app:collapsedTitleGravity="left"
-    android:orientation="vertical"
+    android:layout_height="@dimen/bar_height"
     android:focusable="true"
+    android:fitsSystemWindows="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bar_height"
-        android:focusable="true"
-        android:fitsSystemWindows="true"
-        >
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_layout"
@@ -29,7 +23,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:src="@mipmap/weather"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
@@ -41,17 +35,13 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 android:focusable="true"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                  />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <fragment
-        android:id="@+id/weather_fragment"
-        android:layout_width="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:name="fragment.WeatherFragment"
-        android:layout_height="wrap_content"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+

@@ -3,10 +3,31 @@ package control;
 
 import com.orhanobut.logger.Logger;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 /**
  * The type Util x.
  */
 public class UtilX {
+
+
+
+
+    public static String DataFormat(String data){
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf2 = new SimpleDateFormat("MM-dd");
+        String formatStr = "";
+        try {
+            formatStr = sf2.format(sf1.parse(data));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Logger.d("for====="+formatStr);
+        return formatStr;
+
+    }
+
 
 
     /**
@@ -24,7 +45,7 @@ public class UtilX {
             if(str.charAt(i)=='-'){
                 nagative=true;
             }
-           else if(str.charAt(i)>'0'&&str.charAt(i)<'9'){
+           else if(str.charAt(i)>='0'&&str.charAt(i)<='9'){
                 num*=10;
                num+=(str.charAt(i)-'0');
             }
@@ -32,6 +53,7 @@ public class UtilX {
         if(nagative){
             num= 0 - num;
         }
+        Logger.d("Centigrade=="+str+"  int=="+num);
         return num;
     }
 

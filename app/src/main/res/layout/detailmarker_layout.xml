@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/card_detailweather"
+    android:layout_height="@dimen/card_detailweather"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    card_view:cardCornerRadius="4dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/margin"
+        >
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+        android:gravity="center"
+    android:background="@color/colorPrimary"
+    >
+    <TextView
+        android:id="@+id/tv_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2020-2-11"
+        android:textSize="@dimen/card_text"
+        />
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/tv_tem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="温度：0-5"
+            android:layout_margin="@dimen/margin"
+            android:textSize="@dimen/card_text"
+            />
+        <TextView
+            android:id="@+id/tv_wea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="天气：暴雨转小雨"
+            android:layout_margin="@dimen/margin"
+            android:textSize="@dimen/card_text"
+            />
+    </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

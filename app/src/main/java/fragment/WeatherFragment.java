@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -23,8 +22,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import control.WeatherControl;
-import control.WeatherModel;
-import data.SendViewModel;
 import data.StaggeredGridAdapter;
 
 public class WeatherFragment extends Fragment {
@@ -40,8 +37,10 @@ public class WeatherFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        Logger.d("onCreateView");
         View root = inflater.inflate(R.layout.fragment_weather, container, false);
         unbinder = ButterKnife.bind(this, root);
         staggeredGridAdapter=new StaggeredGridAdapter(Objects.requireNonNull(getActivity()));
@@ -51,7 +50,7 @@ public class WeatherFragment extends Fragment {
             mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if(position%12!=0){
+                    if(position%StaggeredGridAdapter.DIV_NUM!=0){
                         return 1;
                     }else {
                         return 2;
@@ -65,20 +64,11 @@ public class WeatherFragment extends Fragment {
             e.printStackTrace();
             Logger.d("-----------------"+e.getMessage());
         }
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                weatherControl.GetCityInfo();
-                //这里获取数据的逻辑
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        weatherControl.SetweatherControl(swipeRefreshLayout);
+        weatherControl.setOncliAdapter(getContext());
         return root;
     }
 
-    private void setSwip(){
-
-    }
 
     @Override
     public void onDestroy() {

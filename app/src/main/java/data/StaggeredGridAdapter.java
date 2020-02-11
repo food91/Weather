@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -36,14 +37,23 @@ import control.WeatherGerHttp;
 public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private Context mContext;
-    private AdapterView.OnItemClickListener onItemClickListener;
-    private ArrayList<WeaterData> weatherData;
+    private ArrayList<WeatherData> weatherData;
     private int widthPixels=0;
     private final static int VIEW_ONE=101;
     private final static int VIEW_TWO=102;
     private final static int VIEW_THREE=103;
+    public final static int DIV_NUM=11;
     private RecyclerView.ViewHolder holder;
     private int position;
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener{
+        void onClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener=onItemClickListener;
+    }
 
 
     /**
@@ -51,13 +61,20 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
      *
      * @param weaterData the weater data
      */
-    public void AddWeatherData(WeaterData weaterData){
+    public void AddWeatherData(WeatherData weaterData){
 
         weatherData.add(weaterData);
 
 
     }
 
+    public WeatherData GetWeaterData(int position){
+        return weatherData.get(position);
+    }
+
+    public void ClearData(){
+        weatherData.clear();
+    }
 
     @NonNull
     @Override
@@ -82,9 +99,11 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
+
+
     @Override
     public int getItemViewType(int position) {
-         if(position%12!=0){
+         if(position%DIV_NUM!=0){
             return VIEW_ONE;
         }else {
              return VIEW_TWO;
@@ -101,7 +120,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     public StaggeredGridAdapter(Context mContext) {
 
         this.mContext = mContext;
-        weatherData=new ArrayList<WeaterData>();
+        weatherData=new ArrayList<WeatherData>();
         DisplayMetrics outMetrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(outMetrics);
@@ -113,10 +132,12 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        int h= (int) (Math.random()%800+450);
-        int w= (int) (Math.random()%widthPixels/2+300);
+
+        try {
+
+        int h= 450;
+        int w= 300;
         int data= (int) (position+1)%30;
-        ViewGroup.LayoutParams parm = holder.itemView.getLayoutParams();
         if(holder instanceof ItemViewHolder_One){
             w=widthPixels;
             ItemViewHolder_One itemViewHolder= (ItemViewHolder_One) holder;
@@ -128,7 +149,6 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
             num[2]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
             itemViewHolder.textView_centigrade_text.setText(UtilX.minint(num)+"--"+UtilX.maxint(num));
             itemViewHolder.textView_weathertip.setText(weatherData.get(position).getData().get(0).getAir_tips());
-
         }
         if(holder instanceof ItemViewHolder_two){
             ItemViewHolder_two itemViewHolder= (ItemViewHolder_two) holder;
@@ -141,6 +161,17 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
             Logger.d("data=="+weatherData.get(position).getData().get(0).getAir_tips());
             itemViewHolder.ciytText.setText(weatherData.get(position).getCity());
             itemViewHolder.dataTextView.setText(weatherData.get(position).getData().get(0).getWea());
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener!=null){
+                    onItemClickListener.onClick(position);
+                }
+            }
+        });
+        }catch (Exception e){
+            Logger.d(e.getMessage());
         }
     }
 

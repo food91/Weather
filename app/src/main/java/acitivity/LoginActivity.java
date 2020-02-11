@@ -17,7 +17,7 @@ import com.xiekun.myapplication.R;
 import control.Login;
 import control.UtilX;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Xactivity {
 
     private Button login,exit;
     private TextInputEditText usertext,passwordtext;
@@ -29,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
         init();
         onclick();
     }
+
+
 
     private void onclick(){
         exit.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void init(){
+    protected void init(){
 
         login=findViewById(R.id.login_sure_button);
         exit=findViewById(R.id.login_exit_button);

@@ -15,8 +15,11 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
-    <string name="menu_home">当地天气</string>
+    <string name="menu_weather">天气</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
@@ -29,7 +32,7 @@
     <dimen name="card_text">16sp</dimen>
     <dimen name="card_one">48dp</dimen>
     <dimen name="card_three">88dp</dimen>
-
+    <dimen name="view_text">5sp</dimen>
 
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
@@ -38,4 +41,7 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="bar_height">200dp</dimen>
+    <dimen name="margin">8dp</dimen>
+    <dimen name="card_detailweather">200dp</dimen>
+
 </resources>

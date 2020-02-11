@@ -1,8 +1,11 @@
 package data;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class WeaterData {
+public class WeatherData implements Serializable {
+
+    public static final String DATANAME="WeatherData";
 
     @Override
     public String toString() {
@@ -91,7 +94,7 @@ public class WeaterData {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * day : 29日（今天）
          * date : 2020-01-29
@@ -266,7 +269,7 @@ public class WeaterData {
             this.index = index;
         }
 
-        public static class AlarmBean {
+        public static class AlarmBean implements  Serializable{
             /**
              * alarm_type :
              * alarm_level :
@@ -302,7 +305,7 @@ public class WeaterData {
             }
         }
 
-        public static class HoursBean {
+        public static class HoursBean implements  Serializable{
             /**
              * day : 29日20时
              * wea : 晴
@@ -358,7 +361,7 @@ public class WeaterData {
             }
         }
 
-        public static class IndexBean {
+        public static class IndexBean implements Serializable{
             /**
              * title : 紫外线指数
              * level : 弱

@@ -6,9 +6,10 @@ package control;
 
 import android.util.Log;
 
-import data.WeaterData;
 
 
+
+import data.WeatherData;
 import io.reactivex.Observable;
 
 import okhttp3.OkHttpClient;
@@ -61,7 +62,7 @@ public class WeatherGerHttp {
          * @return the call
          */
         @GET("api")
-        Observable<WeaterData> get(@Query("appid") String appid,
+        Observable<WeatherData> get(@Query("appid") String appid,
                                    @Query("appsecret") String appsecret,
                                    @Query("version") String version,
                                    @Query("city") String city
@@ -74,7 +75,7 @@ public class WeatherGerHttp {
      * 请求7天天气信息
      * @return
      */
-    public static Observable<WeaterData> GetHttpData(String cityname){
+    public static Observable<WeatherData> GetHttpData(String cityname){
         //拦截器获取日志
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
@@ -98,13 +99,9 @@ public class WeatherGerHttp {
                 .client(client)
                 .build();
         GetRuest_Interface request = retrofit.create(GetRuest_Interface.class);
-        Observable<WeaterData> call = request.get(WEATHERID,WEATHERPASSWORD,VERSION,cityname);
+        Observable<WeatherData> call = request.get(WEATHERID,WEATHERPASSWORD,VERSION,cityname);
 
         return call;
     }
-
-
-
-
 
 }
