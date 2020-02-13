@@ -9,6 +9,8 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.xiekun.myapplication.R;
 
+import data.WeatherData;
+
 public class DetailsMarkerView extends MarkerView {
 
 
@@ -21,21 +23,23 @@ public class DetailsMarkerView extends MarkerView {
 
     TextView tv_updatetime,tv_tem,tv_wea;
 
+    WeatherData weatherData;
 
-    public DetailsMarkerView(Context context, int layoutResource) {
+    public DetailsMarkerView(Context context, int layoutResource,WeatherData weatherData) {
         super(context, layoutResource);
         tv_tem=findViewById(R.id.tv_tem);
         tv_updatetime=findViewById(R.id.tv_update);
         tv_wea=findViewById(R.id.tv_wea);
+        this.weatherData=weatherData;
     }
 
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
 
         super.refreshContent(e, highlight);
-        tv_updatetime.setText(e.getX()+"");
-        tv_tem.setText(e.getY()+"");
-        tv_wea.setText(e.getData()+"");
+        tv_updatetime.setText("时间:  "+weatherData.getData().get((int) e.getX()).getDate());
+        tv_tem.setText("今日温度:   "+e.getY());
+        tv_wea.setText("天气状况:   "+e.getData());
         super.refreshContent(e, highlight);
     }
 

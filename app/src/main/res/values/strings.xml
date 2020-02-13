@@ -30,6 +30,7 @@
     <dimen name="App_big">44sp</dimen>
     <dimen name="card_title">24sp</dimen>
     <dimen name="card_text">16sp</dimen>
+    <dimen name="card_text_small">12sp</dimen>
     <dimen name="card_one">48dp</dimen>
     <dimen name="card_three">88dp</dimen>
     <dimen name="view_text">5sp</dimen>
@@ -42,6 +43,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="bar_height">200dp</dimen>
     <dimen name="margin">8dp</dimen>
-    <dimen name="card_detailweather">200dp</dimen>
+    <dimen name="card_detailweather">160dp</dimen>
+    <dimen name="card_detailweather_width">200dp</dimen>
 
 </resources>

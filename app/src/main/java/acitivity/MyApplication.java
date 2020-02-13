@@ -5,6 +5,7 @@ import android.app.Application;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
+import control.UtilX;
 
 
 public class MyApplication extends Application {
@@ -27,6 +28,7 @@ public class MyApplication extends Application {
     private void init(){
         Logger.addLogAdapter(new AndroidLogAdapter());
         Logger.d("-----------init");
+        UtilX.isDebug=true;
     }
 
 }

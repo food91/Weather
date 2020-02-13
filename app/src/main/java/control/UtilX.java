@@ -11,7 +11,15 @@ import java.text.SimpleDateFormat;
  */
 public class UtilX {
 
+    public static boolean isDebug=true;
 
+    public static void LogX(String string){
+
+        if(isDebug){
+            Logger.d(string);
+        }
+
+    }
 
 
     public static String DataFormat(String data){

@@ -7,30 +7,29 @@
     android:fitsSystemWindows="true"
     tools:context="acitivity.DetailWeatherActivity">
 
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:context="acitivity.WeatherActivity"
         >
 
-    <include layout="@layout/toolbar"
+    <include
+        layout="@layout/toolbar"
         android:fitsSystemWindows="true"
         />
+        <fragment
+            android:id="@+id/fragment_detailweather"
+            app:layout_behavior = "@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="fragment.DetailFragment"
+            />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/line"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent=".9"
-        app:layout_constraintHeight_percent=".54"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

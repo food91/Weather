@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -20,12 +23,10 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.orhanobut.logger.Logger;
+import com.qmuiteam.qmui.widget.QMUIFontFitTextView;
 import com.xiekun.myapplication.R;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,21 +39,27 @@ import view.DetailsMarkerView;
 
 public class DetailWeatherActivity extends Xactivity {
 
-    private static final int Y_MAX=10;
-    private static final int Y_ADD=10;
-    private static final int Y_START=-10;
+    private static final int Y_MAX = 10;
+    private static final int Y_ADD = 10;
+    private static final int Y_START = -10;
     int pcity = 0;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.app_bar)
-    AppBarLayout appBar;
     WeatherData weatherData;
     @BindView(R.id.line)
     LineChart line;
 
-    private static final int Ynum=9;
+    private static final int Ynum = 9;
+    @BindView(R.id.tv_weater_tip)
+    QMUIFontFitTextView tvWeaterTip;
+    @BindView(R.id.card_linechart)
+    CardView cardLinechart;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.app_bar)
+    AppBarLayout appBar;
+    @BindView(R.id.iv_toolbar)
+    ImageView ivToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,29 +79,35 @@ public class DetailWeatherActivity extends Xactivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+    }
 
     @Override
     protected void init() {
 
+        Logger.d("-----"+getClass().getName());
         Intent intent = getIntent();
         if (intent != null) {
             weatherData = (WeatherData) intent.getSerializableExtra(WeatherData.DATANAME);
             pcity = intent.getIntExtra(WeatherControl.CITYNUM, 0);
             Logger.d("w===" + weatherData.toString() + "--i=" + pcity);
         }
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.qmui_icon_topbar_back);
         collapsingToolbarLayout.setTitle(weatherData.getCity());
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         List<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < weatherData.getData().size(); i++){
+        for (int i = 0; i < weatherData.getData().size(); i++) {
             Entry entry = new Entry(i,
-                   UtilX.CentigradeStringToInt(weatherData.getData().get(i).getTem()));
+                    UtilX.CentigradeStringToInt(weatherData.getData().get(i).getTem()));
             entry.setData(weatherData.getData().get(i).getWea());
             entries.add(entry);
         }
-        LineDataSet dataSet = new LineDataSet(entries, "北京温度");
+        LineDataSet dataSet = new LineDataSet(entries, "");
         dataSet.setColor(Color.BLUE);//线条颜色
         dataSet.setCircleColor(Color.GREEN);//圆点颜色
         dataSet.setLineWidth(1f);//线条宽度
@@ -106,17 +119,29 @@ public class DetailWeatherActivity extends Xactivity {
         line.setData(lineData);
         setX();
         setView();
+        tvWeaterTip.setText("温馨提示:  " + weatherData.getData().get(0).getAir_tips());
+
     }
 
-    private void setView(){
+    @Override
+    protected void onDestroy() {
 
-        MarkerView markerView=new DetailsMarkerView(this,R.layout.detailmarker_layout);
+        super.onDestroy();
+    }
+
+    private void setView() {
+
+        MarkerView markerView = new DetailsMarkerView(this, R.layout.detailmarker_layout, weatherData);
         markerView.setChartView(line);
         line.setMarker(markerView);
+        line.getViewPortHandler().setMinimumScaleX(1.0f);
+
+
+        line.getViewPortHandler().setMinimumScaleY(1.0f);
 
     }
 
-    private void setY(){
+    private void setY() {
         YAxis rightAxis = line.getAxisRight();
         //设置图表右边的y轴禁用
         rightAxis.setEnabled(false);
@@ -124,16 +149,16 @@ public class DetailWeatherActivity extends Xactivity {
         rightAxis.setDrawGridLines(false);
         YAxis leftAxis = line.getAxisLeft();
         leftAxis.setDrawGridLines(false);
-        int y=Y_START;
-        List<String> list=new ArrayList<>();
-        for(int i=0;i<weatherData.getData().size();i++){
-            list.add(y+"℃");
-            y+=Y_ADD;
+        int y = Y_START;
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < weatherData.getData().size(); i++) {
+            list.add(y + "℃");
+            y += Y_ADD;
         }
-        leftAxis.setValueFormatter(new IndexAxisValueFormatter(){
+        leftAxis.setValueFormatter(new IndexAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return value+"℃";
+                return value + "℃";
             }
         });
         leftAxis.setTextSize(getResources().getDimension(R.dimen.view_text));
@@ -142,10 +167,10 @@ public class DetailWeatherActivity extends Xactivity {
         line.setDescription(description);
 
         //设置图表左边的y轴禁用
-     //   leftAxis.setEnabled(false);
+        //   leftAxis.setEnabled(false);
     }
 
-    private void setX(){
+    private void setX() {
         XAxis xAxis = line.getXAxis();
 
         //设置x轴
@@ -158,16 +183,15 @@ public class DetailWeatherActivity extends Xactivity {
         xAxis.setGranularity(1f);//禁止放大后x轴标签重绘
         xAxis.setDrawGridLines(false);
         xAxis.setTextSize(getResources().getDimension(R.dimen.view_text));
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(){
+        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
 
             @Override
             public String getFormattedValue(float value) {
-                int i= (int) value;
+                int i = (int) value;
                 return UtilX.DataFormat(weatherData.getData().get(i).getDate());
             }
         });
     }
-
 
 
 }
