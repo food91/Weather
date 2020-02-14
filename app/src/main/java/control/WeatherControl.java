@@ -3,6 +3,8 @@ package control;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -12,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
+import com.qmuiteam.qmui.widget.popup.QMUIPopup;
 import com.xiekun.myapplication.R;
 
 import java.io.BufferedReader;
@@ -28,8 +31,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import acitivity.DetailWeatherActivity;
+import adapter.StaggeredGridAdapter;
 import data.CityBean;
-import data.StaggeredGridAdapter;
 import data.WeatherData;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -38,17 +41,33 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
+/**
+ * The type Weather control.
+ */
 public class WeatherControl {
 
     private StaggeredGridAdapter staggeredGridAdapter;
     private WeatherGerHttp weatherGerHttp;
     private List<CityBean> cityId=new ArrayList<>() ;
+    /**
+     * The Swipe refresh layout.
+     */
     SwipeRefreshLayout swipeRefreshLayout;
     private WeatherData weatherData;
     private int[] cityp;
+    /**
+     * The constant CITYNUM.
+     */
     public static final String CITYNUM="citynum";
 
 
+    /**
+     * Instantiates a new Weather control.
+     *
+     * @param staggeredGridAdapter the staggered grid adapter
+     * @param context              the context
+     * @throws IOException the io exception
+     */
     public WeatherControl(StaggeredGridAdapter staggeredGridAdapter,Context context) throws IOException {
         this.staggeredGridAdapter = staggeredGridAdapter;
         weatherGerHttp=new WeatherGerHttp();
@@ -57,6 +76,13 @@ public class WeatherControl {
 
 
 
+
+
+    /**
+     * Set oncli adapter.单击跳转到详细界面
+     *
+     * @param context the context
+     */
     public void setOncliAdapter(Context context){
         staggeredGridAdapter.setOnItemClickListener(new StaggeredGridAdapter.OnItemClickListener() {
             @Override
@@ -72,6 +98,11 @@ public class WeatherControl {
     }
 
 
+    /**
+     * Setweather control.
+     *
+     * @param swipeRefreshLayout the swipe refresh layout
+     */
     public void SetweatherControl(SwipeRefreshLayout swipeRefreshLayout){
         this.swipeRefreshLayout=swipeRefreshLayout;
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -114,6 +145,9 @@ public class WeatherControl {
         cityId=gson.fromJson(sb.toString(),new TypeToken<List<CityBean>>(){}.getType());
     }
 
+    /**
+     * Get city info.
+     */
     public  void GetCityInfo(){
         staggeredGridAdapter.ClearData();
         cityp= new int[100];
@@ -141,7 +175,15 @@ public class WeatherControl {
     }
 
 
-
+    /**
+     * Get image view http cache strategy.
+     *
+     * @param context   the context
+     * @param imageView the image view
+     * @param h         the h
+     * @param w         the w
+     * @param rondom    the rondom
+     */
     public static void GetImageViewHttpCacheStrategy(final Context context, final ImageView imageView, final int h, final int w,int rondom){
 
         String connect;

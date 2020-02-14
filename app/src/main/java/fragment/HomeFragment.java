@@ -7,16 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.xiekun.myapplication.R;
-
-import java.io.IOException;
-
-import control.WeatherControl;
-import data.StaggeredGridAdapter;
 
 
 public class HomeFragment extends Fragment {

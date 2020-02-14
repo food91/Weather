@@ -1,34 +1,35 @@
-package data;
+package adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.orhanobut.logger.Logger;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.popup.QMUIPopup;
+import com.qmuiteam.qmui.widget.popup.QMUIPopups;
+import com.qmuiteam.qmui.widget.popup.QMUIQuickAction;
 import com.xiekun.myapplication.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import control.UtilX;
 import control.WeatherControl;
-import control.WeatherGerHttp;
+import data.WeatherData;
 
 
 /**
@@ -47,8 +48,30 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     private int position;
     private OnItemClickListener onItemClickListener;
 
+    private List<String> strtext_view_onlongclick;
+    private List<Integer> intview_view_onlongclick;
+
+    private void init(){
+       strtext_view_onlongclick=new ArrayList<String>();
+       strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_favior));
+       strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_share));
+       strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_remark));
+       strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_about));
+
+        intview_view_onlongclick=new ArrayList<Integer>();
+        intview_view_onlongclick.add(R.drawable.ic_favorite_border_black_24dp);
+        intview_view_onlongclick.add(R.drawable.ic_view_share);
+        intview_view_onlongclick.add(R.drawable.ic_remarks);
+        intview_view_onlongclick.add(R.drawable.ic_about);
+    }
+
+
     public interface OnItemClickListener{
         void onClick(int position);
+    }
+
+    public interface OnItemLongClickListenerX{
+        void onLongClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener){
@@ -78,7 +101,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @NonNull
     @Override
-    public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view=null;
         if(viewType==VIEW_TWO){
@@ -125,8 +148,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(outMetrics);
         widthPixels = outMetrics.widthPixels;
-        Logger.d("StaggeredGridAdapter");
-
+        init();
     }
 
 
@@ -168,6 +190,29 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
                 if(onItemClickListener!=null){
                     onItemClickListener.onClick(position);
                 }
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                QMUIPopup  mNormalPopup = QMUIPopups.popup(mContext, QMUIDisplayHelper.dp2px(mContext, 120),
+                        QMUIDisplayHelper.dp2px(mContext,160))
+                        .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
+                        .view(R.layout.view_onclicklong_weather)
+                        .edgeProtection(QMUIDisplayHelper.dp2px(mContext, 20))
+                        .offsetX(QMUIDisplayHelper.dp2px(mContext, 20))
+                        .offsetYIfBottom(QMUIDisplayHelper.dp2px(mContext, 5))
+                        .shadow(true)
+                        .arrow(true)
+                        .animStyle(QMUIPopup.ANIM_GROW_FROM_CENTER)
+                        .onDismiss(new PopupWindow.OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+
+                            }
+                        })
+                        .show(v);
+                return true;
             }
         });
         }catch (Exception e){

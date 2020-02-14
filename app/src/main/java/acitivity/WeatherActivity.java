@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -50,10 +49,12 @@ public class WeatherActivity extends Xactivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawerlayout);
         ButterKnife.bind(this);
-        //   initDefaultFragment();
         init();
         onclick();
     }
+
+
+
 
 /*    public void initDefaultFragment() {
         fragmentManager = getSupportFragmentManager();
@@ -87,7 +88,7 @@ public class WeatherActivity extends Xactivity {
         collapsingToolbarLayout.setEnabled(true);
         drawerLayout = findViewById(R.id.drawer_layout);
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.weather_fragment,
-                R.id.nav_gallery, R.id.nav_send,R.id.nav_share,R.id.nav_tools,
+                R.id.nav_mycare, R.id.nav_send,R.id.nav_share,R.id.nav_tools,
                 R.id.nav_slideshow)
                 .setDrawerLayout(drawerLayout)
                 .build();

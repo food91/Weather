@@ -16,6 +16,7 @@
         android:id="@+id/cv_img_activity"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginTop="8dp"
         app:cardCornerRadius="50dp"
         app:cardElevation="50dp"
         app:cardPreventCornerOverlap="true">

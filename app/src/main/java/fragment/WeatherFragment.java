@@ -18,11 +18,11 @@ import com.xiekun.myapplication.R;
 import java.io.IOException;
 import java.util.Objects;
 
+import adapter.StaggeredGridAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import control.WeatherControl;
-import data.StaggeredGridAdapter;
 
 public class WeatherFragment extends Fragment {
 
