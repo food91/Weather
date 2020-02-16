@@ -9,7 +9,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.xiekun.myapplication.R;
 
-import data.WeatherData;
+import Entity.WeatherData;
 
 public class DetailsMarkerView extends MarkerView {
 

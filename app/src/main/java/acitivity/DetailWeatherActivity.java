@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -29,11 +28,11 @@ import com.xiekun.myapplication.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Entity.WeatherData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import control.UtilX;
+import util.UtilX;
 import control.WeatherControl;
-import data.WeatherData;
 import view.DetailsMarkerView;
 
 

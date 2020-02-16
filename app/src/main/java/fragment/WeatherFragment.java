@@ -17,6 +17,7 @@ import com.xiekun.myapplication.R;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
 import adapter.StaggeredGridAdapter;
 import butterknife.BindView;
@@ -34,6 +35,7 @@ public class WeatherFragment extends Fragment {
      WeatherControl weatherControl;
      StaggeredGridAdapter staggeredGridAdapter;
      GridLayoutManager mLayoutManager;
+
 
     @Nullable
     @Override
@@ -59,7 +61,7 @@ public class WeatherFragment extends Fragment {
             });
             recyclerView.setLayoutManager(mLayoutManager);
             weatherControl=new WeatherControl(staggeredGridAdapter,Objects.requireNonNull(getActivity()));
-            weatherControl.GetCityInfo();
+            weatherControl.GetCityInfo_Weathe();
         } catch (IOException e) {
             e.printStackTrace();
             Logger.d("-----------------"+e.getMessage());

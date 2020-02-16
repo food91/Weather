@@ -6,11 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,23 +17,22 @@ import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.qmuiteam.qmui.widget.popup.QMUIPopup;
 import com.qmuiteam.qmui.widget.popup.QMUIPopups;
-import com.qmuiteam.qmui.widget.popup.QMUIQuickAction;
 import com.xiekun.myapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Entity.WeatherData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import control.UtilX;
+import util.UtilX;
 import control.WeatherControl;
-import data.WeatherData;
 
 
 /**
  * The type Staggered grid adapter.
  */
-public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements WeatherBaseAdapter{
 
     private Context mContext;
     private ArrayList<WeatherData> weatherData;
@@ -89,6 +86,11 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         weatherData.add(weaterData);
 
 
+    }
+
+    @Override
+    public void updateView() {
+        notifyDataSetChanged();
     }
 
     public WeatherData GetWeaterData(int position){
@@ -156,10 +158,9 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         try {
-
         int h= 450;
         int w= 300;
-        int data= (int) (position+1)%30;
+        int data= (int) (position)%30+1;
         if(holder instanceof ItemViewHolder_One){
             w=widthPixels;
             ItemViewHolder_One itemViewHolder= (ItemViewHolder_One) holder;

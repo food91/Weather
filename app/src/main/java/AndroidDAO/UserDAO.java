@@ -1,6 +1,5 @@
 package AndroidDAO;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -8,7 +7,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import data.UserEntity;
+import Entity.UserEntity;
 
 
 @Dao
@@ -18,8 +17,8 @@ public interface UserDAO {
     @Query("SELECT * FROM users")
     List<UserEntity> getAll();
 
-    @Query("SELETE * FROM users WHERE userid == :userid")
-    LiveData<List<UserEntity>> getUser();
+    @Query("SELECT * FROM users WHERE userid == :userid")
+    UserEntity getUser(String userid);
 
     @Insert
     void insert(UserEntity userEntity);
@@ -28,5 +27,5 @@ public interface UserDAO {
     void deleteAll();
 
     @Update
-    void updateUsers(UserEntity...userEntities)
+    void updateUsers(UserEntity...userEntities);
 }

@@ -3,8 +3,6 @@ package control;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -14,7 +12,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
-import com.qmuiteam.qmui.widget.popup.QMUIPopup;
 import com.xiekun.myapplication.R;
 
 import java.io.BufferedReader;
@@ -30,10 +27,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import Entity.CityBean;
 import acitivity.DetailWeatherActivity;
 import adapter.StaggeredGridAdapter;
-import data.CityBean;
-import data.WeatherData;
+import adapter.WeatherBaseAdapter;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -48,12 +45,17 @@ public class WeatherControl {
 
     private StaggeredGridAdapter staggeredGridAdapter;
     private WeatherGerHttp weatherGerHttp;
+    private WeatherBaseAdapter mweatherBaseAdapter;
+
+    //存储所有城市的名
     private List<CityBean> cityId=new ArrayList<>() ;
     /**
      * The Swipe refresh layout.
      */
-    SwipeRefreshLayout swipeRefreshLayout;
-    private WeatherData weatherData;
+    SwipeRefreshLayout swipeRefreshLayout=null;
+
+    //存储所有显示在VIEW上的城市在CITYID的下标
+    //比如第一个VIEW城市是  Cityid[cityp[0]]
     private int[] cityp;
     /**
      * The constant CITYNUM.
@@ -69,13 +71,30 @@ public class WeatherControl {
      * @throws IOException the io exception
      */
     public WeatherControl(StaggeredGridAdapter staggeredGridAdapter,Context context) throws IOException {
-        this.staggeredGridAdapter = staggeredGridAdapter;
+        this.staggeredGridAdapter = (StaggeredGridAdapter) staggeredGridAdapter;
         weatherGerHttp=new WeatherGerHttp();
         GetAllCity(context);
     }
 
+    public WeatherControl() {
+    }
+
+    public WeatherControl buildadapter(WeatherBaseAdapter weatherBaseAdapter){
+        this.mweatherBaseAdapter=weatherBaseAdapter;
+        return this;
+    }
 
 
+
+    /**
+     * Instantiates a new Weather control.
+     *
+     * @param context the context
+     * @throws IOException the io exception
+     */
+    public WeatherControl(Context context) throws IOException {
+        weatherGerHttp=new WeatherGerHttp();
+    }
 
 
     /**
@@ -108,7 +127,7 @@ public class WeatherControl {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               GetCityInfo();
+               GetCityInfo_Weathe();
                 //这里获取数据的逻辑
 
             }
@@ -145,33 +164,45 @@ public class WeatherControl {
         cityId=gson.fromJson(sb.toString(),new TypeToken<List<CityBean>>(){}.getType());
     }
 
+    Runnable GetAllweater_runnable=new Runnable() {
+        @Override
+        public void run() {
+            int num= 0;
+            int i=0,t=0;
+            while (i<cityId.size()){
+                //获得随机数字
+                num= Math.abs(new Random().nextInt()%50);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //数字映射到城市数组中，访问随机城市
+                UpdataWeatherViewFromHttp(cityId.get(i).getName(),staggeredGridAdapter);
+                //将随机数字储存
+                cityp[t]=i;
+                t++;
+                i+=num;
+            }
+        }
+    };
+
+    public void GetCityInfo_Weathe(){
+        staggeredGridAdapter.ClearData();
+        cityp= new int[100];
+        GetCityInfor(GetAllweater_runnable);
+    }
+
     /**
      * Get city info.
      */
-    public  void GetCityInfo(){
-        staggeredGridAdapter.ClearData();
-        cityp= new int[100];
+    public  void GetCityInfor(Runnable runnable){
+
         final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(4,5,1, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(50));
-        threadPoolExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                int num= 0;
-                int i=0,t=0;
-                while (i<cityId.size()){
-                    num= Math.abs(new Random().nextInt()%50);
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    UpdataWeatherViewFromHttp(i);
-                    cityp[t]=i;
-                    t++;
-                    i+=num;
-                }
-            }
-        });
+        //设置线程池回收
+        threadPoolExecutor.allowCoreThreadTimeOut(true);
+        threadPoolExecutor.execute(runnable);
     }
 
 
@@ -208,12 +239,15 @@ public class WeatherControl {
     }
 
 
+    /**
+     * Updata weather view from http.
+     *
+     * @param cityname the cityname
+     * @param adapter  the adapter
+     */
+    public void UpdataWeatherViewFromHttp(String cityname, WeatherBaseAdapter adapter){
 
-
-
-    private void UpdataWeatherViewFromHttp(int num){
-        Logger.d("num===="+num);
-        Observable call=WeatherGerHttp.GetHttpData(cityId.get(num).getName());
+        Observable call=WeatherGerHttp.GetHttpData(cityname);
         call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WeatherData>() {
                     @Override
@@ -224,14 +258,16 @@ public class WeatherControl {
                     @Override
                     public void onNext(WeatherData weaterData) {
                         if(weaterData.getCity()==null){
-                            Logger.d("城市名空=="+cityId.get(num).getName());
+
                             return;
                         }
                         Logger.d("onNext=="+weaterData.toString());
-                        staggeredGridAdapter.AddWeatherData(weaterData);
-                        staggeredGridAdapter.notifyDataSetChanged();
-                        swipeRefreshLayout.setRefreshing(false);
-                        weatherData=weaterData;
+                        adapter.AddWeatherData(weaterData);
+                        adapter.updateView();
+                        if(swipeRefreshLayout!=null){
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+
                     }
 
                     @Override
@@ -247,5 +283,7 @@ public class WeatherControl {
                 });
 
     }
+
+
 
 }

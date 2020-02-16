@@ -2,23 +2,17 @@ package acitivity;
 
 import android.app.Application;
 
-import androidx.room.Room;
-
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
-import AndroidDAO.CityRoomDatabase;
-import control.UtilX;
+import util.UtilX;
 
 
 public class MyApplication extends Application {
 
-    private static MyApplication mApplication;
+    private static MyApplication mApplication=null;
 
-    public static synchronized MyApplication getApplicationInstance() {
-        if (mApplication == null) {
-            mApplication = new MyApplication();
-        }
+    public static  MyApplication getApplicationInstance() {
         return mApplication;
     }
 
@@ -26,6 +20,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         init();
+        mApplication=this;
     }
 
     private void init(){

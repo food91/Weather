@@ -16,31 +16,38 @@
       app:cardElevation="0dp"
       >
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <com.qmuiteam.qmui.widget.QMUIEmptyView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="30dp">
+        android:layout_marginTop="?attr/qmui_topbar_height"
+        android:background="@color/qmui_config_color_white"
+        android:fitsSystemWindows="true"/>
 
 
-      <com.google.android.material.button.MaterialButton
+      <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
           android:id="@+id/login_sure_button"
-          android:layout_width="wrap_content"
+          android:layout_width="100dp"
           android:layout_height="wrap_content"
           android:layout_below="@id/login_password_text"
-          android:layout_marginTop="44dp"
+          app:qmui_backgroundColor="@color/colorPrimary"
+            android:layout_marginTop="43dp"
+          android:textColor="@color/white"
           android:padding="10dp"
           android:text="@string/login_sure" />
 
-      <com.google.android.material.button.MaterialButton
-          android:id="@+id/login_exit_button"
-          android:layout_width="wrap_content"
+      <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+          android:id="@+id/button_login_register"
+          android:layout_width="100dp"
           android:layout_height="wrap_content"
+          app:qmui_backgroundColor="@color/colorPrimary"
           android:layout_alignBottom="@id/login_sure_button"
-          android:layout_marginStart="120dp"
-
+          android:layout_marginStart="100dp"
+          android:background="@color/colorPrimary"
+          android:textColor="@color/white"
           android:layout_toEndOf="@id/login_sure_button"
           android:padding="10dp"
-          android:text="@string/login_exit" />
+          android:text="@string/login_register" />
 
       <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/login_password_text"
@@ -82,8 +89,24 @@
           android:textColor="@color/black"
           android:text="@string/app_name" />
 
+      <CheckBox
+          android:id="@+id/checkBox_keeppassword"
+          android:layout_below="@+id/login_password_text"
+          android:layout_above="@+id/button_login_register"
+          android:layout_alignStart="@+id/button_login_register"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/login_keep_password" />
 
-    </RelativeLayout>
+      <CheckBox
+          android:id="@+id/checkBox_keepuser"
+          android:layout_below="@+id/login_password_text"
+          android:layout_above="@+id/button_login_register"
+          android:layout_alignStart="@+id/login_sure_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/login_keep_user" />
+    </com.qmuiteam.qmui.widget.QMUIEmptyView>
   </androidx.cardview.widget.CardView>
 
 </LinearLayout>

@@ -10,10 +10,10 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-import data.UserEntity;
+import Entity.UserEntity;
 
 @Database(entities = {UserEntity.class},version = 1)
-public class CityRoomDatabase extends RoomDatabase {
+public abstract class CityRoomDatabase extends RoomDatabase {
 
     private static volatile CityRoomDatabase INSTANCE;
 
@@ -21,8 +21,8 @@ public class CityRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (CityRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            UserEntity.class, "users_database").build();
+                    INSTANCE = Room.databaseBuilder(context,
+                            CityRoomDatabase.class, "users_database").build();
                 }
             }
         }
@@ -44,4 +44,6 @@ public class CityRoomDatabase extends RoomDatabase {
     public void clearAllTables() {
 
     }
+
+    public abstract UserDAO wordDao();
 }
