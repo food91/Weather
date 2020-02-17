@@ -28,6 +28,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import Entity.CityBean;
+import Entity.WeatherData;
 import acitivity.DetailWeatherActivity;
 import adapter.StaggeredGridAdapter;
 import adapter.WeatherBaseAdapter;

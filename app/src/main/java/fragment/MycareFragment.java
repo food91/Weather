@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.xiekun.myapplication.R;
 
+import Entity.UserEntity;
 import adapter.MycareRecyclerviewAdapter;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -41,7 +42,7 @@ public class MycareFragment extends Fragment {
                     weatherControl.GetCityInfor(new Runnable() {
                         @Override
                         public void run() {
-                            if(userEntity==null||userEntity.favoritecity.size()==0)
+                            if(userEntity==null||userEntity.favoritecity==null||userEntity.favoritecity.size()==0)
                                 return;
                             for(int i=0;i<userEntity.favoritecity.size();i++){
                                 weatherControl.UpdataWeatherViewFromHttp(userEntity.favoritecity.get(i)

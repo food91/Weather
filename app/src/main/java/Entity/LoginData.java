@@ -42,7 +42,7 @@ public class LoginData {
 
     @Override
     public String toString() {
-        return "LoginData{" +
+        return "{" +
                 "user='" + user + '\'' +
                 ", password='" + password + '\'' +
                 ", keepuser=" + keepuser +

@@ -7,31 +7,31 @@
     android:gravity="center"
     android:background="@mipmap/locatback">
 
-
-
-  <androidx.cardview.widget.CardView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      app:cardCornerRadius="5dp"
-      app:cardElevation="0dp"
-      >
-
     <com.qmuiteam.qmui.widget.QMUIEmptyView
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/qmui_topbar_height"
-        android:background="@color/qmui_config_color_white"
-        android:fitsSystemWindows="true"/>
+        android:visibility="gone"
+        android:background="@mipmap/locatback"
+      />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
 
 
       <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
           android:id="@+id/login_sure_button"
           android:layout_width="100dp"
           android:layout_height="wrap_content"
-          android:layout_below="@id/login_password_text"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintHorizontal_bias="0.1"
+          android:layout_marginBottom="30dp"
+          app:layout_constraintTop_toBottomOf="@id/login_password_text"
+          app:layout_constraintBottom_toBottomOf="parent"
           app:qmui_backgroundColor="@color/colorPrimary"
-            android:layout_marginTop="43dp"
+          android:layout_marginTop="43dp"
           android:textColor="@color/white"
           android:padding="10dp"
           android:text="@string/login_sure" />
@@ -41,20 +41,22 @@
           android:layout_width="100dp"
           android:layout_height="wrap_content"
           app:qmui_backgroundColor="@color/colorPrimary"
-          android:layout_alignBottom="@id/login_sure_button"
+          app:layout_constraintBottom_toBottomOf="@id/login_sure_button"
           android:layout_marginStart="100dp"
           android:background="@color/colorPrimary"
           android:textColor="@color/white"
-          android:layout_toEndOf="@id/login_sure_button"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintHorizontal_bias="0.85"
           android:padding="10dp"
           android:text="@string/login_register" />
 
       <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/login_password_text"
-          android:layout_width="300dp"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@id/login_user_text"
-          android:layout_alignLeft="@id/login_user_text"
+          app:layout_constraintTop_toBottomOf="@id/login_user_text"
+          app:layout_constraintStart_toStartOf="@id/login_user_text"
           android:layout_marginTop="25dp"
           android:hint="@string/login_tip_password"
           android:inputType="textPassword"
@@ -63,50 +65,53 @@
 
       <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/login_user_text"
-          android:layout_width="300dp"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/imageView2"
+          app:layout_constraintTop_toBottomOf="@+id/imageView2"
+          app:layout_constraintLeft_toLeftOf="parent"
           android:layout_marginTop="25dp"
           android:hint="@string/login_tip_user"
           android:padding="10dp"
           android:textAppearance="?android:attr/textAppearanceButton" />
-
       <ImageView
           android:id="@+id/imageView2"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_centerHorizontal="true"
-          android:layout_marginBottom="20dp"
+          app:layout_constraintTop_toTopOf="parent"
+          android:layout_marginTop="20dp"
           android:src="@drawable/ic_login_24dp" />
 
       <TextView
           android:id="@+id/textView2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_above="@id/login_user_text"
-          android:layout_centerHorizontal="true"
+          app:layout_constraintBottom_toTopOf="@id/login_user_text"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
           android:textSize="@dimen/card_text"
           android:textColor="@color/black"
           android:text="@string/app_name" />
 
       <CheckBox
           android:id="@+id/checkBox_keeppassword"
-          android:layout_below="@+id/login_password_text"
-          android:layout_above="@+id/button_login_register"
-          android:layout_alignStart="@+id/button_login_register"
+          app:layout_constraintBottom_toTopOf="@+id/button_login_register"
+          app:layout_constraintTop_toBottomOf="@+id/login_password_text"
+          app:layout_constraintStart_toStartOf="@+id/button_login_register"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/login_keep_password" />
 
       <CheckBox
           android:id="@+id/checkBox_keepuser"
-          android:layout_below="@+id/login_password_text"
-          android:layout_above="@+id/button_login_register"
-          android:layout_alignStart="@+id/login_sure_button"
+          app:layout_constraintBottom_toTopOf="@+id/login_password_text"
+          app:layout_constraintTop_toBottomOf="@+id/button_login_register"
+           app:layout_constraintStart_toStartOf="@+id/login_sure_button"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/login_keep_user" />
-    </com.qmuiteam.qmui.widget.QMUIEmptyView>
-  </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </LinearLayout>

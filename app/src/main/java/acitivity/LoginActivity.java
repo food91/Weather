@@ -1,6 +1,9 @@
 package acitivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,35 +14,73 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.orhanobut.logger.Logger;
-import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
+import com.qmuiteam.qmui.widget.QMUIEmptyView;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.xiekun.myapplication.R;
 
+import Entity.LoginData;
+import Entity.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import control.Login;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import util.GsonUtilX;
 import util.UtilX;
 
+/**
+ * The type Login activity.
+ *
+ */
 public class LoginActivity extends Xactivity {
 
+    /**
+     * The Login sure button.
+     */
     @BindView(R.id.login_sure_button)
     QMUIRoundButton loginSureButton;
+    /**
+     * The Button login register.
+     */
     @BindView(R.id.button_login_register)
     QMUIRoundButton buttonLoginRegister;
+    /**
+     * The Login password text.
+     */
     @BindView(R.id.login_password_text)
     TextInputEditText loginPasswordText;
+    /**
+     * The Login user text.
+     */
     @BindView(R.id.login_user_text)
     TextInputEditText loginUserText;
+    /**
+     * The Image view 2.
+     */
     @BindView(R.id.imageView2)
     ImageView imageView2;
+    /**
+     * The Text view 2.
+     */
     @BindView(R.id.textView2)
     TextView textView2;
+    /**
+     * The Check box keeppassword.
+     */
     @BindView(R.id.checkBox_keeppassword)
     CheckBox checkBoxKeeppassword;
+    /**
+     * The Check box keepuser.
+     */
     @BindView(R.id.checkBox_keepuser)
     CheckBox checkBoxKeepuser;
-    private Button login, btn_login_register;
-    private TextInputEditText usertext, passwordtext;
+    /**
+     * The Empty view.
+     */
+    @BindView(R.id.emptyView)
+    QMUIEmptyView emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,55 +121,93 @@ public class LoginActivity extends Xactivity {
     }
 
     private void onclick() {
-        btn_login_register.setOnClickListener(new View.OnClickListener() {
+         buttonLoginRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user = usertext.getText().toString();
-                String password = passwordtext.getText().toString();
+                String user = loginUserText.getText().toString();
+                String password = loginPasswordText.getText().toString();
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-                boolean keepuser =checkBoxKeepuser.isChecked();
-                boolean keeppassword=checkBoxKeeppassword.isChecked();
-                Login login=new Login(user,password,keepuser,keeppassword);
-                if(login.IsUser(getApplication())){
-                    Toast.makeText(LoginActivity.this,
-                            getResources().getString(R.string.login_effect)
-                            , Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
+                boolean keepuser = checkBoxKeepuser.isChecked();
+                boolean keeppassword = checkBoxKeeppassword.isChecked();
+                Login.register(LoginActivity.this,user,password,emptyView);
 
             }
         });
-        login.setOnClickListener(new View.OnClickListener() {
+        loginSureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user = usertext.getText().toString();
-                String password = passwordtext.getText().toString();
+                String user = loginUserText.getText().toString();
+                String password = loginPasswordText.getText().toString();
+                boolean keepuser = checkBoxKeepuser.isChecked();
+                boolean keeppassword = checkBoxKeeppassword.isChecked();
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-                Logger.d("user==" + user + " pa==" + password);
-                Login login = new Login(user, password);
-                login.wirteDate(getApplication(), user, password);
-                if (login.IsUser(getApplicationContext())) {
+                emptyView.show(true,
+                      getResources().getString(R.string.login_loading_login)
+                        ,null,null,null);
+                emptyView.setTitleColor(Color.WHITE);
+                Login login = new Login(user, password,keepuser,keeppassword);
+                Observer<Boolean> observer=new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-                    Intent intent = new Intent(LoginActivity.this, WeatherActivity.class);
-                    //启动
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this,
-                            getResources().getString(R.string.login_Wrong)
-                            , Toast.LENGTH_SHORT).show();
-                }
+                    }
 
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if(aBoolean) {
+                            UserData.getUserData().setName(user);
+                            UserData.getUserData().setPassword(password);
+                            login.wirteDate(LoginActivity.this);
+                            Intent intent = new Intent(LoginActivity.this, WeatherActivity.class);
+                            //启动
+                            startActivity(intent);
+                            finish();
+                        }else {
+                            Toast.makeText(LoginActivity.this,
+                                    getResources().getString(R.string.login_Wrong)
+                                    , Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        emptyView.hide();
+                        Toast.makeText(LoginActivity.this,
+                                getResources().getString(R.string.login_unknwon_Wrong)
+                                , Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                };
+
+                login.IsUser(user,password,observer);
             }
         });
     }
 
     protected void init() {
 
+        emptyView.setVisibility(View.GONE);
+        SharedPreferences sharedPreferences= getSharedPreferences(LoginData.LOGIN, Context.MODE_APPEND);
+        String userId=sharedPreferences.getString(LoginData.LOGINDATA,"");
+        if(!userId.equals("")){
+            Logger.d("user==="+userId);
+            LoginData loginData= GsonUtilX.parseJsonWithGson(userId,LoginData.class);
+            if(loginData.isKeepuser()){
+                loginUserText.setText(loginData.getUser());
+                checkBoxKeepuser.setChecked(true);
+            }
+            if(loginData.isKeeppassword()){
+                loginPasswordText.setText(loginData.getPassword());
+                checkBoxKeeppassword.setChecked(true);
+            }
+        }
     }
 }

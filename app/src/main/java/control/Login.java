@@ -2,13 +2,13 @@ package control;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.PostProcessor;
+import android.graphics.Color;
 import android.widget.Toast;
 
-import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
+import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
+import com.qmuiteam.qmui.widget.QMUIEmptyView;
 import com.xiekun.myapplication.R;
-
-import java.util.List;
 
 import Entity.LoginData;
 import Entity.UserEntity;
@@ -22,88 +22,135 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import util.GsonUtilX;
 
+/**
+ * The type Login.
+ * SharedPreferences只存储用户状态，不对身份验证
+ * 数据库对身份验证
+ */
 public class Login {
 
     private LoginData mloginData;
 
+    /**
+     * Instantiates a new Login.
+     *
+     * @param u  the u
+     * @param p  the p
+     * @param ub the ub
+     * @param pb the pb
+     */
     public Login(String u,String p,boolean ub,boolean pb){
         mloginData=new LoginData(u,p,ub,pb);
     }
 
+    /**
+     * Instantiates a new Login.
+     */
     public  Login() {
     }
 
 
+    /**
+     * Instantiates a new Login.
+     *
+     * @param loginData the login data
+     */
     public Login(LoginData loginData){
         this.mloginData=loginData;
     }
 
+    /**
+     * Instantiates a new Login.
+     *
+     * @param context the context
+     */
     public Login(Context context){
         SharedPreferences sharedPreferences= context.getSharedPreferences("data", Context .MODE_PRIVATE);
-       String user=sharedPreferences.getString(LoginData.SUSER,"");
-       String password=sharedPreferences.getString(LoginData.SPASSWORD,"");
-       mloginData=new LoginData(user,password);
     }
 
+    /**
+     * Instantiates a new Login.
+     *
+     * @param user     the user
+     * @param password the password
+     */
     public Login(String user, String password){
 
         mloginData=new LoginData(user,password);
     }
 
-    public boolean IsPword(Context context){
-        SharedPreferences sharedPreferences= context.getSharedPreferences(LoginData.LOGIN, Context .MODE_PRIVATE);
-        String ls=sharedPreferences.getString(LoginData.LOGINDATA,"");
-        List<LoginData> m= GsonUtilX.parseArrayJsonWithGson(ls,LoginData.class);
-        for(int i=0;i<m.size();i++){
-            String user=m.get(i).getUser();
-            String password=m.get(i).getPassword();
-            if(password.equals(mloginData.getPassword())){
-                return true;
+    /**
+     * Is user boolean.
+     *
+     * @param context the context
+     * @return the boolean
+     */
+    public void  IsUser(String id,String pw,
+    Observer<Boolean> b){
+
+
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
+                UserEntityRepository  userEntityRepository=new UserEntityRepository(MyApplication.getApplicationInstance());
+                UserEntity userData=userEntityRepository.QueryId(id);
+                if(userData!=null&&userData.userid.equals(id)&&userData.password.equals(pw))
+                {
+                    emitter.onNext(true);
+                }else{
+                    emitter.onNext(false);
+                }
             }
-        }
-        return false;
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(b);
+
     }
 
-    public boolean  IsUser(Context context){
-
-        SharedPreferences sharedPreferences= context.getSharedPreferences(LoginData.LOGIN, Context .MODE_PRIVATE);
-        String ls=sharedPreferences.getString(LoginData.LOGINDATA,"");
-        List<LoginData> m= GsonUtilX.parseArrayJsonWithGson(ls,LoginData.class);
-        for(int i=0;i<m.size();i++){
-            String user=m.get(i).getUser();
-            String password=m.get(i).getPassword();
-            if(user.equals(mloginData.getUser())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void wirteDate(Context context,String user,String password) {
+    /**
+     * Wirte date.
+     *  @param user     the user
+     * @param password the password
+     * @param ku       the ku
+     * @param kp       the kp
+     * @param context  the context
+     * @return
+     */
+    public Login wirteDate(Context context) {
         //步骤1：创建一个SharedPreferences对象
-        SharedPreferences sharedPreferences = context.getSharedPreferences(LoginData.LOGINDATA, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(LoginData.LOGIN, Context.MODE_PRIVATE);
         //步骤2： 实例化SharedPreferences.Editor对象
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //步骤3：将获取过来的值放入文件
-        editor.putString(LoginData.SUSER,user);
-        editor.putString(LoginData.SPASSWORD,password);
 
+        editor.putString(LoginData.LOGINDATA,mloginData.toString());
         //步骤4：提交
         editor.commit();
+        return this;
     }
 
-    public void register(Context context,String u,String p){
+    /**
+     * Register.
+     *
+     * @param context       the context
+     * @param u             the u
+     * @param p             the p
+     * @param qmuiEmptyView the qmui empty view
+     */
+    public static void register(Context context, String u,String p,QMUIEmptyView qmuiEmptyView){
 
-        final QMUITipDialog  tipDialog = new QMUITipDialog.Builder(context)
-                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord(context.getResources().getString(R.string.login_loading_register))
-                .create();
-                tipDialog.show();
-       Observable.create(new ObservableOnSubscribe<String>() {
+        qmuiEmptyView.show(true,
+                context.getResources().getString(R.string.login_loading_register)
+        ,null,null,null);
+        qmuiEmptyView.setTitleColor(Color.WHITE);
+
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Thread.sleep(2500);
                 UserEntityRepository  userEntityRepository=new UserEntityRepository(MyApplication.getApplicationInstance());
                 userEntityRepository.InsertId(u,p);
+
                 emitter.onNext("123");
             }
         }).observeOn(AndroidSchedulers.mainThread())
@@ -116,17 +163,15 @@ public class Login {
 
                     @Override
                     public void onNext(String s) {
-                        tipDialog.dismiss();
-                        QMUITipDialog tipDialog_su = new QMUITipDialog.Builder(context)
-                                .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
-                                .setTipWord(context.getResources().getString(R.string.login_register_success))
-                                .create();
-
+                        qmuiEmptyView.hide();
+                        Toast.makeText(context,
+                                context.getResources().getString(R.string.login_register_success)
+                                , Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        tipDialog.dismiss();
+                        qmuiEmptyView.hide();
                         Toast.makeText(context,
                                 context.getResources().getString(R.string.login_register_fail)
                                 , Toast.LENGTH_SHORT).show();
