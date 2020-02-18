@@ -60,7 +60,8 @@ public class WeatherFragment extends Fragment {
                 }
             });
             recyclerView.setLayoutManager(mLayoutManager);
-            weatherControl=new WeatherControl(staggeredGridAdapter,Objects.requireNonNull(getActivity()));
+            weatherControl=new WeatherControl(staggeredGridAdapter,
+                    Objects.requireNonNull(getActivity()));
             weatherControl.GetCityInfo_Weathe();
         } catch (IOException e) {
             e.printStackTrace();

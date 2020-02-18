@@ -61,7 +61,6 @@ public class UtilX {
         if(nagative){
             num= 0 - num;
         }
-        Logger.d("Centigrade=="+str+"  int=="+num);
         return num;
     }
 

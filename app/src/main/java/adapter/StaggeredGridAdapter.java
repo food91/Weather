@@ -6,9 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,9 +27,20 @@ import com.xiekun.myapplication.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import AndroidDAO.CityRoomDatabase;
+import Entity.PopItemBean;
+import Entity.UserData;
+import Entity.UserEntity;
 import Entity.WeatherData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import util.UtilX;
 import control.WeatherControl;
 
@@ -44,9 +60,10 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     private RecyclerView.ViewHolder holder;
     private int position;
     private OnItemClickListener onItemClickListener;
-
+    QMUIPopup  mNormalPopup;
     private List<String> strtext_view_onlongclick;
     private List<Integer> intview_view_onlongclick;
+    private List<PopItemBean> popItemBean;
 
     private void init(){
        strtext_view_onlongclick=new ArrayList<String>();
@@ -60,6 +77,12 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         intview_view_onlongclick.add(R.drawable.ic_view_share);
         intview_view_onlongclick.add(R.drawable.ic_remarks);
         intview_view_onlongclick.add(R.drawable.ic_about);
+        popItemBean=new ArrayList<PopItemBean>();
+        for(int i=0;i<strtext_view_onlongclick.size();i++){
+            popItemBean.add(new PopItemBean(intview_view_onlongclick.get(i),
+                    strtext_view_onlongclick.get(i)));
+        }
+        Logger.d("init------------------");
     }
 
 
@@ -170,7 +193,6 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
             num[0]= UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem());
             num[1]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem2());
             num[2]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
-            itemViewHolder.textView_centigrade_text.setText(UtilX.minint(num)+"--"+UtilX.maxint(num));
             itemViewHolder.textView_weathertip.setText(weatherData.get(position).getData().get(0).getAir_tips());
         }
         if(holder instanceof ItemViewHolder_two){
@@ -196,10 +218,61 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                QMUIPopup  mNormalPopup = QMUIPopups.popup(mContext, QMUIDisplayHelper.dp2px(mContext, 120),
-                        QMUIDisplayHelper.dp2px(mContext,160))
+
+                WeatherViewClcikLong weatherViewClcikLong=new WeatherViewClcikLong(popItemBean,mContext);
+                AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Observable.create(new ObservableOnSubscribe<UserEntity>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<UserEntity> emitter) throws Exception {
+                                UserEntity userEntity=CityRoomDatabase.getDatabase(mContext).
+                                        wordDao().getUser(UserData.
+                                        getUserData().getName());
+                                userEntity.addCityfavorite(weatherData.get(position).getCity());
+                                CityRoomDatabase.getDatabase(mContext).wordDao().updateUsers(userEntity);
+                                emitter.onNext(userEntity);
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Observer<UserEntity>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onNext(UserEntity userEntity) {
+                                Toast.makeText(mContext,
+                                        mContext.getResources().getString(R.string.view_pop_favior_success),
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Logger.d(e.getMessage());
+                                Toast.makeText(mContext,
+                                        mContext.getResources().getString(R.string.view_pop_favior_fail),
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+                        if (mNormalPopup != null) {
+                            mNormalPopup.dismiss();
+                        }
+                    }
+                };
+
+                  mNormalPopup = QMUIPopups.listPopup(mContext,
+                        QMUIDisplayHelper.dp2px(mContext, 120),
+                        QMUIDisplayHelper.dp2px(mContext, 160)
+                        ,weatherViewClcikLong
+                        ,onItemClickListener)
                         .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
-                        .view(R.layout.view_onclicklong_weather)
                         .edgeProtection(QMUIDisplayHelper.dp2px(mContext, 20))
                         .offsetX(QMUIDisplayHelper.dp2px(mContext, 20))
                         .offsetYIfBottom(QMUIDisplayHelper.dp2px(mContext, 5))

@@ -6,6 +6,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import AndroidDAO.StringTypeConverterCity;
@@ -20,6 +21,40 @@ import AndroidDAO.StringTypeConverterCity;
                 unique = true)}
 )
 public class UserEntity {
+
+    public void setUser(String name,String password,String city){
+        userid=name;
+        password=password;
+        favoritecity=new ArrayList<>();
+        favoritecity.add(city);
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public List<String> getFavoritecity() {
+        return favoritecity;
+    }
+
+    public List<String> getCity_picture_path() {
+        return city_picture_path;
+    }
+
+    public synchronized void addCityfavorite(String city){
+        if(favoritecity==null){
+            favoritecity=new ArrayList<>();
+        }
+        for(int i=0;i<favoritecity.size();i++){
+            if(favoritecity.get(i).equals(city))
+                return;
+        }
+        favoritecity.add(city);
+    }
 
     /**
      * The Id.自增主键
