@@ -6,5 +6,4 @@ public interface WeatherBaseAdapter {
 
    void AddWeatherData(WeatherData weatherData);
    void updateView();
-
 }

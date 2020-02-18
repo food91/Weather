@@ -113,6 +113,8 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         notifyDataSetChanged();
     }
 
+
+
     public WeatherData GetWeaterData(int position){
         return weatherData.get(position);
     }
@@ -244,6 +246,10 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
             num[1]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem2());
             num[2]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
             itemViewHolder.textView_weathertip.setText(weatherData.get(position).getData().get(0).getAir_tips());
+            String s_wea=weatherData.get(position).getData().get(0).getWea_img();
+            Logger.d("s_wea---"+s_wea);
+            WeatherControl.LoadLocalWeatherIcon(mContext,itemViewHolder.iv_wea,
+                    s_wea);
         }
         if(holder instanceof ItemViewHolder_two){
             ItemViewHolder_two itemViewHolder= (ItemViewHolder_two) holder;
@@ -260,9 +266,14 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(onItemClickListener!=null){
-                    onItemClickListener.onClick(position);
+                try {
+                    if(onItemClickListener!=null){
+                        onItemClickListener.onClick(position);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -389,6 +400,8 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         @BindView(R.id.centigrade_text)
         TextView textView_centigrade_text;
 
+        ImageView iv_wea;
+
         /**
          * Instantiates a new Item view holder one.
          *
@@ -397,6 +410,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         public ItemViewHolder_One(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            iv_wea=itemView.findViewById(R.id.iv_wind);
         }
     }
 

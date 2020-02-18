@@ -41,7 +41,7 @@ public class DetailWeatherActivity extends Xactivity {
     private static final int Y_MAX = 10;
     private static final int Y_ADD = 10;
     private static final int Y_START = -10;
-    int pcity = 0;
+
     @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
     WeatherData weatherData;
@@ -92,8 +92,7 @@ public class DetailWeatherActivity extends Xactivity {
         Intent intent = getIntent();
         if (intent != null) {
             weatherData = (WeatherData) intent.getSerializableExtra(WeatherData.DATANAME);
-            pcity = intent.getIntExtra(WeatherControl.CITYNUM, 0);
-            Logger.d("w===" + weatherData.toString() + "--i=" + pcity);
+
         }
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.qmui_icon_topbar_back);

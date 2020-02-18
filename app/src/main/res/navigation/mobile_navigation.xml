@@ -18,26 +18,17 @@
         tools:layout="@layout/fragment_mycare" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-android:name="fragment.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_searh"
+        android:name="fragment.SearchFragment"
+        android:label="@string/menu_search"
+        tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/nav_tools"
-android:name="fragment.ToolsFragment"
-        android:label="@string/menu_tools"
+        android:id="@+id/nav_about"
+android:name="fragment.AboutFragment"
+        android:label="@string/menu_about"
         tools:layout="@layout/fragment_tools" />
 
-    <fragment
-        android:id="@+id/nav_share"
-android:name="fragment.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
 
-    <fragment
-        android:id="@+id/nav_send"
-android:name="fragment.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+
 </navigation>

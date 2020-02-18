@@ -59,13 +59,14 @@ public class MycareFragment extends Fragment {
                             if (userEntity == null || userEntity.favoritecity == null || userEntity.favoritecity.size() == 0)
                                 return;
                             for (int i = 0; i < userEntity.favoritecity.size(); i++) {
+                                weatherControl.UpdataWeatherViewFromHttp(userEntity.favoritecity.get(i)
+                                        , mycareRecyclerviewAdapter);
                                 try {
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                weatherControl.UpdataWeatherViewFromHttp(userEntity.favoritecity.get(i)
-                                        , mycareRecyclerviewAdapter);
+
                             }
                         }
                     });

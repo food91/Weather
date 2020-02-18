@@ -7,6 +7,8 @@ package control;
 import android.util.Log;
 
 
+import java.util.concurrent.TimeUnit;
+
 import Entity.WeatherData;
 import io.reactivex.Observable;
 
@@ -63,13 +65,6 @@ public class WeatherGerHttp {
                                    @Query("city") String city
                                   );
     }
-
-
-    /**
-     * Get http data.
-     * 请求7天天气信息
-     * @return
-     */
     public static Observable<WeatherData> GetHttpData(String cityname){
         //拦截器获取日志
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
@@ -96,6 +91,40 @@ public class WeatherGerHttp {
         GetRuest_Interface request = retrofit.create(GetRuest_Interface.class);
         Observable<WeatherData> call = request.get(WEATHERID,WEATHERPASSWORD,VERSION,cityname);
 
+        return call;
+    }
+
+    /**
+     * Get http data.
+     * 请求7天天气信息
+     * @return
+     */
+    public static Observable<WeatherData> GetHttpData(String cityname,Long time){
+        //拦截器获取日志
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                //打印retrofit日志
+                Log.i("RetrofitLog","retrofitBack = "+message);
+            }
+        });
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()//okhttp设置部分，此处还可再设置网络参数
+                .addInterceptor(loggingInterceptor)
+                .build();
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                //设置网络请求的 Base Url地址
+                .baseUrl(WEATHERURL)
+                //设置数据解析器
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(client)
+                .build();
+        GetRuest_Interface request = retrofit.create(GetRuest_Interface.class);
+        Observable<WeatherData> call = request.get(WEATHERID,WEATHERPASSWORD,VERSION,cityname)
+                .delay(time,TimeUnit.SECONDS);
         return call;
     }
 

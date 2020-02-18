@@ -9,6 +9,11 @@
         android:id="@+id/recyclerview_care"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?selectableItemBackground"
+
+        android:clickable="true"
+
+        android:focusable="true"
         android:layout_margin="@dimen/margin"
         />
 

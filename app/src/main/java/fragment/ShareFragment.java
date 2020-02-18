@@ -21,6 +21,7 @@ public class ShareFragment extends Fragment {
 
     private ShareViewModel shareViewModel;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         shareViewModel =

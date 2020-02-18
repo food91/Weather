@@ -64,11 +64,11 @@ public class UserEntity {
         if(favoritecity==null){
             favoritecity=new ArrayList<>();
         }
-        Logger.d("care-------"+favoritecity.toString());
+        Logger.d("care-------"+favoritecity.toString()+"city=="+city);
         for(int i=0;i<favoritecity.size();i++){
             if(favoritecity.get(i).equals(city)){
                 favoritecity.remove(i);
-                return false;
+                return true;
             }
 
         }

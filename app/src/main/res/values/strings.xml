@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">MyAppX</string>
+    <string name="app_version">1.0.0</string>
     <string name="login_user">用户名</string>
     <string name="login_password">密码</string>
     <string name="login_keep_password">记住密码</string>
@@ -29,6 +30,7 @@
     <string name="view_pop_remark">备注</string>
     <string name="view_pop_about">关于</string>
     <string name="view_pop_advice">建议</string>
+    <string name="fragment_btn_search">搜索</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -41,10 +43,10 @@
 
     <string name="menu_weather">天气</string>
     <string name="menu_gallery">我的关注</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_search">搜索</string>
+    <string name="menu_about">关于</string>
+    <string name="menu_share">分享</string>
+    <string name="menu_send">建议</string>
 
     <dimen name="App_title">32sp</dimen>
     <dimen name="App_big">44sp</dimen>

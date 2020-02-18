@@ -48,6 +48,9 @@ public class WeatherControl {
     private WeatherGerHttp weatherGerHttp;
     private WeatherBaseAdapter mweatherBaseAdapter;
 
+    private static final String[] WEA_IMG={"xue","lei","shachen","wu","bingbao","yun","yu","yin","qing"};
+    private static final int[] WEA_IMG_ID={R.mipmap.xue,R.mipmap.lei,R.mipmap.shachen,
+    R.mipmap.wu,R.mipmap.mai,R.mipmap.yun,R.mipmap.yu,R.mipmap.yin,R.mipmap.qing};
     //存储所有城市的名
     private List<CityBean> cityId=new ArrayList<>() ;
     /**
@@ -85,6 +88,19 @@ public class WeatherControl {
         return this;
     }
 
+    public static void LoadLocalWeatherIcon(Context context,ImageView iv,String wea){
+        for(int i=0;i<WEA_IMG.length;i++){
+            if(wea.equals(WEA_IMG[i])){
+                Glide.with(context)
+                        .load(WEA_IMG_ID[i])
+                        .into(iv);
+                return;
+            }
+
+        }
+
+    }
+
 
 
     /**
@@ -96,6 +112,7 @@ public class WeatherControl {
     public WeatherControl(Context context) throws IOException {
         weatherGerHttp=new WeatherGerHttp();
     }
+
 
 
     /**
@@ -207,7 +224,13 @@ public class WeatherControl {
     }
 
     public void stopThreadPool(){
-        threadPoolExecutor.shutdownNow();
+        try {
+            threadPoolExecutor.shutdownNow();
+            threadPoolExecutor=null;
+        }catch (Exception e){
+
+        }
+
     }
 
 

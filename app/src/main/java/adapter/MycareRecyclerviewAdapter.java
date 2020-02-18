@@ -1,6 +1,7 @@
 package adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.qmuiteam.qmui.widget.popup.QMUIPopup;
@@ -27,6 +29,7 @@ import Entity.PopItemBean;
 import Entity.UserData;
 import Entity.UserEntity;
 import Entity.WeatherData;
+import acitivity.DetailWeatherActivity;
 import control.WeatherControl;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -97,12 +100,19 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
             Favourite_cardview favourite_cardview= (Favourite_cardview) holder;
             //city picture
             WeatherControl.GetImageViewHttpCacheStrategy(mContext,favourite_cardview.iv_city,450,screen_w,data);
-            Logger.d("weaterdata==="+weatherDataList.get(position).getCity());
             favourite_cardview.tv_city.setText(weatherDataList.get(position).getCity());
             favourite_cardview.tv_tip.setText(weatherDataList.get(position).getData().get(0).getAir_tips());
-            favourite_cardview.centigrade.setText(UtilX.CentigradeStringToInt(
-                    weatherDataList.get(position).getData().get(0).getTem()
-            ));
+            Logger.d("centigred---"+UtilX.CentigradeStringToInt(
+                    weatherDataList.get(position).getData().get(0).getTem()));
+            int[] num=new int[3];
+            num[0]= UtilX.CentigradeStringToInt(weatherDataList.get(position).getData().get(0).getTem());
+            num[1]=UtilX.CentigradeStringToInt(weatherDataList.get(position).getData().get(0).getTem2());
+            num[2]=UtilX.CentigradeStringToInt(weatherDataList.get(position).getData().get(0).getTem1());
+            favourite_cardview.centigrade.setText(
+                    UtilX.minint(num)+"--"+UtilX.maxint(num)
+                    );
+            String waes=weatherDataList.get(position).getData().get(0).getWea_img();
+            WeatherControl.LoadLocalWeatherIcon(mContext,favourite_cardview.iv_wea,waes);
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -112,6 +122,15 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
                 }
             });
 
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(mContext, DetailWeatherActivity.class);
+                    WeatherData tweatherData=weatherDataList.get(position);
+                    intent.putExtra(WeatherData.DATANAME,tweatherData);
+                    mContext.startActivity(intent);
+                }
+            });
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -127,10 +146,10 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
                         getUserData().getName());
                 Boolean IsNoExistCity=userEntity.RemoveCityfavorite(weatherDataList.get(i).getCity());
                 if(IsNoExistCity){
+                    weatherDataList.remove(i);
                     CityRoomDatabase.getDatabase(mContext).wordDao().updateUsers(userEntity);
                 }
                 emitter.onNext(IsNoExistCity);
-
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -143,6 +162,7 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
                     @Override
                     public void onNext(Boolean aBoolean) {
                         if(aBoolean){
+                            notifyDataSetChanged();
                             Toast.makeText(mContext,
                                     mContext.getResources().getString(R.string.view_pop_faviored_cancel),
                                     Toast.LENGTH_LONG).show();
@@ -180,7 +200,7 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Logger.d("i==="+i);
                 if(i==0){
-                    initPopQMUI(p,v);
+                    care(p);
                 }
                 if (mNormalPopup != null) {
                     mNormalPopup.dismiss();
@@ -237,6 +257,7 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
 
 
         TextView tv_tip;
+        ImageView iv_wea;
 
 
         public Favourite_cardview(@NonNull View itemView) {
@@ -245,6 +266,7 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
             tv_city=itemView.findViewById(R.id.citycare_text_adapter);
             centigrade=itemView.findViewById(R.id.centigradecare_text_adapter);
             tv_tip=itemView.findViewById(R.id.tipcare_weather_adapter);
+            iv_wea=itemView.findViewById(R.id.iv_wind_adapter);
         }
     }
 }

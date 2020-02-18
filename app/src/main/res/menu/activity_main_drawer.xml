@@ -15,16 +15,16 @@
             android:icon="@drawable/ic_star_two"
             android:title="@string/menu_gallery" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_searh"
             android:icon="@drawable/ic_album_three"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/menu_search" />
         <item
-            android:id="@+id/nav_tools"
+            android:id="@+id/nav_about"
             android:icon="@drawable/ic_brightness_four"
-            android:title="@string/menu_tools" />
+            android:title="@string/menu_about" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="其他">
         <menu>
             <item
                 android:id="@+id/nav_share"
