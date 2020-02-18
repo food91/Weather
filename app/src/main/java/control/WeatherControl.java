@@ -193,17 +193,21 @@ public class WeatherControl {
         cityp= new int[100];
         GetCityInfor(GetAllweater_runnable);
     }
-
+    ThreadPoolExecutor threadPoolExecutor;
     /**
      * Get city info.
      */
     public  void GetCityInfor(Runnable runnable){
 
-        final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(4,5,1, TimeUnit.SECONDS,
+        threadPoolExecutor = new ThreadPoolExecutor(4,5,1, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(50));
         //设置线程池回收
         threadPoolExecutor.allowCoreThreadTimeOut(true);
         threadPoolExecutor.execute(runnable);
+    }
+
+    public void stopThreadPool(){
+        threadPoolExecutor.shutdownNow();
     }
 
 

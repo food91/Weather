@@ -27,6 +27,14 @@ public class UserData {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "UserData{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     /**
      * Gets name.
      *

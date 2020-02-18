@@ -19,8 +19,12 @@
     <string name="login_register_success">注册成功</string>
     <string name="login_register_fail">注册失败</string>
     <string name="view_pop_favior_success">关注成功</string>
+    <string name="view_pop_faviored">已添加关注</string>
+    <string name="view_pop_faviored_cancel">已取消关注</string>
     <string name="view_pop_favior_fail">关注失败</string>
+    <string name="view_pop_favior_fail_cancel_fail">取消关注失败</string>
     <string name="view_pop_favior">关注</string>
+    <string name="view_pop_favior_cancel">取消关注</string>
     <string name="view_pop_share">分享</string>
     <string name="view_pop_remark">备注</string>
     <string name="view_pop_about">关于</string>

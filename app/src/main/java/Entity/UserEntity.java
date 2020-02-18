@@ -6,6 +6,8 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,15 +47,32 @@ public class UserEntity {
         return city_picture_path;
     }
 
-    public synchronized void addCityfavorite(String city){
+    public synchronized boolean addCityfavorite(String city){
         if(favoritecity==null){
             favoritecity=new ArrayList<>();
         }
+        Logger.d("care-------"+favoritecity.toString());
         for(int i=0;i<favoritecity.size();i++){
             if(favoritecity.get(i).equals(city))
-                return;
+                return false;
         }
         favoritecity.add(city);
+        return true;
+    }
+
+    public synchronized boolean RemoveCityfavorite(String city){
+        if(favoritecity==null){
+            favoritecity=new ArrayList<>();
+        }
+        Logger.d("care-------"+favoritecity.toString());
+        for(int i=0;i<favoritecity.size();i++){
+            if(favoritecity.get(i).equals(city)){
+                favoritecity.remove(i);
+                return false;
+            }
+
+        }
+        return false;
     }
 
     /**

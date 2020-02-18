@@ -18,8 +18,10 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
 
+import Entity.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fragment.WeatherFragment;
@@ -43,6 +45,7 @@ public class WeatherActivity extends Xactivity {
     DrawerLayout drawerLayout;
     WeatherFragment weatherfragment;
     private AppBarConfiguration mAppBarConfiguration;
+    private TextView tv_head_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +98,9 @@ public class WeatherActivity extends Xactivity {
         NavController navController = Navigation.findNavController(this, R.id.weather_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        Logger.d("user=="+UserData.getUserData().toString());
+        tv_head_id=navigationView.getHeaderView(0).findViewById(R.id.tv_nav_header_id);
+        tv_head_id.setText(UserData.getUserData().getName());
     }
 
     @Override

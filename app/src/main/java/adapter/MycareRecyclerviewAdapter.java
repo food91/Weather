@@ -4,22 +4,38 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.popup.QMUIPopup;
+import com.qmuiteam.qmui.widget.popup.QMUIPopups;
 import com.xiekun.myapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import AndroidDAO.CityRoomDatabase;
+import Entity.PopItemBean;
+import Entity.UserData;
+import Entity.UserEntity;
 import Entity.WeatherData;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import control.WeatherControl;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import util.UtilX;
 
 public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements WeatherBaseAdapter{
 
@@ -27,12 +43,37 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
     private List<WeatherData> weatherDataList;
     private Context mContext;
     private int screen_w;
-
+    private List<String> strtext_view_onlongclick;
+    private List<Integer> intview_view_onlongclick;
+    private List<PopItemBean> popItemBean;
+    private     QMUIPopup mNormalPopup;
     public MycareRecyclerviewAdapter(Context mcontext) {
         this.mContext = mcontext;
         screen_w=QMUIDisplayHelper.getScreenWidth(mcontext);
         weatherDataList=new ArrayList<WeatherData>();
+        init();
     }
+
+    private void init(){
+        strtext_view_onlongclick=new ArrayList<String>();
+        strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_favior_cancel));
+        strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_share));
+        strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_remark));
+        strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_about));
+
+        intview_view_onlongclick=new ArrayList<Integer>();
+        intview_view_onlongclick.add(R.drawable.ic_favorite_border_black_24dp);
+        intview_view_onlongclick.add(R.drawable.ic_view_share);
+        intview_view_onlongclick.add(R.drawable.ic_remarks);
+        intview_view_onlongclick.add(R.drawable.ic_about);
+        popItemBean=new ArrayList<PopItemBean>();
+        for(int i=0;i<strtext_view_onlongclick.size();i++){
+            popItemBean.add(new PopItemBean(intview_view_onlongclick.get(i),
+                    strtext_view_onlongclick.get(i)));
+        }
+        Logger.d("init------------------");
+    }
+
 
     public void setUserEntityList(List<WeatherData> list){
         weatherDataList=list;
@@ -42,7 +83,7 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
        View view = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.layout_staggere_goun_one_item,
+                inflate(R.layout.favourite_cardview,
                         parent,
                         false);
         return new Favourite_cardview(view);
@@ -56,15 +97,115 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
             Favourite_cardview favourite_cardview= (Favourite_cardview) holder;
             //city picture
             WeatherControl.GetImageViewHttpCacheStrategy(mContext,favourite_cardview.iv_city,450,screen_w,data);
-
+            Logger.d("weaterdata==="+weatherDataList.get(position).getCity());
             favourite_cardview.tv_city.setText(weatherDataList.get(position).getCity());
             favourite_cardview.tv_tip.setText(weatherDataList.get(position).getData().get(0).getAir_tips());
+            favourite_cardview.centigrade.setText(UtilX.CentigradeStringToInt(
+                    weatherDataList.get(position).getData().get(0).getTem()
+            ));
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                   initPopQMUI(position,v);
 
+                    return false;
+                }
+            });
 
         }catch (Exception e){
             e.printStackTrace();
         }
 
+    }
+
+    private void care(int i){
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
+                UserEntity userEntity= CityRoomDatabase.getDatabase(mContext).
+                        wordDao().getUser(UserData.
+                        getUserData().getName());
+                Boolean IsNoExistCity=userEntity.RemoveCityfavorite(weatherDataList.get(i).getCity());
+                if(IsNoExistCity){
+                    CityRoomDatabase.getDatabase(mContext).wordDao().updateUsers(userEntity);
+                }
+                emitter.onNext(IsNoExistCity);
+
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if(aBoolean){
+                            Toast.makeText(mContext,
+                                    mContext.getResources().getString(R.string.view_pop_faviored_cancel),
+                                    Toast.LENGTH_LONG).show();
+                            notifyDataSetChanged();
+                        }else{
+                            Toast.makeText(mContext,
+                                    mContext.getResources().getString(R.string.view_pop_favior_fail_cancel_fail),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.getMessage());
+                        Toast.makeText(mContext,
+                                mContext.getResources().getString(R.string.view_pop_favior_fail),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+
+    private void initPopQMUI(int p,View v){
+        WeatherViewClcikLong weatherViewClcikLong=new WeatherViewClcikLong(popItemBean,mContext);
+
+        AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Logger.d("i==="+i);
+                if(i==0){
+                    initPopQMUI(p,v);
+                }
+                if (mNormalPopup != null) {
+                    mNormalPopup.dismiss();
+                }
+            }
+        };
+         mNormalPopup = QMUIPopups.listPopup(mContext,
+                QMUIDisplayHelper.dp2px(mContext, 120),
+                QMUIDisplayHelper.dp2px(mContext, 160)
+                ,weatherViewClcikLong
+                ,onItemClickListener)
+                .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
+                .edgeProtection(QMUIDisplayHelper.dp2px(mContext, 20))
+                .offsetX(QMUIDisplayHelper.dp2px(mContext, 20))
+                .offsetYIfBottom(QMUIDisplayHelper.dp2px(mContext, 5))
+                .shadow(true)
+                .arrow(true)
+                .animStyle(QMUIPopup.ANIM_GROW_FROM_CENTER)
+                .onDismiss(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+
+                    }
+                })
+                .show(v);
     }
 
     @Override
@@ -85,22 +226,25 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
 
     class Favourite_cardview extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.iv_careweather)
+
         ImageView iv_city;
 
-        @BindView(R.id.citycare_text)
+
         TextView tv_city;
 
-        @BindView(R.id.centigradecare_text)
+
         TextView centigrade;
 
-        @BindView(R.id.tipcare_weather)
+
         TextView tv_tip;
 
 
         public Favourite_cardview(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            iv_city=itemView.findViewById(R.id.iv_careweather_adapter);
+            tv_city=itemView.findViewById(R.id.citycare_text_adapter);
+            centigrade=itemView.findViewById(R.id.centigradecare_text_adapter);
+            tv_tip=itemView.findViewById(R.id.tipcare_weather_adapter);
         }
     }
 }

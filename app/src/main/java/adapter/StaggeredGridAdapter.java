@@ -7,10 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -176,6 +173,59 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         init();
     }
 
+    private void care(int i){
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
+                UserEntity userEntity=CityRoomDatabase.getDatabase(mContext).
+                        wordDao().getUser(UserData.
+                        getUserData().getName());
+                Boolean IsNoExistCity=userEntity.addCityfavorite(weatherData.get(i).getCity());
+                if(IsNoExistCity){
+                    CityRoomDatabase.getDatabase(mContext).wordDao().updateUsers(userEntity);
+                }
+                emitter.onNext(IsNoExistCity);
+
+
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if(aBoolean){
+                            Toast.makeText(mContext,
+                                    mContext.getResources().getString(R.string.view_pop_favior_success),
+                                    Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(mContext,
+                                    mContext.getResources().getString(R.string.view_pop_faviored),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.getMessage());
+                        Toast.makeText(mContext,
+                                mContext.getResources().getString(R.string.view_pop_favior_fail),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
@@ -220,53 +270,19 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
             public boolean onLongClick(View v) {
 
                 WeatherViewClcikLong weatherViewClcikLong=new WeatherViewClcikLong(popItemBean,mContext);
+
                 AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Observable.create(new ObservableOnSubscribe<UserEntity>() {
-                            @Override
-                            public void subscribe(ObservableEmitter<UserEntity> emitter) throws Exception {
-                                UserEntity userEntity=CityRoomDatabase.getDatabase(mContext).
-                                        wordDao().getUser(UserData.
-                                        getUserData().getName());
-                                userEntity.addCityfavorite(weatherData.get(position).getCity());
-                                CityRoomDatabase.getDatabase(mContext).wordDao().updateUsers(userEntity);
-                                emitter.onNext(userEntity);
-                            }
-                        }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Observer<UserEntity>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onNext(UserEntity userEntity) {
-                                Toast.makeText(mContext,
-                                        mContext.getResources().getString(R.string.view_pop_favior_success),
-                                        Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Logger.d(e.getMessage());
-                                Toast.makeText(mContext,
-                                        mContext.getResources().getString(R.string.view_pop_favior_fail),
-                                        Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        });
+                        Logger.d("i==="+i);
+                     if(i==0){
+                         care(position);
+                     }
                         if (mNormalPopup != null) {
                             mNormalPopup.dismiss();
                         }
                     }
                 };
-
                   mNormalPopup = QMUIPopups.listPopup(mContext,
                         QMUIDisplayHelper.dp2px(mContext, 120),
                         QMUIDisplayHelper.dp2px(mContext, 160)

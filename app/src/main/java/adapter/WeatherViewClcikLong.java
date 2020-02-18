@@ -4,11 +4,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.popup.QMUIPopup;
+import com.qmuiteam.qmui.widget.popup.QMUIPopups;
 import com.xiekun.myapplication.R;
 
 import java.util.List;
@@ -56,7 +61,6 @@ public class WeatherViewClcikLong extends BaseAdapter {
             //对viewHolder的属性进行赋值
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.iv_careweather_item);
             viewHolder.itemTitle = (TextView) convertView.findViewById(R.id.tv_careweather_item);
-
             //通过setTag将convertView与viewHolder关联
             convertView.setTag(viewHolder);
         }else {
@@ -71,6 +75,8 @@ public class WeatherViewClcikLong extends BaseAdapter {
 
         return convertView;
     }
+
+
 
 
     class ViewHolder {

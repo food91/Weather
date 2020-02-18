@@ -72,6 +72,12 @@ public class WeatherFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onPause() {
+        weatherControl.stopThreadPool();
+        super.onPause();
+
+    }
 
     @Override
     public void onDestroy() {
