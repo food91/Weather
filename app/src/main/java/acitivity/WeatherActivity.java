@@ -1,5 +1,7 @@
 package acitivity;
 
+
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,6 +35,10 @@ import com.xiekun.myapplication.R;
 import Entity.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fragment.AboutFragment;
+import fragment.AboutFragment_ViewBinding;
+import fragment.MycareFragment;
+import fragment.SearchFragment;
 import fragment.WeatherFragment;
 
 
@@ -52,6 +59,9 @@ public class WeatherActivity extends Xactivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     WeatherFragment weatherfragment;
+    AboutFragment aboutFragment;
+    MycareFragment mycareFragment;
+    SearchFragment searchFragment;
     private AppBarConfiguration mAppBarConfiguration;
     private TextView tv_head_id;
     private int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
@@ -68,21 +78,24 @@ public class WeatherActivity extends Xactivity {
         setContentView(R.layout.drawerlayout);
         ButterKnife.bind(this);
         init();
+        initDefaultFragment();
         onclick();
+
     }
 
+    public void initDefaultFragment() {
 
-
-
-/*    public void initDefaultFragment() {
-        fragmentManager = getSupportFragmentManager();
-        detailWeatherfragment = new DetailFragment();
-        weatherfragment = new WeatherFragment();
-        fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        weatherfragment=new WeatherFragment();
+        aboutFragment = new AboutFragment();
+        mycareFragment = new MycareFragment();
+        searchFragment = new SearchFragment();
         fragmentTransaction.add(R.id.weather_fragment, weatherfragment);
-        fragmentTransaction.add(R.id.weather_fragment, detailWeatherfragment);
+        fragmentTransaction.add(R.id.weather_fragment, aboutFragment);
+        fragmentTransaction.add(R.id.weather_fragment, mycareFragment);
+        fragmentTransaction.add(R.id.weather_fragment, searchFragment);
         fragmentTransaction.commit();
-    }*/
+    }
 
     private void onclick() {
 
@@ -136,13 +149,16 @@ public class WeatherActivity extends Xactivity {
                 switch (item.getItemId()){
                     case R.id.nav_share:
                         allShare();
-                        return true;
+                        return false;
                     case R.id.nav_send:
                         showEditTextDialog();
-                        return true;
+                        return false;
+                    case R.id.nav_mycare:
+                        mycareFragment.sh
+                        break;
                 }
 
-                return false;
+                return true;
             }
         });
     }

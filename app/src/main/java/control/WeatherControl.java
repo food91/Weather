@@ -147,7 +147,6 @@ public class WeatherControl {
             public void onRefresh() {
                GetCityInfo_Weathe();
                 //这里获取数据的逻辑
-
             }
         });
     }
@@ -301,7 +300,9 @@ public class WeatherControl {
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-
+                        if(swipeRefreshLayout!=null){
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
                     }
 
                     @Override

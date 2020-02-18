@@ -42,6 +42,13 @@ public class MycareFragment extends Fragment {
                 ViewModelProviders.of(this).get(MycareViewModel.class);
         View root = inflater.inflate(R.layout.fragment_mycare, container, false);
         unbinder = ButterKnife.bind(this, root);
+
+        return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mycareRecyclerviewAdapter = new MycareRecyclerviewAdapter(getContext());
         recyclerviewCare.setLayoutManager(new LinearLayoutManager(getContext()));//这里用线性显示 类似于listview
         recyclerviewCare.setLayoutManager(new GridLayoutManager(getContext(), 1));//这里用线性宫格显示 类似于gridview
@@ -77,9 +84,7 @@ public class MycareFragment extends Fragment {
             e.printStackTrace();
         }
 
-        return root;
     }
-
 
     @Override
     public void onDestroy() {

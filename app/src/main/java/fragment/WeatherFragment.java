@@ -1,5 +1,6 @@
 package fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ public class WeatherFragment extends Fragment {
      GridLayoutManager mLayoutManager;
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -70,6 +72,19 @@ public class WeatherFragment extends Fragment {
         weatherControl.SetweatherControl(swipeRefreshLayout);
         weatherControl.setOncliAdapter(getContext());
         return root;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
     }
 
     @Override
