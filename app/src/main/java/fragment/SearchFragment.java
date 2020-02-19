@@ -1,5 +1,6 @@
 package fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,8 +55,6 @@ public class SearchFragment extends Fragment {
     @BindView(R.id.fragment_btn_search)
     QMUIRoundButton fragmentBtnSearch;
 
-    @BindView(R.id.iv_gif_loading)
-    ImageView imageView_gif;
     private Unbinder unbinder;
     private SearchViewModel searchViewModel;
     private WeatherControl weatherControl;
@@ -121,16 +121,16 @@ public class SearchFragment extends Fragment {
         super.onStart();
     }
 
+    ProgressDialog progressBar;
+
     private void stopgif(){
-        fragmentBtnSearch.setVisibility(View.VISIBLE);
-        intvSearch.setVisibility(View.VISIBLE);
-        imageView_gif.setVisibility(View.GONE);
+
+     progressBar.dismiss();
+
     }
 
     private void loadinggif(){
-        fragmentBtnSearch.setVisibility(View.GONE);
-        intvSearch.setVisibility(View.GONE);
-        imageView_gif.setVisibility(View.VISIBLE);
+        progressBar= ProgressDialog.show(getContext(), "提示", "正在搜索中");
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 //.placeholder(R.mipmap.ic_launcher_round)
@@ -139,11 +139,7 @@ public class SearchFragment extends Fragment {
                 //.skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
 
-        Glide.with(this)
-                .load(R.drawable.loadinggif)
-                .apply(options)
-                //.thumbnail(Glide.with(this).load(R.mipmap.ic_launcher))
-                .into(imageView_gif);
+  
     }
 
     @Override

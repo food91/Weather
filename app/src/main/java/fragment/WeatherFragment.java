@@ -37,8 +37,6 @@ public class WeatherFragment extends Fragment {
      StaggeredGridAdapter staggeredGridAdapter;
      GridLayoutManager mLayoutManager;
 
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,

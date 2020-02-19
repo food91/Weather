@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -148,7 +149,7 @@ public class WeatherActivity extends Xactivity {
             FragmentTransaction fragmentTransaction;
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+                drawerLayout.closeDrawer(Gravity.START);
                 switch (item.getItemId()){
                     case R.id.nav_share:
                         allShare();

@@ -233,13 +233,10 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         try {
-        int h= 450;
-        int w= 300;
         int data= (int) (position)%30+1;
         if(holder instanceof ItemViewHolder_One){
-            w=widthPixels;
             ItemViewHolder_One itemViewHolder= (ItemViewHolder_One) holder;
-            WeatherControl.GetImageViewHttpCacheStrategy(mContext,itemViewHolder.iv_weather,h,w,data);
+            WeatherControl.GetImageViewHttpCacheStrategy(mContext,itemViewHolder.iv_weather,data);
             itemViewHolder.textView_city.setText(weatherData.get(position).getCity());
             int[] num=new int[3];
             num[0]= UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem());
@@ -253,7 +250,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
         if(holder instanceof ItemViewHolder_two){
             ItemViewHolder_two itemViewHolder= (ItemViewHolder_two) holder;
-            WeatherControl.GetImageViewHttpCacheStrategy(mContext,itemViewHolder.mImageView, h, w,data);
+            WeatherControl.GetImageViewHttpCacheStrategy(mContext,itemViewHolder.mImageView,data);
             int[] num=new int[3];
             num[0]= UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem());
             num[1]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem2());

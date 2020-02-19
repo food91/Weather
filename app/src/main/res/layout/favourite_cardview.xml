@@ -17,10 +17,11 @@
 
         <ImageView
             android:id="@+id/iv_careweather_adapter"
-            android:layout_margin="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/loadgif" />
+            android:scaleType="centerCrop"
+            android:padding="@dimen/margin"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@mipmap/ic_launcher_round" />
 
         <LinearLayout
             android:layout_width="wrap_content"

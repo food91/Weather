@@ -99,7 +99,7 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
             int data= (int) (position+1)%30;
             Favourite_cardview favourite_cardview= (Favourite_cardview) holder;
             //city picture
-            WeatherControl.GetImageViewHttpCacheStrategy(mContext,favourite_cardview.iv_city,450,screen_w,data);
+            WeatherControl.GetImageViewHttpCacheStrategy(mContext,favourite_cardview.iv_city,data);
             favourite_cardview.tv_city.setText(weatherDataList.get(position).getCity());
             favourite_cardview.tv_tip.setText(weatherDataList.get(position).getData().get(0).getAir_tips());
             Logger.d("centigred---"+UtilX.CentigradeStringToInt(
