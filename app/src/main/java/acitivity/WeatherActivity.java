@@ -36,7 +36,6 @@ import Entity.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fragment.AboutFragment;
-import fragment.AboutFragment_ViewBinding;
 import fragment.MycareFragment;
 import fragment.SearchFragment;
 import fragment.WeatherFragment;
@@ -158,7 +157,6 @@ public class WeatherActivity extends Xactivity {
                         showEditTextDialog();
                         break;
                     case R.id.nav_mycare:
-
                       fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.hide(searchFragment)
                                 .hide(weatherfragment)
