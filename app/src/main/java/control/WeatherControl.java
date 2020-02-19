@@ -206,6 +206,7 @@ public class WeatherControl {
 
     public void GetCityInfo_Weathe(){
         staggeredGridAdapter.ClearData();
+        staggeredGridAdapter.notifyDataSetChanged();
         cityp= new int[100];
         GetCityInfor(GetAllweater_runnable);
     }

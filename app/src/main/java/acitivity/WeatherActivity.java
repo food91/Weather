@@ -80,7 +80,6 @@ public class WeatherActivity extends Xactivity {
         init();
         initDefaultFragment();
         onclick();
-
     }
 
     public void initDefaultFragment() {

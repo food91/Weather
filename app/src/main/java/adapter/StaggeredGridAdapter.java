@@ -110,7 +110,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void updateView() {
-        notifyDataSetChanged();
+        notifyItemChanged(weatherData.size());
     }
 
 
