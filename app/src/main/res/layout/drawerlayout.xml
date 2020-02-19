@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             app:layout_behavior = "@string/appbar_scrolling_view_behavior"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/mobile_navigation" />
+            />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation_view"

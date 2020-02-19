@@ -38,23 +38,30 @@ public class MycareFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mycareViewModel =
-                ViewModelProviders.of(this).get(MycareViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_mycare, container, false);
         unbinder = ButterKnife.bind(this, root);
-
+        update();
         return root;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mycareRecyclerviewAdapter = new MycareRecyclerviewAdapter(getContext());
-        recyclerviewCare.setLayoutManager(new LinearLayoutManager(getContext()));//这里用线性显示 类似于listview
-        recyclerviewCare.setLayoutManager(new GridLayoutManager(getContext(), 1));//这里用线性宫格显示 类似于gridview
-        recyclerviewCare.setLayoutManager(new StaggeredGridLayoutManager(1, OrientationHelper.VERTICAL));//这里用线性宫格显示 类似于瀑布流
-        recyclerviewCare.setAdapter(mycareRecyclerviewAdapter);
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            mycareViewModel.update();
+        }
+    }
+
+    public void update(){
         try {
+            mycareRecyclerviewAdapter = new MycareRecyclerviewAdapter(getContext());
+            recyclerviewCare.setLayoutManager(new LinearLayoutManager(getContext()));//这里用线性显示 类似于listview
+            recyclerviewCare.setLayoutManager(new GridLayoutManager(getContext(), 1));//这里用线性宫格显示 类似于gridview
+            recyclerviewCare.setLayoutManager(new StaggeredGridLayoutManager(1, OrientationHelper.VERTICAL));//这里用线性宫格显示 类似于瀑布流
+            recyclerviewCare.setAdapter(mycareRecyclerviewAdapter);
+            mycareViewModel =
+                    ViewModelProviders.of(this).get(MycareViewModel.class);
             weatherControl = new WeatherControl().buildadapter(mycareRecyclerviewAdapter);
             mycareViewModel.getIdEntity().observe(this, new Observer<UserEntity>() {
                 @Override
@@ -83,6 +90,12 @@ public class MycareFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
     }
 

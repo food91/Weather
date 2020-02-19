@@ -90,11 +90,15 @@ public class WeatherActivity extends Xactivity {
         aboutFragment = new AboutFragment();
         mycareFragment = new MycareFragment();
         searchFragment = new SearchFragment();
-        fragmentTransaction.add(R.id.weather_fragment, weatherfragment);
         fragmentTransaction.add(R.id.weather_fragment, aboutFragment);
         fragmentTransaction.add(R.id.weather_fragment, mycareFragment);
         fragmentTransaction.add(R.id.weather_fragment, searchFragment);
+        fragmentTransaction.add(R.id.weather_fragment, weatherfragment);
         fragmentTransaction.commit();
+        fragmentTransaction.hide(searchFragment)
+                .hide(mycareFragment)
+                .hide(aboutFragment);
+        fragmentTransaction.show(weatherfragment);
     }
 
     private void onclick() {
@@ -143,18 +147,51 @@ public class WeatherActivity extends Xactivity {
         tv_head_id=navigationView.getHeaderView(0).findViewById(R.id.tv_nav_header_id);
         tv_head_id.setText(UserData.getUserData().getName());
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            FragmentTransaction fragmentTransaction;
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()){
                     case R.id.nav_share:
                         allShare();
-                        return false;
+                       break;
                     case R.id.nav_send:
                         showEditTextDialog();
-                        return false;
+                        break;
                     case R.id.nav_mycare:
-                        mycareFragment.sh
+
+                      fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.hide(searchFragment)
+                                .hide(weatherfragment)
+                                .hide(aboutFragment)
+                                .remove(mycareFragment);
+                        mycareFragment=new MycareFragment();
+                        fragmentTransaction.add(R.id.weather_fragment,mycareFragment);
+                        fragmentTransaction.commit();
+                        break;
+                    case R.id.nav_about:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.hide(mycareFragment)
+                                .hide(weatherfragment)
+                                .hide(searchFragment)
+                                .show(aboutFragment);
+                        fragmentTransaction.commit();
+                        break;
+                    case R.id.nav_searh:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.hide(mycareFragment)
+                                .hide(weatherfragment)
+                                .hide(aboutFragment)
+                                .show(searchFragment);
+                        fragmentTransaction.commit();
+                        break;
+                    case R.id.weather_fragment:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.hide(mycareFragment)
+                                .hide(searchFragment)
+                                .hide(aboutFragment)
+                                .show(weatherfragment);
+                        fragmentTransaction.commit();
                         break;
                 }
 

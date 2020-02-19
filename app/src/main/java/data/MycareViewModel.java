@@ -28,6 +28,11 @@ public class MycareViewModel extends ViewModel {
     UserEntityRepository userEntityRepository;
 
     public MycareViewModel() {
+        update();
+    }
+
+    public void update(){
+
         userEntityRepository=new UserEntityRepository(MyApplication.getApplicationInstance());
         userEntityLiveData=new MutableLiveData<>();
         new Thread(new Runnable() {
