@@ -202,6 +202,9 @@ public class MycareRecyclerviewAdapter extends RecyclerView.Adapter implements W
                 if(i==0){
                     care(p);
                 }
+                if(i==1){
+                    UtilX.allShare(mContext);
+                }
                 if (mNormalPopup != null) {
                     mNormalPopup.dismiss();
                 }

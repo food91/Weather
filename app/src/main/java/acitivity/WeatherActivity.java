@@ -2,6 +2,7 @@ package acitivity;
 
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import fragment.AboutFragment;
 import fragment.MycareFragment;
 import fragment.SearchFragment;
 import fragment.WeatherFragment;
+import util.UtilX;
 
 
 public class WeatherActivity extends Xactivity {
@@ -152,7 +154,7 @@ public class WeatherActivity extends Xactivity {
                 drawerLayout.closeDrawer(Gravity.START);
                 switch (item.getItemId()){
                     case R.id.nav_share:
-                        allShare();
+                        UtilX.allShare(WeatherActivity.this);
                        break;
                     case R.id.nav_send:
                         showEditTextDialog();
@@ -224,16 +226,7 @@ public class WeatherActivity extends Xactivity {
                 .create(mCurrentDialogStyle).show();
     }
 
-    public void allShare(){
-        Intent share_intent = new Intent();
-        share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
-        share_intent.setType("text/plain");//设置分享内容的类型
-        share_intent.putExtra(Intent.EXTRA_SUBJECT, "share");//添加分享内容标题
-        share_intent.putExtra(Intent.EXTRA_TEXT, "分享:"+"android");//添加分享内容
-        //创建分享的Dialog
-        share_intent = Intent.createChooser(share_intent, "share");
-        startActivity(share_intent);
-    }
+
 
     @Override
     public boolean onSupportNavigateUp() {

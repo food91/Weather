@@ -286,6 +286,9 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
                      if(i==0){
                          care(position);
                      }
+                     if(i==1){
+                            UtilX.allShare(mContext);
+                        }
                         if (mNormalPopup != null) {
                             mNormalPopup.dismiss();
                         }

@@ -2,6 +2,7 @@ package util;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -17,6 +18,18 @@ import java.text.SimpleDateFormat;
 public class UtilX {
 
     public static boolean isDebug=true;
+
+
+    public static void allShare(Context context){
+        Intent share_intent = new Intent();
+        share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
+        share_intent.setType("text/plain");//设置分享内容的类型
+        share_intent.putExtra(Intent.EXTRA_SUBJECT, "share");//添加分享内容标题
+        share_intent.putExtra(Intent.EXTRA_TEXT, "分享:"+"android");//添加分享内容
+        //创建分享的Dialog
+        share_intent = Intent.createChooser(share_intent, "share");
+        context.startActivity(share_intent);
+    }
 
     /**
      * 返回当前程序版本号

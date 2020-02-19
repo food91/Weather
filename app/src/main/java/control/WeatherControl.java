@@ -184,7 +184,6 @@ public class WeatherControl {
     //防止无限下拉刷新，造成的BUG
     private static volatile boolean isloading = false;
     volatile int t = 0;
-
     private void rondomcity() {
         int num = 0;
         int cityid_position = 0;
