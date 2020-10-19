@@ -64,4 +64,5 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
     implementation 'me.jessyan:autosize:1.1.2'
+    compile 'com.jaeger.statusbarutil:library:1.5.1'
 }

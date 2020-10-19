@@ -167,6 +167,7 @@ public class LoginActivity extends Xactivity {
                             startActivity(intent);
                             finish();
                         }else {
+                            emptyView.hide();
                             Toast.makeText(LoginActivity.this,
                                     getResources().getString(R.string.login_Wrong)
                                     , Toast.LENGTH_SHORT).show();
