@@ -2,6 +2,8 @@ package view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,12 +11,19 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+import com.xiekun.myapplication.R;
+
 import java.util.ArrayList;
 import java.util.Random;
+
+import Entity.WeatherData;
+import util.StringUtils;
 
 public class WeatherDetailsView extends View {
 
@@ -37,6 +46,11 @@ public class WeatherDetailsView extends View {
     private MPoint WaveStartPoint,WaveEndPoint;
     private ValueAnimator mAnimator;
     private int mOffsetX=0;
+    private WeatherData weatherData;
+    private MPoint mPointWeather;
+    private Paint weatherPaint;
+    private Bitmap weatherBitmap;
+ 
 
     class MPoint{
         float x;
@@ -80,7 +94,57 @@ public class WeatherDetailsView extends View {
         init();
     }
 
+    public void getData(WeatherData weatherData){
+        this.weatherData=weatherData;
+        if(weatherData!=null){
+            String wea=weatherData.getData().get(0).getWea_img();
+            for(int i=0;i< StringUtils.IMGSTRING.length;i++){
+                if(wea.equals(StringUtils.IMGSTRING[i])){
+                    if(i==0){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.xue);
+                    }
+                    if(i==1){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.lei);
+                    }
+                    if(i==2){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.shachen);
+                    }
+                    if(i==3){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.wu);
+                    }
+                    if(i==4){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.bingbao);
+                    }
+                    if(i==5){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.yun);
+                    }
+                    if(i==6){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.yu);
+                    }
+                    if(i==7){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.yin);
+                    }
+                    if(i==8){
+                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
+                                R.mipmap.qing);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
     private void init(){
+        weatherPaint=new Paint();
+        weatherPaint.setColor(Color.WHITE);
         BallmPaint=new Paint();
         BallmPaint.setColor(Color.WHITE);
         WeatherCNum=new ArrayList<>();
@@ -106,6 +170,8 @@ public class WeatherDetailsView extends View {
         mAnimator.setDuration(1000);
         mAnimator.setRepeatCount(-1);
         mAnimator.start();
+        START=0;
+        mPointWeather=new MPoint();
     }
 
 
@@ -124,7 +190,7 @@ public class WeatherDetailsView extends View {
             }
 
         }
-      invalidate();
+      postInvalidate();
     }
 
     //边界检测,为0后重置小球，小球X位置随机，y=0
@@ -161,7 +227,6 @@ public class WeatherDetailsView extends View {
 
     }
 
-
     private void getData(){
 
         int dx=getWidth()/BollNum;
@@ -172,9 +237,9 @@ public class WeatherDetailsView extends View {
             setRandomPoint(mPoint,dx*i,dx*(i+1));
             Log.d("sss","mpoint==="+mPoint.getX());
             WeatherCNum.add(mPoint);
-
-
         }
+
+
 
     }
 
@@ -198,6 +263,10 @@ public class WeatherDetailsView extends View {
         WaveEndPoint.setX(w);
         WaveEndPoint.setY(QualHeight);
         Log.d("sss","onMeasure  BoundX=="+BallBoundaryX+"BoundY=="+BallBoundaryY);
+        //计算天气图标坐标
+
+        mPointWeather.setX(w-200);
+        mPointWeather.setY(h/5);
     }
 
 
@@ -242,7 +311,18 @@ public class WeatherDetailsView extends View {
                 }
             }).start();
         }
+
+        //画天气图标
+        setWeatherImage(canvas);
     }
+
+    private void setWeatherImage(Canvas canvas){
+    //    if(weatherData==null||weatherPaint==null||weatherBitmap==null)
+    //        return;
+        canvas.drawBitmap(weatherBitmap,mPointWeather.getX(),mPointWeather.getY(),weatherPaint);
+    }
+
+
 
     private void drawWave(Canvas canvas,MPoint startpoint,MPoint endpoint,int betweenNum){
     QualPath.reset();
