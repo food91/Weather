@@ -1,6 +1,7 @@
 package acitivity;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -10,7 +11,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
@@ -39,22 +42,27 @@ import butterknife.ButterKnife;
 import util.UtilX;
 import control.WeatherControl;
 import view.DetailsMarkerView;
+import view.WeatherDetailsView;
 
 
-public class DetailWeatherActivity extends Xactivity {
+public class DetailWeatherActivity extends AppCompatActivity {
 
     private static final int Y_MAX = 10;
     private static final int Y_ADD = 10;
     private static final int Y_START = -10;
 
-    WeatherData weatherData;
-    int cityp;
+    WeatherDetailsView weatherDetailsView;
 
+    View mViewNeedOffset;
+
+
+    @BindView(R.id.weather_toolbar)
+     Toolbar mToolbar;
+    WeatherData weatherData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-   //     StatusBarUtil.setTransparent(this);
         setContentView(R.layout.activity_detail_weather);
         ButterKnife.bind(this);
         init();
@@ -62,13 +70,50 @@ public class DetailWeatherActivity extends Xactivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setToolbar();
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        mViewNeedOffset = findViewById(R.id.view_need_offset);
+        StatusBarUtil.setTranslucentForImageView(this,0, mViewNeedOffset);
+    }
+
     protected void init() {
 
-        Intent intent=getIntent();
-        weatherData= (WeatherData) intent.getSerializableExtra(WeatherData.DATANAME);
-        cityp=  intent.getIntExtra(WeatherControl.CITYNUM, 0);
-        Log.d("sss",weatherData.toString());
-        Log.d("sss",cityp+"");
+        getData();
+        setSupportActionBar(mToolbar);
+        weatherDetailsView=findViewById(R.id.weatherd_view_wdv);
+        setviewdata(weatherData);
+    }
+
+    private void setviewdata(WeatherData weatherData){
+        if(weatherData!=null&&weatherDetailsView!=null)
+            weatherDetailsView.getData(weatherData);
+    }
+
+    private void setToolbar(){
+        mToolbar.setTitle(weatherData.getCity());
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    private void getData(){
+        Logger.d("getData");
+        weatherData= (WeatherData) getIntent().getSerializableExtra(WeatherData.DATANAME);
+        if(weatherData!=null){
+
+            Logger.d(weatherData.toString());
+        }else{
+            Logger.d("weaterData is  null");
+        }
 
 
     }

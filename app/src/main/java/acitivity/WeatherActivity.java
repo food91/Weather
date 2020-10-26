@@ -29,6 +29,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
@@ -46,12 +47,9 @@ import util.UtilX;
 
 public class WeatherActivity extends Xactivity {
 
-    @BindView(R.id.toolbar)
+    @BindView(R.id.weather_main_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.collapsing_toolbar_layout)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.app_bar)
-    AppBarLayout appBar;
+
     @BindView(R.id.footer_item_setting)
     TextView footerItemSetting;
     @BindView(R.id.footer_item_out)
@@ -64,6 +62,7 @@ public class WeatherActivity extends Xactivity {
     AboutFragment aboutFragment;
     MycareFragment mycareFragment;
     SearchFragment searchFragment;
+    private View offsetview;
     private AppBarConfiguration mAppBarConfiguration;
     private TextView tv_head_id;
     private int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
@@ -82,6 +81,12 @@ public class WeatherActivity extends Xactivity {
         init();
         initDefaultFragment();
         onclick();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        toolbar.setTitle("MyAppX");
     }
 
     public void initDefaultFragment() {
@@ -126,15 +131,12 @@ public class WeatherActivity extends Xactivity {
     }
 
 
+
+
      public void init() {
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_format_list_bulleted_black_24dp);
-        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
-        collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
-        collapsingToolbarLayout.setEnabled(true);
         drawerLayout = findViewById(R.id.drawer_layout);
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.weather_fragment,
                 R.id.nav_mycare, R.id.nav_send,R.id.nav_share,R.id.nav_about,R.id.nav_searh
@@ -198,6 +200,9 @@ public class WeatherActivity extends Xactivity {
                 return true;
             }
         });
+         offsetview=findViewById(R.id.drawer_layout);
+         StatusBarUtil.setTranslucent(this);
+         StatusBarUtil.setTranslucentForImageViewInFragment(this, 0,null);
     }
 
     private void showEditTextDialog() {

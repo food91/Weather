@@ -8,11 +8,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 
@@ -25,7 +31,7 @@ import java.util.Random;
 import Entity.WeatherData;
 import util.StringUtils;
 
-public class WeatherDetailsView extends View {
+public class WeatherDetailsView extends LinearLayout {
 
     private final String LOGSTRING="WeatherDetailsView";
     //球体画笔
@@ -50,7 +56,17 @@ public class WeatherDetailsView extends View {
     private MPoint mPointWeather;
     private Paint weatherPaint;
     private Bitmap weatherBitmap;
- 
+
+    private Paint centigradePaint;
+    private final static  int centigradeSize=178;
+    private MPoint  centigradePoint;
+
+    private Paint weaPaint;
+    private final static  int WEASize=48;
+    private MPoint  weaPoint;
+    private String[] num=new String[2];
+    private Paint RectPaint;
+    private RectF rectF;
 
     class MPoint{
         float x;
@@ -140,6 +156,14 @@ public class WeatherDetailsView extends View {
                 }
             }
         }
+ /*       String str=weatherData.getData().get(0).getTem();
+        for(int i=0;i<str.length();i++){
+            if((str.charAt(i) >= '0') && (str.charAt(i) <= '9')){
+                num[0]+=str.charAt(i);
+            }else{
+                num[1]+=str.charAt(i);
+            }
+        }*/
     }
 
     private void init(){
@@ -172,6 +196,28 @@ public class WeatherDetailsView extends View {
         mAnimator.start();
         START=0;
         mPointWeather=new MPoint();
+
+        centigradePaint=new Paint();
+        centigradePaint.setColor(Color.YELLOW);
+        centigradePaint.setAntiAlias(true);
+        centigradePaint.setTextSize(centigradeSize);
+        centigradePaint.setStrokeWidth(5);
+        centigradePaint.setStyle(Paint.Style.FILL);
+        centigradePoint=new MPoint();
+
+        weaPaint=new Paint();
+        weaPaint.setColor(Color.YELLOW);
+        weaPaint.setAntiAlias(true);
+        weaPaint.setTextSize(WEASize);
+        weaPaint.setStrokeWidth(5);
+        weaPaint.setStyle(Paint.Style.FILL);
+        weaPoint=new MPoint();
+
+        RectPaint=new Paint();
+        weaPaint.setColor(Color.BLUE);
+        weaPaint.setAntiAlias(true);
+        weaPaint.setStrokeWidth(5);
+        weaPaint.setStyle(Paint.Style.FILL);
     }
 
 
@@ -237,6 +283,7 @@ public class WeatherDetailsView extends View {
             setRandomPoint(mPoint,dx*i,dx*(i+1));
             Log.d("sss","mpoint==="+mPoint.getX());
             WeatherCNum.add(mPoint);
+
         }
 
 
@@ -267,13 +314,14 @@ public class WeatherDetailsView extends View {
 
         mPointWeather.setX(w-200);
         mPointWeather.setY(h/5);
+        centigradePoint.setX(w/2-centigradeSize);
+        centigradePoint.setY(h/2-centigradeSize/2);
+        weaPoint.setX(w/2-WEASize/2);
+        weaPoint.setY(h/2+centigradeSize/2-WEASize);
     }
 
-
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        Log.d(LOGSTRING,"onlayout");
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         getData();
     }
 
@@ -314,11 +362,28 @@ public class WeatherDetailsView extends View {
 
         //画天气图标
         setWeatherImage(canvas);
+
+        //写摄氏度
+        canvas.drawText(weatherData.getData().get(0).getTem(),
+                centigradePoint.getX(),
+                centigradePoint.getY(),
+                centigradePaint);
+        canvas.drawText(weatherData.getData().get(0).getWea(),
+                weaPoint.getX(),
+                weaPoint.getY(),
+                weaPaint);
+
+        canvas.drawText(weatherData.getData().get(0).getAir_tips(),
+                50,
+                weaPoint.getY()+150,
+                weaPaint);
+
     }
 
     private void setWeatherImage(Canvas canvas){
-    //    if(weatherData==null||weatherPaint==null||weatherBitmap==null)
-    //        return;
+       if(weatherData==null||weatherPaint==null||weatherBitmap==null)
+            return;
+
         canvas.drawBitmap(weatherBitmap,mPointWeather.getX(),mPointWeather.getY(),weatherPaint);
     }
 

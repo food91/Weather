@@ -193,7 +193,7 @@ public class WeatherControl {
             getCity(name);
             cityp[t] = cityid_position;
             t++;
-            num = Math.abs(new Random().nextInt() % 50);
+            num = Math.abs(new Random().nextInt() % 150);
             cityid_position += num;
         }
     }

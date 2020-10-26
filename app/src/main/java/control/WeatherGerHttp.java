@@ -34,11 +34,11 @@ public class WeatherGerHttp {
     /**
      * The constant WEATHERID.
      */
-    public final static String WEATHERID="31521234";
+    public final static String WEATHERID="87699471";
     /**
      * The constant WEATHERPASSWORD.
      */
-    public final static String WEATHERPASSWORD="K1q9t13H";
+    public final static String WEATHERPASSWORD="oSys9sgp";
     /**
      * The constant VERSION.
      */

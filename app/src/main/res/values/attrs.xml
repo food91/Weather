@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mText" format="string"/>
+    <attr name="mTextColor" format="color"/>
+    <attr name="mTextSize" format="dimension"/>
+    <attr name="rx" format="float"/>
+    <attr name="ry" format="float"/>
+    <declare-styleable name="TextViewRidus">
+        <attr name="mText"/>
+        <attr name="mTextColor"/>
+        <attr name="mTextSize"/>
+        <attr name="rx"/>
+        <attr name="ry"/>
+    </declare-styleable>
+
+</resources>
