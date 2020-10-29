@@ -200,9 +200,9 @@ public class WeatherActivity extends Xactivity {
                 return true;
             }
         });
-         offsetview=findViewById(R.id.drawer_layout);
+        offsetview=findViewById(R.id.drawer_layout);
          StatusBarUtil.setTranslucent(this);
-         StatusBarUtil.setTranslucentForImageViewInFragment(this, 0,null);
+        StatusBarUtil.setTranslucentForImageViewInFragment(this, 0,null);
     }
 
     private void showEditTextDialog() {

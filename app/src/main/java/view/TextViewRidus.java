@@ -63,16 +63,16 @@ public class TextViewRidus extends androidx.appcompat.widget.AppCompatTextView {
         mPaint.setTextSize(mTextSize);
         mPaint.setColor(mTextColor);
         mBound=new RectF();
-        mBound.bottom=100;
-        mBound.left=100;
-        mBound.right=100;
-        mBound.top=100;
+        mBound.bottom=1000;
+        mBound.left=0;
+        mBound.right=1000;
+        mBound.top=0;
         RectPaint=new Paint();
         RectPaint.setAntiAlias(true);
-        RectPaint.setStyle(Paint.Style.STROKE);
+        RectPaint.setStyle(Paint.Style.FILL);
         RectPaint.setStrokeWidth(rectPaintStrokeWidth);
-        RectPaint.setAlpha(50);
-        RectPaint.setColor(Color.BLACK);
+     //   RectPaint.setAlpha(50);
+        RectPaint.setColor(getResources().getColor(R.color.skyblue));
         Logger.d("TextViewRidus 3 is ok");
     }
 
@@ -87,20 +87,37 @@ public class TextViewRidus extends androidx.appcompat.widget.AppCompatTextView {
         this.ry=ry;
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int w_mod=MeasureSpec.getMode(widthMeasureSpec);
+        int h_mod=MeasureSpec.getMode(heightMeasureSpec);
+        int w=MeasureSpec.getSize(widthMeasureSpec),h=MeasureSpec.getSize(heightMeasureSpec);
+        mBound.bottom=h;
+        mBound.left=0;
+        mBound.right=w;
+        mBound.top=0;
+        Logger.d("mBound is onMesure "+mBound.toString());
+    }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
 
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+
         if(mBound!=null){
             canvas.drawRoundRect(mBound,
                     rx,
                     ry,
                     RectPaint);
+            Logger.d("mBound  is   not null");
         }else{
             Logger.d("mBound  is   null");
         }
-
+        super.onDraw(canvas);
     }
 }

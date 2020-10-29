@@ -31,7 +31,7 @@ import java.util.Random;
 import Entity.WeatherData;
 import util.StringUtils;
 
-public class WeatherDetailsView extends LinearLayout {
+public class WeatherDetailsView extends RelativeLayout {
 
     private final String LOGSTRING="WeatherDetailsView";
     //球体画笔
@@ -316,7 +316,7 @@ public class WeatherDetailsView extends LinearLayout {
         mPointWeather.setY(h/5);
         centigradePoint.setX(w/2-centigradeSize);
         centigradePoint.setY(h/2-centigradeSize/2);
-        weaPoint.setX(w/2-WEASize/2);
+        weaPoint.setX((centigradePoint.getX()+centigradeSize/2)+WEASize/2);
         weaPoint.setY(h/2+centigradeSize/2-WEASize);
     }
 
@@ -372,12 +372,6 @@ public class WeatherDetailsView extends LinearLayout {
                 weaPoint.getX(),
                 weaPoint.getY(),
                 weaPaint);
-
-        canvas.drawText(weatherData.getData().get(0).getAir_tips(),
-                50,
-                weaPoint.getY()+150,
-                weaPaint);
-
     }
 
     private void setWeatherImage(Canvas canvas){

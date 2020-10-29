@@ -42,6 +42,7 @@ import butterknife.ButterKnife;
 import util.UtilX;
 import control.WeatherControl;
 import view.DetailsMarkerView;
+import view.TextViewRidus;
 import view.WeatherDetailsView;
 
 
@@ -52,6 +53,7 @@ public class DetailWeatherActivity extends AppCompatActivity {
     private static final int Y_START = -10;
 
     WeatherDetailsView weatherDetailsView;
+    TextViewRidus mTextViewRidus;
 
     View mViewNeedOffset;
 
@@ -66,7 +68,6 @@ public class DetailWeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_weather);
         ButterKnife.bind(this);
         init();
-
     }
 
     @Override
@@ -78,8 +79,9 @@ public class DetailWeatherActivity extends AppCompatActivity {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        mViewNeedOffset = findViewById(R.id.view_need_offset);
-        StatusBarUtil.setTranslucentForImageView(this,0, mViewNeedOffset);
+        mViewNeedOffset=findViewById(R.id.view_need_offset);
+        mTextViewRidus=findViewById(R.id.md_wap);
+        StatusBarUtil.setTranslucentForImageView(this,0,mViewNeedOffset);
     }
 
     protected void init() {
@@ -88,6 +90,7 @@ public class DetailWeatherActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         weatherDetailsView=findViewById(R.id.weatherd_view_wdv);
         setviewdata(weatherData);
+
     }
 
     private void setviewdata(WeatherData weatherData){
@@ -109,12 +112,11 @@ public class DetailWeatherActivity extends AppCompatActivity {
         Logger.d("getData");
         weatherData= (WeatherData) getIntent().getSerializableExtra(WeatherData.DATANAME);
         if(weatherData!=null){
-
+            mTextViewRidus.setText(weatherData.getData().get(0).getAir_tips());
             Logger.d(weatherData.toString());
         }else{
             Logger.d("weaterData is  null");
         }
-
 
     }
 
