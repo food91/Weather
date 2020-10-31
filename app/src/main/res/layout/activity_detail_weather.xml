@@ -29,11 +29,72 @@
         android:paddingBottom="15dp"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
-
         android:layout_centerHorizontal="true"
         android:layout_marginTop="315dp"
         android:textColor="@color/white"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_thisday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="400dp"
+        android:layout_marginStart="20dp"
+        android:text="今天·阴"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/tv_thisday_ce"
+        android:text="26"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/tv_thisday"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_tomoroday"
+        android:text="明天·晴"
+        android:layout_alignStart="@+id/tv_thisday"
+        android:layout_below="@+id/tv_thisday"
+        android:layout_marginTop="35dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/tv_tomoroday_ce"
+        android:text="28"
+        android:layout_alignBaseline="@+id/tv_tomoroday"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_afterto"
+        android:text="后天·晴"
+        android:layout_alignStart="@+id/tv_tomoroday"
+        android:layout_below="@+id/tv_tomoroday"
+        android:layout_marginTop="35dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/tv_afterto_ce"
+        android:text="29"
+        android:layout_alignBaseline="@+id/tv_afterto"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/view_need_offset"
         android:layout_width="match_parent"

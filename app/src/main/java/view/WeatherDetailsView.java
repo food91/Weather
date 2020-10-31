@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
 
 import java.util.ArrayList;
@@ -265,6 +266,7 @@ public class WeatherDetailsView extends RelativeLayout {
     }
 
     private void setRandomPoint(MPoint mPoint,int startx,int endx){
+
         Random r = new Random();
         int x = r.nextInt(endx-startx)+startx;
         int y=r.nextInt(BallBoundaryY);
@@ -285,8 +287,6 @@ public class WeatherDetailsView extends RelativeLayout {
             WeatherCNum.add(mPoint);
 
         }
-
-
 
     }
 
@@ -311,13 +311,22 @@ public class WeatherDetailsView extends RelativeLayout {
         WaveEndPoint.setY(QualHeight);
         Log.d("sss","onMeasure  BoundX=="+BallBoundaryX+"BoundY=="+BallBoundaryY);
         //计算天气图标坐标
-
         mPointWeather.setX(w-200);
         mPointWeather.setY(h/5);
-        centigradePoint.setX(w/2-centigradeSize);
+        //计算点的位置
+        int len=1;
+        if(weatherData!=null){
+
+            len=weatherData.getData().get(0).getTem().length();
+
+        }
+        centigradePoint.setX(w/2-centigradeSize*len/2+80);
         centigradePoint.setY(h/2-centigradeSize/2);
-        weaPoint.setX((centigradePoint.getX()+centigradeSize/2)+WEASize/2);
-        weaPoint.setY(h/2+centigradeSize/2-WEASize);
+        if(weatherData!=null){
+            len=weatherData.getData().get(0).getWea().length();
+        }
+        weaPoint.setX(w/2-WEASize*len/2);
+        weaPoint.setY(h/2+centigradeSize/2-WEASize-40);
     }
 
     @Override
