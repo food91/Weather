@@ -34,6 +34,31 @@
         android:textColor="@color/white"
         android:textSize="18sp" />
 
+    <ImageView
+        android:id="@+id/iv_thisday_wea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star_two"
+        android:layout_alignBottom="@+id/tv_thisday"
+        android:layout_marginStart="20dp"
+        />
+    <ImageView
+        android:id="@+id/iv_today_wea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star_two"
+        android:layout_alignBottom="@+id/tv_tomoroday"
+        android:layout_marginStart="20dp"
+        />
+    <ImageView
+        android:id="@+id/iv_aftertoday_wea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star_two"
+        android:layout_alignBottom="@+id/tv_afterto"
+        android:layout_marginStart="20dp"
+        />
+
     <TextView
         android:id="@+id/tv_thisday"
         android:layout_width="wrap_content"
@@ -95,22 +120,22 @@
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/view_need_offset"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-
         <androidx.appcompat.widget.Toolbar
-            app:navigationIcon="@drawable/qmui_icon_topbar_back"
-            android:navigationIcon="@drawable/qmui_icon_topbar_back"
             android:id="@+id/weather_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/transparent"
+            android:navigationIcon="@drawable/qmui_icon_topbar_back"
+            app:navigationIcon="@drawable/qmui_icon_topbar_back"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>
