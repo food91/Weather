@@ -1,6 +1,7 @@
 package acitivity;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
@@ -17,6 +19,7 @@ import com.xiekun.myapplication.R;
 import Entity.WeatherData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import util.UtilX;
 import view.TextViewRidus;
 import view.WeatherDetailsView;
 
@@ -29,7 +32,7 @@ public class DetailWeatherActivity extends AppCompatActivity {
 
     WeatherDetailsView weatherDetailsView;
     TextViewRidus mTextViewRidus;
-
+    Bitmap bitmap;
     View mViewNeedOffset;
 
 
@@ -70,6 +73,14 @@ public class DetailWeatherActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        bitmap.recycle();
+        weatherDetailsView.destroy();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         setToolbar();
@@ -107,8 +118,8 @@ public class DetailWeatherActivity extends AppCompatActivity {
         });
     }
 
+
     private void getData() {
-        Logger.d("getData");
         weatherData = (WeatherData) getIntent().getSerializableExtra(WeatherData.DATANAME);
         if (weatherData != null) {
             mTextViewRidus.setText(weatherData.getData().get(0).getAir_tips());
@@ -118,13 +129,19 @@ public class DetailWeatherActivity extends AppCompatActivity {
             tvTomorodayCe.setText(weatherData.getData().get(1).getTem());
             tvTomoroday.setText("后天·" + weatherData.getData().get(2).getWea());
             tvAftertoCe.setText(weatherData.getData().get(2).getTem());
+            bitmap= UtilX.getweatherBitmap(weatherData,this);
+            ivThisdayWea.setImageBitmap(bitmap);
+            bitmap= UtilX.getweatherBitmap(weatherData,1,this);
+            ivTodayWea.setImageBitmap(bitmap);
+            bitmap= UtilX.getweatherBitmap(weatherData,2,this);
+            ivAftertodayWea.setImageBitmap(bitmap);
 
-            Logger.d(weatherData.toString());
         } else {
             Logger.d("weaterData is  null");
         }
 
     }
+
 
 
 }

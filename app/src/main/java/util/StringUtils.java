@@ -9,7 +9,8 @@ public class StringUtils {
             "bingbao",
             "yun",
             "yu",
-            "yin、qing"};
+            "yin",
+            "qing"};
 
 
 }

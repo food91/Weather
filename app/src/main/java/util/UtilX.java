@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.orhanobut.logger.Logger;
+import com.xiekun.myapplication.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import Entity.WeatherData;
 
 /**
  * The type Util x.
@@ -144,6 +149,106 @@ public class UtilX {
             }
             return false;
         }
+
+    public static Bitmap getweatherBitmap(WeatherData weatherData,
+                          Context mcontext) {
+        Bitmap weatherBitmap = null;
+        if (weatherData != null) {
+            String wea = weatherData.getData().get(0).getWea_img();
+            for (int i = 0; i < StringUtils.IMGSTRING.length; i++) {
+                if (wea.equals(StringUtils.IMGSTRING[i])) {
+                    if (i == 0) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.xue);
+                    }
+                    if (i == 1) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.lei);
+                    }
+                    if (i == 2) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.shachen);
+                    }
+                    if (i == 3) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.wu);
+                    }
+                    if (i == 4) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.bingbao);
+                    }
+                    if (i == 5) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.yun);
+                    }
+                    if (i == 6) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.yu);
+                    }
+                    if (i == 7) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.yin);
+                    }
+                    if (i == 8) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.qing);
+                    }
+                    break;
+                }
+            }
+        }
+        return weatherBitmap;
+    }
+
+    public static Bitmap getweatherBitmap(WeatherData weatherData,int m,
+                                          Context mcontext) {
+        Bitmap weatherBitmap = null;
+        if (weatherData != null) {
+            String wea = weatherData.getData().get(m).getWea_img();
+            for (int i = 0; i < StringUtils.IMGSTRING.length; i++) {
+                if (wea.equals(StringUtils.IMGSTRING[i])) {
+                    if (i == 0) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.xue);
+                    }
+                    if (i == 1) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.lei);
+                    }
+                    if (i == 2) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.shachen);
+                    }
+                    if (i == 3) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.wu);
+                    }
+                    if (i == 4) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.bingbao);
+                    }
+                    if (i == 5) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.yun);
+                    }
+                    if (i == 6) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.yu);
+                    }
+                    if (i == 7) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.yin);
+                    }
+                    if (i == 8) {
+                        weatherBitmap = BitmapFactory.decodeResource(mcontext.getResources(),
+                                R.mipmap.qing);
+                    }
+                    break;
+                }
+            }
+        }
+        return weatherBitmap;
+    }
 
     /**
      * Is string effect boolean.

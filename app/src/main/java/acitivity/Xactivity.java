@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jaeger.library.StatusBarUtil;
 
 public abstract class Xactivity extends AppCompatActivity {
 

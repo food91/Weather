@@ -31,6 +31,7 @@ import java.util.Random;
 
 import Entity.WeatherData;
 import util.StringUtils;
+import util.UtilX;
 
 public class WeatherDetailsView extends RelativeLayout {
 
@@ -59,7 +60,7 @@ public class WeatherDetailsView extends RelativeLayout {
     private Bitmap weatherBitmap;
 
     private Paint centigradePaint;
-    private final static  int centigradeSize=178;
+    private final static  int centigradeSize=158;
     private MPoint  centigradePoint;
 
     private Paint weaPaint;
@@ -113,58 +114,11 @@ public class WeatherDetailsView extends RelativeLayout {
 
     public void getData(WeatherData weatherData){
         this.weatherData=weatherData;
-        if(weatherData!=null){
-            String wea=weatherData.getData().get(0).getWea_img();
-            for(int i=0;i< StringUtils.IMGSTRING.length;i++){
-                if(wea.equals(StringUtils.IMGSTRING[i])){
-                    if(i==0){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.xue);
-                    }
-                    if(i==1){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.lei);
-                    }
-                    if(i==2){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.shachen);
-                    }
-                    if(i==3){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.wu);
-                    }
-                    if(i==4){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.bingbao);
-                    }
-                    if(i==5){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.yun);
-                    }
-                    if(i==6){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.yu);
-                    }
-                    if(i==7){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.yin);
-                    }
-                    if(i==8){
-                        weatherBitmap=BitmapFactory.decodeResource(getContext().getResources(),
-                                R.mipmap.qing);
-                    }
-                    break;
-                }
-            }
-        }
- /*       String str=weatherData.getData().get(0).getTem();
-        for(int i=0;i<str.length();i++){
-            if((str.charAt(i) >= '0') && (str.charAt(i) <= '9')){
-                num[0]+=str.charAt(i);
-            }else{
-                num[1]+=str.charAt(i);
-            }
-        }*/
+        weatherBitmap=UtilX.getweatherBitmap(weatherData,getContext());
+    }
+
+    public void destroy(){
+        weatherBitmap.recycle();
     }
 
     private void init(){
@@ -321,12 +275,12 @@ public class WeatherDetailsView extends RelativeLayout {
 
         }
         centigradePoint.setX(w/2-centigradeSize*len/2+80);
-        centigradePoint.setY(h/2-centigradeSize/2);
+        centigradePoint.setY(h/2-centigradeSize);
         if(weatherData!=null){
             len=weatherData.getData().get(0).getWea().length();
         }
         weaPoint.setX(w/2-WEASize*len/2);
-        weaPoint.setY(h/2+centigradeSize/2-WEASize-40);
+        weaPoint.setY(centigradePoint.getY()+60);
     }
 
     @Override
@@ -348,8 +302,6 @@ public class WeatherDetailsView extends RelativeLayout {
 
         //在2/3处画弧线
         drawWave(canvas,WaveStartPoint,WaveEndPoint,4);
-
-
 
         //开启自动下落计算线程
         if(START==0){
@@ -384,9 +336,13 @@ public class WeatherDetailsView extends RelativeLayout {
     }
 
     private void setWeatherImage(Canvas canvas){
-       if(weatherData==null||weatherPaint==null||weatherBitmap==null)
-            return;
-
+       if(weatherData==null||weatherPaint==null||weatherBitmap==null){
+          Logger.d("weather imag is null");
+          if(weatherData!=null){
+              Logger.d("wea is "+weatherData.getData().get(0).getWea_img());
+          }
+           return;
+       }
         canvas.drawBitmap(weatherBitmap,mPointWeather.getX(),mPointWeather.getY(),weatherPaint);
     }
 

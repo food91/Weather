@@ -2,14 +2,19 @@ package acitivity;
 
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,11 +31,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
+
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.xiekun.myapplication.R;
@@ -82,6 +87,7 @@ public class WeatherActivity extends Xactivity {
         initDefaultFragment();
         onclick();
     }
+
 
     @Override
     protected void onResume() {
@@ -200,9 +206,24 @@ public class WeatherActivity extends Xactivity {
                 return true;
             }
         });
-        offsetview=findViewById(R.id.drawer_layout);
-         StatusBarUtil.setTranslucent(this);
-        StatusBarUtil.setTranslucentForImageViewInFragment(this, 0,null);
+        Logger.d("this is Version =="+Build.VERSION.SDK_INT);
+        DrawerLayout drawerLayout=findViewById(R.id.drawer_layout);
+         StatusBarUtil.setTranslucentForDrawerLayout(this,
+                 drawerLayout, 0);
+     }
+
+    /**
+     * 设置根布局参数
+     */
+    private static void setRootView(Activity activity) {
+        ViewGroup parent = (ViewGroup) activity.findViewById(android.R.id.content);
+        for (int i = 0, count = parent.getChildCount(); i < count; i++) {
+            View childView = parent.getChildAt(i);
+            if (childView instanceof ViewGroup) {
+                childView.setFitsSystemWindows(true);
+                ((ViewGroup) childView).setClipToPadding(true);
+            }
+        }
     }
 
     private void showEditTextDialog() {
