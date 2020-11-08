@@ -25,7 +25,6 @@
         </activity>
         <activity android:name="acitivity.LoginActivity" >
 
-
         </activity>
         <activity android:name="acitivity.WeatherActivity">
             <intent-filter>

@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
-    android:background="@mipmap/locatback">
+    android:background="@mipmap/loginback">
 
     <com.qmuiteam.qmui.widget.QMUIEmptyView
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:background="@mipmap/locatback"
+        android:background="@mipmap/loginback"
       />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

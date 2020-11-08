@@ -33,7 +33,7 @@ import Entity.WeatherData;
 import util.StringUtils;
 import util.UtilX;
 
-public class WeatherDetailsView extends RelativeLayout {
+public class WeatherDetailsView  extends  View{
 
     private final String LOGSTRING="WeatherDetailsView";
     //球体画笔

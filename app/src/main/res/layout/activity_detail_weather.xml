@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    >
-
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
     <view.WeatherDetailsView
         android:id="@+id/weatherd_view_wdv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:scaleType="centerCrop"
         android:background="@drawable/shape_gradient_view">
 
@@ -144,4 +147,8 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
 </RelativeLayout>
+</ScrollView>

@@ -5,12 +5,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
@@ -39,8 +39,7 @@ public class DetailWeatherActivity extends AppCompatActivity {
     @BindView(R.id.weather_toolbar)
     Toolbar mToolbar;
     WeatherData weatherData;
-    @BindView(R.id.weatherd_view_wdv)
-    WeatherDetailsView weatherdViewWdv;
+
     @BindView(R.id.md_wap)
     TextViewRidus mdWap;
     @BindView(R.id.tv_thisday)
@@ -63,6 +62,14 @@ public class DetailWeatherActivity extends AppCompatActivity {
     ImageView ivTodayWea;
     @BindView(R.id.iv_aftertoday_wea)
     ImageView ivAftertodayWea;
+
+
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
+
+
+    @BindView(R.id.weatherd_view_wdv)
+    WeatherDetailsView weatherdViewWdv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,19 +136,18 @@ public class DetailWeatherActivity extends AppCompatActivity {
             tvTomorodayCe.setText(weatherData.getData().get(1).getTem());
             tvTomoroday.setText("后天·" + weatherData.getData().get(2).getWea());
             tvAftertoCe.setText(weatherData.getData().get(2).getTem());
-            bitmap= UtilX.getweatherBitmap(weatherData,this);
+            bitmap = UtilX.getweatherBitmap(weatherData, this);
             ivThisdayWea.setImageBitmap(bitmap);
-            bitmap= UtilX.getweatherBitmap(weatherData,1,this);
+            bitmap = UtilX.getweatherBitmap(weatherData, 1, this);
             ivTodayWea.setImageBitmap(bitmap);
-            bitmap= UtilX.getweatherBitmap(weatherData,2,this);
+            bitmap = UtilX.getweatherBitmap(weatherData, 2, this);
             ivAftertodayWea.setImageBitmap(bitmap);
-
+            Logger.d("weather==" + weatherData.toString() + "--" + weatherData.getData().get(0).toString());
         } else {
             Logger.d("weaterData is  null");
         }
 
     }
-
 
 
 }
