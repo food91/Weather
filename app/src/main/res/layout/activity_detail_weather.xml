@@ -6,6 +6,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+    android:fillViewport="true"
         android:scrollbars="none"
         >
     <RelativeLayout
@@ -16,11 +17,9 @@
     <view.WeatherDetailsView
         android:id="@+id/weatherd_view_wdv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop"
         android:background="@drawable/shape_gradient_view">
-
-
     </view.WeatherDetailsView>
     <view.TextViewRidus
         android:id="@+id/md_wap"

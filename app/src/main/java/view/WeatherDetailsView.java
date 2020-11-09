@@ -24,6 +24,8 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+import com.qmuiteam.qmui.util.QMUIDeviceHelper;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.xiekun.myapplication.R;
 
 import java.util.ArrayList;
@@ -222,11 +224,14 @@ public class WeatherDetailsView  extends  View{
     private void setRandomPoint(MPoint mPoint,int startx,int endx){
 
         Random r = new Random();
-        int x = r.nextInt(endx-startx)+startx;
-        int y=r.nextInt(BallBoundaryY);
-        mPoint.setX(x);
-        mPoint.setY(y);
-
+        try {
+            int x = r.nextInt(endx-startx)+startx;
+            int y=r.nextInt(BallBoundaryY);
+            mPoint.setX(x);
+            mPoint.setY(y);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void getData(){
@@ -248,11 +253,20 @@ public class WeatherDetailsView  extends  View{
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
         int w_mod=MeasureSpec.getMode(widthMeasureSpec);
         int h_mod=MeasureSpec.getMode(heightMeasureSpec);
-        int w=MeasureSpec.getSize(widthMeasureSpec),h=MeasureSpec.getSize(heightMeasureSpec);
-        Log.d(LOGSTRING,"onMeasure,w="+w+"-h="+h);
+        int w=MeasureSpec.getSize(widthMeasureSpec),
+                h=MeasureSpec.getSize(heightMeasureSpec);
+        //高等于warp，获得屏幕高
+        if(h_mod==MeasureSpec.AT_MOST||h_mod==MeasureSpec.UNSPECIFIED){
+            h=QMUIDisplayHelper.getScreenHeight(getContext())+
+                    QMUIDisplayHelper.getActionBarHeight(getContext());
+        }
+        //宽等于warp,获得屏幕宽
+        if(w_mod==MeasureSpec.AT_MOST||w_mod==MeasureSpec.UNSPECIFIED){
+            w=QMUIDisplayHelper.getScreenWidth(getContext());
+        }
+        Log.d(LOGSTRING,"onMeasure,w="+w+"-h="+h+" , h_mod=="+h_mod);
 
         setMeasuredDimension(w,h);
         BallBoundaryX=w;
@@ -274,11 +288,13 @@ public class WeatherDetailsView  extends  View{
             len=weatherData.getData().get(0).getTem().length();
 
         }
+        //几摄氏度  大字
         centigradePoint.setX(w/2-centigradeSize*len/2+80);
-        centigradePoint.setY(h/2-centigradeSize);
+        centigradePoint.setY(h/5*2-centigradeSize);
         if(weatherData!=null){
             len=weatherData.getData().get(0).getWea().length();
         }
+        //摄氏度下面的小字
         weaPoint.setX(w/2-WEASize*len/2);
         weaPoint.setY(centigradePoint.getY()+60);
     }

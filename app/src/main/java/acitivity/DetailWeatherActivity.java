@@ -126,6 +126,8 @@ public class DetailWeatherActivity extends AppCompatActivity {
     }
 
 
+
+
     private void getData() {
         weatherData = (WeatherData) getIntent().getSerializableExtra(WeatherData.DATANAME);
         if (weatherData != null) {
