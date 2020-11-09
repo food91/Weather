@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
@@ -71,6 +72,8 @@ public class DetailWeatherActivity extends AppCompatActivity {
     @BindView(R.id.weatherd_view_wdv)
     WeatherDetailsView weatherdViewWdv;
 
+    RecyclerView  recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +105,7 @@ public class DetailWeatherActivity extends AppCompatActivity {
     }
 
     protected void init() {
-
+        recyclerView=findViewById(R.id.rv_detailweatheractivity);
         getData();
         setSupportActionBar(mToolbar);
         weatherDetailsView = findViewById(R.id.weatherd_view_wdv);
