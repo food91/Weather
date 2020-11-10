@@ -102,12 +102,10 @@ public class DetailWeatherActivity extends AppCompatActivity {
     }
 
     protected void init() {
-
         getData();
         setSupportActionBar(mToolbar);
         weatherDetailsView = findViewById(R.id.weatherd_view_wdv);
         setviewdata(weatherData);
-
     }
 
     private void setviewdata(WeatherData weatherData) {
@@ -145,6 +143,7 @@ public class DetailWeatherActivity extends AppCompatActivity {
             bitmap = UtilX.getweatherBitmap(weatherData, 2, this);
             ivAftertodayWea.setImageBitmap(bitmap);
             Logger.d("weather==" + weatherData.toString() + "--" + weatherData.getData().get(0).toString());
+
         } else {
             Logger.d("weaterData is  null");
         }
