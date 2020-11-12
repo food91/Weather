@@ -6,13 +6,14 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:fillViewport="true"
+        android:fillViewport="true"
         android:scrollbars="none"
         >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/white"
         >
     <view.WeatherDetailsView
         android:id="@+id/weatherd_view_wdv"
@@ -130,10 +131,46 @@
         android:layout_height="wrap_content"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_detailweatheractivity"
-            android:layout_width="wrap_content"
+
+            android:id="@+id/rv_detailweather_ac"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_gradient_view"
+            android:layout_below="@+id/tv_afterto"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="20dp"
             />
+
+        <view.TextViewRidus
+            android:id="@+id/tr_md_index_desc"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:layout_below="@+id/rv_detailweather_ac"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <view.TextViewRidus
+            android:id="@+id/md_index_desc2"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:paddingTop="15dp"
+            android:layout_marginBottom="30dp"
+            android:paddingBottom="15dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+           android:layout_below="@+id/tr_md_index_desc"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/view_need_offset"

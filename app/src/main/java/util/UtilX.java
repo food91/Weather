@@ -14,6 +14,7 @@ import com.xiekun.myapplication.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import Entity.WeatherData;
 
@@ -249,6 +250,19 @@ public class UtilX {
         }
         return weatherBitmap;
     }
+
+    public static int  getLocalTimeHour(){
+
+        Calendar calendar=Calendar.getInstance();
+        return calendar.get(Calendar.HOUR_OF_DAY);
+
+    }
+    public static  int getLocalTimeDay(){
+
+        Calendar calendar=Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+    }
+
 
     /**
      * Is string effect boolean.

@@ -17,9 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/dw_rv_adpter" />
+
 
         <activity android:name="acitivity.DetailWeatherActivity"></activity>
         <activity android:name="acitivity.LoginActivity"></activity>
