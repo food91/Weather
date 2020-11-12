@@ -75,6 +75,9 @@ public class DetailWeatherActivity extends AppCompatActivity {
     WeatherDetailsView weatherdViewWdv;
 
 
+
+
+    
     @BindView(R.id.rv_detailweather_ac)
     RecyclerView rvDetailweatherAc;
     @BindView(R.id.tr_md_index_desc)
