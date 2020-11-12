@@ -11,12 +11,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
 
 import Entity.WeatherData;
+import adapter.DetailWeatherRVAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import util.UtilX;
@@ -71,6 +74,14 @@ public class DetailWeatherActivity extends AppCompatActivity {
     @BindView(R.id.weatherd_view_wdv)
     WeatherDetailsView weatherdViewWdv;
 
+
+    @BindView(R.id.rv_detailweather_ac)
+    RecyclerView rvDetailweatherAc;
+    @BindView(R.id.tr_md_index_desc)
+    TextViewRidus trMdIndexDesc;
+    @BindView(R.id.md_index_desc2)
+    TextViewRidus mdIndexDesc2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +122,14 @@ public class DetailWeatherActivity extends AppCompatActivity {
     private void setviewdata(WeatherData weatherData) {
         if (weatherData != null && weatherDetailsView != null)
             weatherDetailsView.getData(weatherData);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvDetailweatherAc.setLayoutManager(layoutManager);
+        DetailWeatherRVAdapter detailWeatherRVAdapter = new DetailWeatherRVAdapter(
+                this, weatherData
+        );
+
+        rvDetailweatherAc.setAdapter(detailWeatherRVAdapter);
     }
 
     private void setToolbar() {
@@ -122,8 +141,6 @@ public class DetailWeatherActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     private void getData() {
@@ -142,6 +159,8 @@ public class DetailWeatherActivity extends AppCompatActivity {
             ivTodayWea.setImageBitmap(bitmap);
             bitmap = UtilX.getweatherBitmap(weatherData, 2, this);
             ivAftertodayWea.setImageBitmap(bitmap);
+            trMdIndexDesc.setText(weatherData.getData().get(0).getIndex().get(0).getDesc());
+            mdIndexDesc2.setText(weatherData.getData().get(0).getIndex().get(1).getDesc());
             Logger.d("weather==" + weatherData.toString() + "--" + weatherData.getData().get(0).toString());
 
         } else {
