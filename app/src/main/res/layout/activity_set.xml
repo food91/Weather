@@ -2,9 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_set_ac"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/holo_blue_bright"
+            android:navigationIcon="@drawable/qmui_icon_topbar_back"
+            app:navigationIcon="@drawable/qmui_icon_topbar_back"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +38,7 @@
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
@@ -29,14 +46,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="早晚天气提醒"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textColor="@color/black"
                 />
             <TextView
                 android:id="@+id/tv_set_ac_tip_detail"
-                android:layout_width="300dp"
+                android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:text="开启后,7:00/19:00后会接到今天/明天的天气推送"
                 app:layout_constraintTop_toBottomOf="@+id/tv_set_ac_tip"
                 android:textColor="@color/cadetblue"
@@ -46,30 +63,281 @@
                 android:id="@+id/xs_set_ac_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_tip_detail"
-              android:layout_marginStart="15dp"
+
+
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/view_need_offset"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/weather_toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
-            android:navigationIcon="@drawable/qmui_icon_topbar_back"
-            app:navigationIcon="@drawable/qmui_icon_topbar_back"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            android:layout_height="wrap_content">
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <TextView
+                android:id="@+id/tv_set_ac_warm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="天气预警提醒"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/tv_set_ac_warm_detail"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="开启后，将会收到气象灾害预警推送"
+                app:layout_constraintTop_toBottomOf="@+id/tv_set_ac_warm"
+                android:textColor="@color/cadetblue"
+                />
 
+            <view.XSwitchView
+                android:id="@+id/xs_set_ac_warm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_warm"
+
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_set_ac_abnormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="异常天气提醒"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/tv_set_ac_abnormal_detail"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="开启后,在降雨、空气质量等天气变化时收到推送"
+                app:layout_constraintTop_toBottomOf="@+id/tv_set_ac_abnormal"
+                android:textColor="@color/cadetblue"
+                />
+
+            <view.XSwitchView
+                android:id="@+id/xs_set_abnormal_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_abnormal_detail"
+
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_set_night_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="夜间免打扰提醒"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/tv_set_ac_night_detail"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="开启后,23:00一次日7:00将屏蔽天气推送"
+                app:layout_constraintTop_toBottomOf="@+id/tv_set_night_tip"
+                android:textColor="@color/cadetblue"
+                />
+
+            <view.XSwitchView
+                android:id="@+id/xs_set_night_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/tv_set_night_tip"
+
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="单位"
+            android:textSize="16sp"
+            android:textColor="@color/cadetblue"
+            android:layout_marginTop="10dp"
+            />
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_set_ac_tep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="温度单位"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="摄氏度(℃)"
+        app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_tep"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_set_ac_tep"
+        android:textColor="@color/cadetblue"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_set_ac_wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="温度单位"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/tv_set_ac_tep"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="摄氏度(℃)"
+        app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_wind"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_set_ac_wind"
+        android:textColor="@color/cadetblue"
+
+        />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="其他设置"
+            android:textSize="16sp"
+            android:textColor="@color/cadetblue"
+            android:layout_marginTop="25dp"
+            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_set_ac_nightupdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="夜间自动更新"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/tv_set_ac_nightupdate_detail"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="关闭后，23:00-次日7:00将不会自动联网更新天气"
+                app:layout_constraintTop_toBottomOf="@+id/tv_set_ac_nightupdate"
+                android:textColor="@color/cadetblue"
+                />
+
+            <view.XSwitchView
+                android:id="@+id/xs_set_ac_nightupdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintVertical_bias="0.25"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_nightupdate"
+
+
+                />
+
+        <TextView
+            android:id="@+id/tv_set_ac_weathervocie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="夜间自动更新"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_set_ac_nightupdate"
+            app:layout_constraintTop_toBottomOf="@+id/tv_set_ac_nightupdate"
+            app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_nightupdate"
+            />
+        <TextView
+            android:id="@+id/tv_set_ac_weathervocie_detail"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="关闭后，23:00-次日7:00将不会自动联网更新天气"
+            android:textColor="@color/cadetblue"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_set_ac_nightupdate_detail"
+            app:layout_constraintTop_toBottomOf="@+id/tv_set_ac_nightupdate_detail"
+            app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_nightupdate_detail"
+            />
+
+        <view.XSwitchView
+            android:id="@+id/xs_set_ac_weathervocie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintLeft_toLeftOf="@+id/xs_set_ac_nightupdate"
+            app:layout_constraintTop_toBottomOf="@+id/xs_set_ac_nightupdate"
+            app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_weathervocie"
+
+
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
 </LinearLayout>
