@@ -1,6 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="天气提醒"
+            android:textSize="16sp"
+            android:textColor="@color/cadetblue"
+            android:layout_marginTop="10dp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_set_ac_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="早晚天气提醒"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/tv_set_ac_tip_detail"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="开启后,7:00/19:00后会接到今天/明天的天气推送"
+                app:layout_constraintTop_toBottomOf="@+id/tv_set_ac_tip"
+                android:textColor="@color/cadetblue"
+                />
+
+            <view.XSwitchView
+                android:id="@+id/xs_set_ac_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@+id/tv_set_ac_tip_detail"
+              android:layout_marginStart="15dp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/view_need_offset"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/weather_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:navigationIcon="@drawable/qmui_icon_topbar_back"
+            app:navigationIcon="@drawable/qmui_icon_topbar_back"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>
