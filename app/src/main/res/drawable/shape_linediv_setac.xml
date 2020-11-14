@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="line"
+
     >
-    <stroke
-        android:width="1dp"
-        android:color="@color/yellow"
-        />
 
-    <gradient
-        android:type="linear"
 
-        />
+        <gradient
+            android:type="linear"
+            android:startColor="@color/colorPrimary"
+            android:centerColor="@color/yellow"
+            android:endColor="@color/darkviolet"
+            android:angle="0"
+            />
+
+
+
+    <size android:height="3dp"/>
 
 </shape>
