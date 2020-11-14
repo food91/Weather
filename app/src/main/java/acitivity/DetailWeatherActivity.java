@@ -65,18 +65,11 @@ public class DetailWeatherActivity extends AppCompatActivity {
     ImageView ivTodayWea;
     @BindView(R.id.iv_aftertoday_wea)
     ImageView ivAftertodayWea;
-
-
     @BindView(R.id.scrollView)
     ScrollView scrollView;
 
-
     @BindView(R.id.weatherd_view_wdv)
     WeatherDetailsView weatherdViewWdv;
-
-
-
-
     
     @BindView(R.id.rv_detailweather_ac)
     RecyclerView rvDetailweatherAc;
@@ -84,7 +77,7 @@ public class DetailWeatherActivity extends AppCompatActivity {
     TextViewRidus trMdIndexDesc;
     @BindView(R.id.md_index_desc2)
     TextViewRidus mdIndexDesc2;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
