@@ -19,13 +19,16 @@
         android:usesCleartextTraffic="true">
 
         <activity android:name="acitivity.DetailWeatherActivity" />
-        <activity android:name="acitivity.LoginActivity" />
-        <activity android:name="acitivity.WeatherActivity">
+        <activity android:name="acitivity.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name="acitivity.WeatherActivity">
+
         </activity>
         <activity android:name="acitivity.SetActivity" />
 
