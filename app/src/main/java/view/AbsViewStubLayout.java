@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewStub;
 
+import androidx.annotation.LayoutRes;
+
 public abstract class AbsViewStubLayout {
 
     /**
@@ -20,11 +22,11 @@ public abstract class AbsViewStubLayout {
         mLayoutVs.setLayoutResource(layoutResId);
     }
 
-    protected ViewStub getLayoutVs() {
+    public ViewStub getLayoutVs() {
         return mLayoutVs;
     }
 
-    protected void setView(View contentView) {
+    public void setView(View contentView) {
         mContentView = contentView;
     }
 
@@ -32,6 +34,6 @@ public abstract class AbsViewStubLayout {
      * 设置数据
      * @param objects           数据
      */
-    abstract void setData(Object... objects);
+    public abstract void setData(Object... objects);
 
 }

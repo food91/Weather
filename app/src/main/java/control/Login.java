@@ -137,12 +137,7 @@ public class Login {
      * @param p             the p
      * @param qmuiEmptyView the qmui empty view
      */
-    public static void register(Context context, String u,String p,QMUIEmptyView qmuiEmptyView){
-
-        qmuiEmptyView.show(true,
-                context.getResources().getString(R.string.login_loading_register)
-        ,null,null,null);
-        qmuiEmptyView.setTitleColor(Color.WHITE);
+    public static void register(Context context, String u,String p){
 
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -163,7 +158,6 @@ public class Login {
 
                     @Override
                     public void onNext(String s) {
-                        qmuiEmptyView.hide();
                         Toast.makeText(context,
                                 context.getResources().getString(R.string.login_register_success)
                                 , Toast.LENGTH_SHORT).show();
@@ -171,7 +165,6 @@ public class Login {
 
                     @Override
                     public void onError(Throwable e) {
-                        qmuiEmptyView.hide();
                         Toast.makeText(context,
                                 context.getResources().getString(R.string.login_register_fail)
                                 , Toast.LENGTH_SHORT).show();

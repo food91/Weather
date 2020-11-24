@@ -17,11 +17,7 @@
             android:id="@+id/weather_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
-            android:navigationIcon="@drawable/qmui_icon_topbar_back"
-            app:navigationIcon="@drawable/qmui_icon_topbar_back"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -24,6 +24,9 @@ import Entity.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import control.Login;
+import control.OnNetworkListener;
+import control.OnRetryListener;
+import control.StateLayoutManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -35,7 +38,7 @@ import util.UtilX;
  * The type Login activity.
  *
  */
-public class LoginActivity extends Xactivity {
+public class LoginActivity extends BaseActivity {
 
     /**
      * The Login sure button.
@@ -77,17 +80,45 @@ public class LoginActivity extends Xactivity {
      */
     @BindView(R.id.checkBox_keepuser)
     CheckBox checkBoxKeepuser;
-    /**
-     * The Empty view.
-     */
-    @BindView(R.id.emptyView)
-    QMUIEmptyView emptyView;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void initStatusLayout() {
+
         StatusBarUtil.setTranslucentForImageView(this, 0, null);
+        statusLayoutManager = StateLayoutManager.newBuilder(this)
+                .contentView(R.layout.activity_main)
+                .emptyDataView(R.layout.activity_emptydata)
+                .errorView(R.layout.activity_error)
+                .loadingView(R.layout.loadingview_layout)
+                .netWorkErrorView(R.layout.activity_networkerror)
+                //设置空数据页面图片控件id
+                .emptyDataIconImageId(R.id.image)
+                //设置空数据页面文本控件id
+                .emptyDataTextTipId(R.id.tv_content)
+                //设置异常页面图片id
+                .errorIconImageId(R.id.image)
+                //设置异常页面文本id
+                .errorTextTipId(R.id.tv_content)
+                .onRetryListener(new OnRetryListener() {
+                    @Override
+                    public void onRetry() {
+                        //点击重试
+                        showContent();
+                    }
+                })
+                .onNetworkListener(new OnNetworkListener() {
+                    @Override
+                    public void onNetwork() {
+                        //网络异常，点击重试
+                        showLoading();
+                    }
+                })
+                .build();
+    }
+
+    @Override
+    protected void initView() {
         ButterKnife.bind(this);
         init();
         onclick();
@@ -133,7 +164,7 @@ public class LoginActivity extends Xactivity {
                 }
                 boolean keepuser = checkBoxKeepuser.isChecked();
                 boolean keeppassword = checkBoxKeeppassword.isChecked();
-                Login.register(LoginActivity.this,user,password,emptyView);
+                Login.register(LoginActivity.this,user,password);
 
             }
         });
@@ -147,10 +178,7 @@ public class LoginActivity extends Xactivity {
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-                emptyView.show(true,
-                      getResources().getString(R.string.login_loading_login)
-                        ,null,null,null);
-                emptyView.setTitleColor(Color.WHITE);
+
                 Login login = new Login(user, password,keepuser,keeppassword);
                 Observer<Boolean> observer=new Observer<Boolean>() {
                     @Override
@@ -169,7 +197,6 @@ public class LoginActivity extends Xactivity {
                             startActivity(intent);
                             finish();
                         }else {
-                            emptyView.hide();
                             Toast.makeText(LoginActivity.this,
                                     getResources().getString(R.string.login_Wrong)
                                     , Toast.LENGTH_SHORT).show();
@@ -178,7 +205,6 @@ public class LoginActivity extends Xactivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        emptyView.hide();
                         Toast.makeText(LoginActivity.this,
                                 getResources().getString(R.string.login_unknwon_Wrong)
                                 , Toast.LENGTH_SHORT).show();
@@ -196,8 +222,6 @@ public class LoginActivity extends Xactivity {
     }
 
     protected void init() {
-
-        emptyView.setVisibility(View.GONE);
         SharedPreferences sharedPreferences= getSharedPreferences(LoginData.LOGIN, Context.MODE_APPEND);
         String userId=sharedPreferences.getString(LoginData.LOGINDATA,"");
         if(!userId.equals("")){
@@ -212,5 +236,8 @@ public class LoginActivity extends Xactivity {
                 checkBoxKeeppassword.setChecked(true);
             }
         }
+
     }
+
+
 }
