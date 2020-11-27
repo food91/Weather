@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -196,13 +197,10 @@ public class LoadingView extends LinearLayout {
     @Override
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
-        isRunAnimator=false;
-        shapeView.clearAnimation();
-        circleView.clearAnimation();
-        ViewGroup parent= (ViewGroup) getParent();
-        if(parent!=null){
-            parent.removeView(this);
-            removeAllViews();
+        if(visibility== View.GONE||visibility==View.INVISIBLE){
+            isRunAnimator=false;
+            shapeView.clearAnimation();
+            circleView.clearAnimation();
         }
 
     }

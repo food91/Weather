@@ -251,10 +251,10 @@ public class StateFrameLayout extends FrameLayout {
         View errorView = layoutSparseArray.get(LAYOUT_ERROR_ID);
         View iconImageView = errorView.findViewById(mStatusLayoutManager.errorIconImageId);
         View textView = errorView.findViewById(mStatusLayoutManager.errorTextTipId);
-        if (iconImageView != null && iconImageView instanceof ImageView) {
+        if (iconImageView instanceof ImageView) {
             ((ImageView) iconImageView).setImageResource(iconImage);
         }
-        if (textView != null && textView instanceof TextView) {
+        if (textView instanceof TextView) {
             ((TextView) textView).setText(textTip);
         }
     }

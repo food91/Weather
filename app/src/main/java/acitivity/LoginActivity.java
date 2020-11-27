@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -106,14 +109,14 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onRetry() {
                         //点击重试
-                        showContent();
+                       // showContent();
                     }
                 })
                 .onNetworkListener(new OnNetworkListener() {
                     @Override
                     public void onNetwork() {
                         //网络异常，点击重试
-                        showLoading();
+                       // showLoading();
                     }
                 })
                 .build();
@@ -122,10 +125,50 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initView() {
         StatusBarUtil.setTranslucentForImageView(this, 0, null);
-        showContent();
+        test();
         ButterKnife.bind(this);
         init();
         onclick();
+    }
+
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if(msg.what==1){
+                showContent();
+            }else if(msg.what==2){
+                showLoading();
+            }else if(msg.what==3){
+                showEmptyData();
+            }else if(msg.what==4){
+                showError();
+            }else if(msg.what==5){
+                showNetworkError();
+            }
+        }
+    };
+
+    private void test(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    handler.sendEmptyMessage(0);
+                    Thread.sleep(5000);
+                handler.sendEmptyMessage(1);
+                Thread.sleep(5000);
+                handler.sendEmptyMessage(2);
+                Thread.sleep(5000);
+                handler.sendEmptyMessage(3);
+                Thread.sleep(5000);
+                handler.sendEmptyMessage(4);
+                Thread.sleep(5000);
+                handler.sendEmptyMessage(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private boolean userisnull(String user, String password) {
@@ -168,7 +211,7 @@ public class LoginActivity extends BaseActivity {
                 }
                 boolean keepuser = checkBoxKeepuser.isChecked();
                 boolean keeppassword = checkBoxKeeppassword.isChecked();
-                showLoading();
+              //  showLoading();
                 try {
                     Login.register(LoginActivity.this,user,password,statusLayoutManager);
                 } catch (Exception e) {
