@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 
+import com.xiekun.myapplication.R;
+
+import util.UtilX;
 import view.AbsViewStubLayout;
 
 public class StateFrameLayout extends FrameLayout {
@@ -83,6 +86,8 @@ public class StateFrameLayout extends FrameLayout {
      * 添加所有不同状态布局到帧布局中
      */
     private void addAllLayoutToRootLayout() {
+
+        UtilX.LogX("contentLayoutResId is =="+mStatusLayoutManager.contentLayoutResId);
         //将内容视图添加到布局中
         if (mStatusLayoutManager.contentLayoutResId != 0) {
             addLayoutResId(mStatusLayoutManager.contentLayoutResId, StateFrameLayout.LAYOUT_CONTENT_ID);
@@ -106,7 +111,9 @@ public class StateFrameLayout extends FrameLayout {
     }
 
     private void addLayoutResId(@LayoutRes int layoutResId, int id) {
-        View resView = LayoutInflater.from(mStatusLayoutManager.context).inflate(layoutResId, null);
+        UtilX.LogX("addLayoutResId =="+id);
+        View resView = LayoutInflater.from(mStatusLayoutManager.context).inflate(layoutResId,
+                null);
         if (id == StateFrameLayout.LAYOUT_LOADING_ID){
             //如果是loading，则设置不可点击
             resView.setOnClickListener(null);
@@ -153,7 +160,7 @@ public class StateFrameLayout extends FrameLayout {
     /**
      *  显示loading
      */
-    public void showLoading() {
+    public void showLoading()throws Exception {
         if (layoutSparseArray.get(LAYOUT_LOADING_ID) != null) {
             showHideViewById(LAYOUT_LOADING_ID);
         }
@@ -162,7 +169,7 @@ public class StateFrameLayout extends FrameLayout {
     /**
      *  显示内容
      */
-    public void showContent() {
+    public void showContent() throws Exception{
         if (layoutSparseArray.get(LAYOUT_CONTENT_ID) != null) {
             showHideViewById(LAYOUT_CONTENT_ID);
         }
@@ -171,7 +178,7 @@ public class StateFrameLayout extends FrameLayout {
     /**
      *  显示空数据
      */
-    public void showEmptyData(int iconImage, String textTip) {
+    public void showEmptyData(int iconImage, String textTip) throws Exception{
         if (inflateLayout(LAYOUT_EMPTY_DATA_ID)) {
             showHideViewById(LAYOUT_EMPTY_DATA_ID);
             emptyDataViewAddData(iconImage, textTip);
@@ -181,7 +188,7 @@ public class StateFrameLayout extends FrameLayout {
     /**
      *  显示网络异常
      */
-    public void showNetWorkError() {
+    public void showNetWorkError() throws Exception{
         if (inflateLayout(LAYOUT_NETWORK_ERROR_ID)) {
             showHideViewById(LAYOUT_NETWORK_ERROR_ID);
         }
@@ -190,7 +197,7 @@ public class StateFrameLayout extends FrameLayout {
     /**
      *  显示异常
      */
-    public void showError(int iconImage, String textTip) {
+    public void showError(int iconImage, String textTip) throws Exception{
         if (inflateLayout(LAYOUT_ERROR_ID)) {
             showHideViewById(LAYOUT_ERROR_ID);
             errorViewAddData(iconImage, textTip);
@@ -209,10 +216,10 @@ public class StateFrameLayout extends FrameLayout {
         View emptyDataView = layoutSparseArray.get(LAYOUT_EMPTY_DATA_ID);
         View iconImageView = emptyDataView.findViewById(mStatusLayoutManager.emptyDataIconImageId);
         View textView = emptyDataView.findViewById(mStatusLayoutManager.emptyDataTextTipId);
-        if (iconImageView != null && iconImageView instanceof ImageView) {
+        if ( iconImageView instanceof ImageView) {
             ((ImageView) iconImageView).setImageResource(iconImage);
         }
-        if (textView != null && textView instanceof TextView) {
+        if ( textView instanceof TextView) {
             ((TextView) textView).setText(textTip);
         }
     }
@@ -221,7 +228,7 @@ public class StateFrameLayout extends FrameLayout {
      * 展示空页面
      * @param objects                   object
      */
-    public void showLayoutEmptyData(Object... objects) {
+    public void showLayoutEmptyData(Object... objects) throws Exception{
         if (inflateLayout(LAYOUT_EMPTY_DATA_ID)) {
             showHideViewById(LAYOUT_EMPTY_DATA_ID);
 
@@ -256,7 +263,7 @@ public class StateFrameLayout extends FrameLayout {
      * 展示错误
      * @param objects
      */
-    public void showLayoutError(Object... objects) {
+    public void showLayoutError(Object... objects) throws Exception {
         if (inflateLayout(LAYOUT_ERROR_ID)) {
             showHideViewById(LAYOUT_ERROR_ID);
 
@@ -269,22 +276,29 @@ public class StateFrameLayout extends FrameLayout {
 
     /**
      * 根据ID显示隐藏布局
+     * 有UI更新操作，所以必须在主线程
      * @param id                    id值
      */
-    private void showHideViewById(int id) {
+    private void showHideViewById (int id) throws Exception {
+
         //这个需要遍历集合中数据，然后切换显示和隐藏
         for (int i = 0; i < layoutSparseArray.size(); i++) {
             int key = layoutSparseArray.keyAt(i);
             View valueView = layoutSparseArray.valueAt(i);
+            UtilX.LogX("showHideViewById --"+id  + " key ==" +key+"---i== "+i+"  " +
+                    "layout=="+layoutSparseArray.size());
             //显示该view
             if(key == id) {
                 //显示该视图
-                valueView.setVisibility(View.VISIBLE);
+                    valueView.setVisibility(View.VISIBLE);
+                UtilX.LogX("key==id  ==   "+key);
                 if(mStatusLayoutManager.onShowHideViewListener != null) {
+                    UtilX.LogX("on show");
                     mStatusLayoutManager.onShowHideViewListener.onShowView(valueView, key);
                 }
             } else {
                 //隐藏该视图
+                UtilX.LogX("-----gone "+key);
                 if(valueView.getVisibility() != View.GONE) {
                     valueView.setVisibility(View.GONE);
                     if(mStatusLayoutManager.onShowHideViewListener != null) {

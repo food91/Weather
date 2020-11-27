@@ -9,6 +9,7 @@ import android.view.ViewStub;
 
 import androidx.annotation.LayoutRes;
 
+import util.UtilX;
 import view.AbsViewStubLayout;
 
 public class StateLayoutManager {
@@ -68,7 +69,6 @@ public class StateLayoutManager {
         this.errorTextTipId = builder.errorTextTipId;
         this.errorLayout = builder.errorLayout;
         this.emptyDataLayout = builder.emptyDataLayout;
-
         //创建帧布局
         rootFrameLayout = new StateFrameLayout(this.context);
         ViewGroup.LayoutParams layoutParams ;
@@ -81,9 +81,9 @@ public class StateLayoutManager {
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         }
         rootFrameLayout.setLayoutParams(layoutParams);
-        //设置为白色
-        rootFrameLayout.setBackgroundColor(Color.WHITE);
-
+    /*    //设置为白色
+        rootFrameLayout.setBackgroundColor(Color.WHITE);*/
+        UtilX.LogX("stateLayoutManage--------------");
         //设置状态管理器
         rootFrameLayout.setStatusLayoutManager(this);
     }
@@ -99,7 +99,7 @@ public class StateLayoutManager {
     /**
      * 显示loading
      */
-    public void showLoading() {
+    public void showLoading() throws Exception{
         if (!isShowLoading()){
             rootFrameLayout.showLoading();
         }
@@ -115,49 +115,49 @@ public class StateLayoutManager {
     /**
      * 显示内容
      */
-    public void showContent() {
+    public void showContent() throws Exception{
         rootFrameLayout.showContent();
     }
 
     /**
      * 显示空数据
      */
-    public void showEmptyData(int iconImage, String textTip) {
+    public void showEmptyData(int iconImage, String textTip) throws Exception{
         rootFrameLayout.showEmptyData(iconImage, textTip);
     }
 
     /**
      * 显示空数据
      */
-    public void showEmptyData() {
+    public void showEmptyData()throws Exception {
         showEmptyData(0, "");
     }
 
     /**
      * 显示空数据
      */
-    public void showLayoutEmptyData(Object... objects) {
+    public void showLayoutEmptyData(Object... objects) throws Exception{
         rootFrameLayout.showLayoutEmptyData(objects);
     }
 
     /**
      * 显示网络异常
      */
-    public void showNetWorkError() {
+    public void showNetWorkError()throws Exception {
         rootFrameLayout.showNetWorkError();
     }
 
     /**
      * 显示异常
      */
-    public void showError(int iconImage, String textTip) {
+    public void showError(int iconImage, String textTip) throws Exception{
         rootFrameLayout.showError(iconImage, textTip);
     }
 
     /**
      * 显示异常
      */
-    public void showError() {
+    public void showError()throws Exception {
         showError(0, "");
     }
 
@@ -165,7 +165,7 @@ public class StateLayoutManager {
      * 显示异常
      * @param objects               objects
      */
-    public void showLayoutError(Object... objects) {
+    public void showLayoutError(Object... objects)throws Exception {
         rootFrameLayout.showLayoutError(objects);
     }
 

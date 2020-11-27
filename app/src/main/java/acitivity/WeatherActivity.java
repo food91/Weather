@@ -50,7 +50,7 @@ import fragment.WeatherFragment;
 import util.UtilX;
 
 
-public class WeatherActivity extends Xactivity {
+public class WeatherActivity extends BaseActivity {
 
     @BindView(R.id.weather_main_toolbar)
     Toolbar toolbar;
@@ -259,5 +259,15 @@ public class WeatherActivity extends Xactivity {
         NavController navController = Navigation.findNavController(this, R.id.weather_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    protected void initStatusLayout() {
+
+    }
+
+    @Override
+    protected void initView() {
+
     }
 }

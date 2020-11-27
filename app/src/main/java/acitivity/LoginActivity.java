@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
@@ -26,6 +29,7 @@ import butterknife.ButterKnife;
 import control.Login;
 import control.OnNetworkListener;
 import control.OnRetryListener;
+import control.OnShowHideViewListener;
 import control.StateLayoutManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -83,14 +87,12 @@ public class LoginActivity extends BaseActivity {
 
 
     @Override
-    protected void initStatusLayout() {
-
-        StatusBarUtil.setTranslucentForImageView(this, 0, null);
+    protected void initStatusLayout(){
         statusLayoutManager = StateLayoutManager.newBuilder(this)
                 .contentView(R.layout.activity_main)
                 .emptyDataView(R.layout.activity_emptydata)
                 .errorView(R.layout.activity_error)
-                .loadingView(R.layout.loadingview_layout)
+                .loadingView(R.layout.activity_showloading)
                 .netWorkErrorView(R.layout.activity_networkerror)
                 //设置空数据页面图片控件id
                 .emptyDataIconImageId(R.id.image)
@@ -119,6 +121,8 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        StatusBarUtil.setTranslucentForImageView(this, 0, null);
+        showContent();
         ButterKnife.bind(this);
         init();
         onclick();
@@ -164,8 +168,12 @@ public class LoginActivity extends BaseActivity {
                 }
                 boolean keepuser = checkBoxKeepuser.isChecked();
                 boolean keeppassword = checkBoxKeeppassword.isChecked();
-                Login.register(LoginActivity.this,user,password);
-
+                showLoading();
+                try {
+                    Login.register(LoginActivity.this,user,password,statusLayoutManager);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         loginSureButton.setOnClickListener(new View.OnClickListener() {

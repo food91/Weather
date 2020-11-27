@@ -12,6 +12,7 @@ import com.xiekun.myapplication.R;
 
 import Entity.LoginData;
 import Entity.UserEntity;
+import acitivity.BaseActivity;
 import acitivity.MyApplication;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -129,23 +130,17 @@ public class Login {
         return this;
     }
 
-    /**
-     * Register.
-     *
-     * @param context       the context
-     * @param u             the u
-     * @param p             the p
-     * @param qmuiEmptyView the qmui empty view
-     */
-    public static void register(Context context, String u,String p){
 
+    public static void register(Context context, String u, String p,
+                                StateLayoutManager stateLayoutManager)
+    throws  Exception{
+        stateLayoutManager.showLoading();
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
                 Thread.sleep(2500);
                 UserEntityRepository  userEntityRepository=new UserEntityRepository(MyApplication.getApplicationInstance());
                 userEntityRepository.InsertId(u,p);
-
                 emitter.onNext("123");
             }
         }).observeOn(AndroidSchedulers.mainThread())
@@ -158,6 +153,11 @@ public class Login {
 
                     @Override
                     public void onNext(String s) {
+                        try {
+                            stateLayoutManager.showContent();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         Toast.makeText(context,
                                 context.getResources().getString(R.string.login_register_success)
                                 , Toast.LENGTH_SHORT).show();
@@ -165,6 +165,11 @@ public class Login {
 
                     @Override
                     public void onError(Throwable e) {
+                        try {
+                            stateLayoutManager.showContent();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                         Toast.makeText(context,
                                 context.getResources().getString(R.string.login_register_fail)
                                 , Toast.LENGTH_SHORT).show();

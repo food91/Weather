@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import view.XSwitchView;
 
-public class SetActivity extends Xactivity {
+public class SetActivity extends BaseActivity {
 
 
     @BindView(R.id.tv_set_ac_tip)
@@ -68,7 +68,6 @@ public class SetActivity extends Xactivity {
         init();
     }
 
-    @Override
     protected void init() {
 
         StatusBarUtil.setColor(this, 0, 0);
@@ -79,5 +78,15 @@ public class SetActivity extends Xactivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void initStatusLayout() {
+
+    }
+
+    @Override
+    protected void initView() {
+
     }
 }

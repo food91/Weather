@@ -2,6 +2,7 @@ package acitivity;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.xiekun.myapplication.R;
 
 import control.StateLayoutManager;
+import util.UtilX;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -22,7 +24,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         initStatusLayout();
         initBaseView();
         initView();
+    }
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_base_view);
+        UtilX.LogX("base oncreate----------after");
+        initStatusLayout();
+        initBaseView();
+        initView();
     }
 
     protected abstract void initStatusLayout();
@@ -35,23 +46,44 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void showContent(){
-        statusLayoutManager.showContent();
+        UtilX.LogX("show Content");
+        try {
+            statusLayoutManager.showContent();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void showEmptyData(){
-        statusLayoutManager.showEmptyData();
+        try {
+            statusLayoutManager.showEmptyData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void showError(){
-        statusLayoutManager.showError();
+        try {
+            statusLayoutManager.showError();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void showNetworkError(){
-        statusLayoutManager.showNetWorkError();
+        try {
+            statusLayoutManager.showNetWorkError();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void showLoading(){
-        statusLayoutManager.showLoading();
+        try {
+            statusLayoutManager.showLoading();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
