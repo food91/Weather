@@ -30,7 +30,7 @@ import view.WeatherDetailsView;
 /**
  * The type Detail weather activity.
  */
-public class DetailWeatherActivity extends AppCompatActivity {
+public class DetailWeatherActivity extends BaseActivity {
 
     private static final int Y_MAX = 10;
     private static final int Y_ADD = 10;
@@ -147,10 +147,15 @@ public class DetailWeatherActivity extends AppCompatActivity {
     @BindView(R.id.md_index_desc2)
     TextViewRidus mdIndexDesc2;
     
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_weather);
+    protected void initStatusLayout() {
+
+    }
+
+    @Override
+    protected void initView() {
         ButterKnife.bind(this);
         init();
     }

@@ -2,14 +2,16 @@ package acitivity;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.xiekun.myapplication.R;
 
+import control.OnNetworkListener;
+import control.OnRetryListener;
 import control.StateLayoutManager;
 import util.UtilX;
 
@@ -31,12 +33,50 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_view);
         UtilX.LogX("base oncreate----------after");
-        initStatusLayout();
+        setContentViewLayout();
         initBaseView();
         initView();
     }
 
-    protected abstract void initStatusLayout();
+    protected  void setContentViewLayout(int...i)
+    {
+        initStatusLayout((int)i[0]);
+    }
+
+    private void initStatusLayout(@LayoutRes int  layout){
+        statusLayoutManager = StateLayoutManager.newBuilder(this)
+                .contentView(layout)
+                .emptyDataView(R.layout.activity_emptydata)
+                .errorView(R.layout.activity_error)
+                .loadingView(R.layout.activity_showloading)
+                .netWorkErrorView(R.layout.activity_networkerror)
+                //设置空数据页面图片控件id
+                .emptyDataIconImageId(R.id.image)
+                //设置空数据页面文本控件id
+                .emptyDataTextTipId(R.id.tv_content)
+                //设置异常页面图片id
+                .errorIconImageId(R.id.image)
+                //设置异常页面文本id
+                .errorTextTipId(R.id.tv_content)
+                .onRetryListener(new OnRetryListener() {
+                    @Override
+                    public void onRetry() {
+                        //点击重试
+                        // showContent();
+                    }
+                })
+                .onNetworkListener(new OnNetworkListener() {
+                    @Override
+                    public void onNetwork() {
+                        //网络异常，点击重试
+                        // showLoading();
+                    }
+                })
+                .build();
+
+    }
+
+
 
     protected abstract void initView();
 

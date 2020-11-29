@@ -78,15 +78,7 @@ public class WeatherActivity extends BaseActivity {
     @BindView(R.id.drawer_layout_ll_set)
     LinearLayout linearLayoutset;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.drawerlayout);
-        ButterKnife.bind(this);
-        init();
-        initDefaultFragment();
-        onclick();
-    }
+
 
 
     @Override
@@ -261,13 +253,12 @@ public class WeatherActivity extends BaseActivity {
                 || super.onSupportNavigateUp();
     }
 
-    @Override
-    protected void initStatusLayout() {
-
-    }
 
     @Override
     protected void initView() {
-
+        ButterKnife.bind(this);
+        init();
+        initDefaultFragment();
+        onclick();
     }
 }

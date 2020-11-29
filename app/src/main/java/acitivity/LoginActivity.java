@@ -88,38 +88,9 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.checkBox_keepuser)
     CheckBox checkBoxKeepuser;
 
-
     @Override
-    protected void initStatusLayout(){
-        statusLayoutManager = StateLayoutManager.newBuilder(this)
-                .contentView(R.layout.activity_main)
-                .emptyDataView(R.layout.activity_emptydata)
-                .errorView(R.layout.activity_error)
-                .loadingView(R.layout.activity_showloading)
-                .netWorkErrorView(R.layout.activity_networkerror)
-                //设置空数据页面图片控件id
-                .emptyDataIconImageId(R.id.image)
-                //设置空数据页面文本控件id
-                .emptyDataTextTipId(R.id.tv_content)
-                //设置异常页面图片id
-                .errorIconImageId(R.id.image)
-                //设置异常页面文本id
-                .errorTextTipId(R.id.tv_content)
-                .onRetryListener(new OnRetryListener() {
-                    @Override
-                    public void onRetry() {
-                        //点击重试
-                       // showContent();
-                    }
-                })
-                .onNetworkListener(new OnNetworkListener() {
-                    @Override
-                    public void onNetwork() {
-                        //网络异常，点击重试
-                       // showLoading();
-                    }
-                })
-                .build();
+    protected void setContentViewLayout(int... i) {
+        super.setContentViewLayout(R.layout.activity_main);
     }
 
     @Override
