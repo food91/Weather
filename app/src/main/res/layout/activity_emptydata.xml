@@ -17,9 +17,9 @@
         android:layout_centerInParent="true">
         <ImageView
             android:id="@+id/iv_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/view_icon_no_data"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@mipmap/view_nodata"
             android:layout_gravity="center_horizontal"/>
 
         <TextView
