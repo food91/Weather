@@ -149,10 +149,6 @@ public class DetailWeatherActivity extends BaseActivity {
     
 
 
-    @Override
-    protected void initStatusLayout() {
-
-    }
 
     @Override
     protected void initView() {

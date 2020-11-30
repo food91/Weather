@@ -23,7 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         setContentView(R.layout.activity_base_view);
-        initStatusLayout();
+        setContentViewLayout();
         initBaseView();
         initView();
     }
@@ -38,9 +38,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
     }
 
-    protected  void setContentViewLayout(int...i)
+    protected  void setContentViewLayout(int...layout)
     {
-        initStatusLayout((int)i[0]);
+        initStatusLayout((int)layout[0]);
     }
 
     private void initStatusLayout(@LayoutRes int  layout){

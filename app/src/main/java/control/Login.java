@@ -131,10 +131,8 @@ public class Login {
     }
 
 
-    public static void register(Context context, String u, String p,
-                                StateLayoutManager stateLayoutManager)
+    public static void register(Context context, String u, String p, Observer<String> observer)
     throws  Exception{
-        stateLayoutManager.showLoading();
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
@@ -145,41 +143,7 @@ public class Login {
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        try {
-                            stateLayoutManager.showContent();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(context,
-                                context.getResources().getString(R.string.login_register_success)
-                                , Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        try {
-                            stateLayoutManager.showContent();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                        Toast.makeText(context,
-                                context.getResources().getString(R.string.login_register_fail)
-                                , Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                .subscribe(observer);
 
     }
 

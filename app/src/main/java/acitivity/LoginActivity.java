@@ -96,51 +96,12 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initView() {
         StatusBarUtil.setTranslucentForImageView(this, 0, null);
-        test();
         ButterKnife.bind(this);
         init();
         onclick();
     }
 
-    private Handler handler=new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            if(msg.what==1){
-                showContent();
-            }else if(msg.what==2){
-                showLoading();
-            }else if(msg.what==3){
-                showEmptyData();
-            }else if(msg.what==4){
-                showError();
-            }else if(msg.what==5){
-                showNetworkError();
-            }
-        }
-    };
 
-    private void test(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    handler.sendEmptyMessage(0);
-                    Thread.sleep(5000);
-                handler.sendEmptyMessage(1);
-                Thread.sleep(5000);
-                handler.sendEmptyMessage(2);
-                Thread.sleep(5000);
-                handler.sendEmptyMessage(3);
-                Thread.sleep(5000);
-                handler.sendEmptyMessage(4);
-                Thread.sleep(5000);
-                handler.sendEmptyMessage(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
 
     private boolean userisnull(String user, String password) {
         if (UtilX.IsStringNull(user) || UtilX.IsStringNull(password)) {
@@ -180,11 +141,43 @@ public class LoginActivity extends BaseActivity {
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-                boolean keepuser = checkBoxKeepuser.isChecked();
-                boolean keeppassword = checkBoxKeeppassword.isChecked();
-              //  showLoading();
+                showLoading();
                 try {
-                    Login.register(LoginActivity.this,user,password,statusLayoutManager);
+                    Login.register(LoginActivity.this, user, password, new Observer<String>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(String string) {
+                            try {
+                                showContent();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(LoginActivity.this,
+                                   LoginActivity.this.getResources().getString(R.string.login_register_success)
+                                    , Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            try {
+                                showContent();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            Toast.makeText(LoginActivity.this,
+                                    LoginActivity.this.getResources().getString(R.string.login_register_fail)
+                                    , Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -222,6 +215,7 @@ public class LoginActivity extends BaseActivity {
                             Toast.makeText(LoginActivity.this,
                                     getResources().getString(R.string.login_Wrong)
                                     , Toast.LENGTH_SHORT).show();
+                            showContent();
                         }
                     }
 
@@ -230,6 +224,7 @@ public class LoginActivity extends BaseActivity {
                         Toast.makeText(LoginActivity.this,
                                 getResources().getString(R.string.login_unknwon_Wrong)
                                 , Toast.LENGTH_SHORT).show();
+                        showContent();
                     }
 
                     @Override
@@ -237,13 +232,13 @@ public class LoginActivity extends BaseActivity {
 
                     }
                 };
-
                 login.IsUser(user,password,observer);
             }
         });
     }
 
     protected void init() {
+        showContent();
         SharedPreferences sharedPreferences= getSharedPreferences(LoginData.LOGIN, Context.MODE_APPEND);
         String userId=sharedPreferences.getString(LoginData.LOGINDATA,"");
         if(!userId.equals("")){
