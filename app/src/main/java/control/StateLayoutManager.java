@@ -129,6 +129,13 @@ public class StateLayoutManager {
     /**
      * 显示空数据
      */
+    public void showEmptyData(int iconImage) throws Exception{
+        rootFrameLayout.showEmptyData(iconImage,"没有获得数据");
+    }
+
+    /**
+     * 显示空数据
+     */
     public void showEmptyData()throws Exception {
         showEmptyData(0, "");
     }

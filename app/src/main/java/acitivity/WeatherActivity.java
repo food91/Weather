@@ -79,18 +79,7 @@ public class WeatherActivity extends BaseActivity {
     LinearLayout linearLayoutset;
 
 
-    @Override
-    protected void setContentViewLayout(int... i) {
-        super.setContentViewLayout(R.layout.drawerlayout);
-    }
 
-    @Override
-    protected void initView() {
-        ButterKnife.bind(this);
-        init();
-        initDefaultFragment();
-        onclick();
-    }
 
     @Override
     protected void onResume() {
@@ -143,7 +132,7 @@ public class WeatherActivity extends BaseActivity {
 
 
      public void init() {
-
+        showContent();
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_format_list_bulleted_black_24dp);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -215,20 +204,6 @@ public class WeatherActivity extends BaseActivity {
                  drawerLayout, 0);
      }
 
-    /**
-     * 设置根布局参数
-     */
-    private static void setRootView(Activity activity) {
-        ViewGroup parent = (ViewGroup) activity.findViewById(android.R.id.content);
-        for (int i = 0, count = parent.getChildCount(); i < count; i++) {
-            View childView = parent.getChildAt(i);
-            if (childView instanceof ViewGroup) {
-                childView.setFitsSystemWindows(true);
-                ((ViewGroup) childView).setClipToPadding(true);
-            }
-        }
-    }
-
     private void showEditTextDialog() {
         final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(WeatherActivity.this);
         builder.setTitle("建议")
@@ -265,5 +240,16 @@ public class WeatherActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void setContentViewLayout(int... i) {
+        super.setContentViewLayout(R.layout.drawerlayout);
+    }
 
+    @Override
+    protected void initView() {
+        ButterKnife.bind(this);
+        init();
+        initDefaultFragment();
+        onclick();
+    }
 }

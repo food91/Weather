@@ -102,7 +102,6 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-
     private boolean userisnull(String user, String password) {
         if (UtilX.IsStringNull(user) || UtilX.IsStringNull(password)) {
             Toast.makeText(LoginActivity.this,
@@ -141,7 +140,7 @@ public class LoginActivity extends BaseActivity {
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-                showLoading();
+               showLoading();
                 try {
                     Login.register(LoginActivity.this, user, password, new Observer<String>() {
                         @Override
@@ -164,7 +163,7 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void onError(Throwable e) {
                             try {
-                                showContent();
+                                showNetworkError();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -193,7 +192,7 @@ public class LoginActivity extends BaseActivity {
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-
+                showLoading();
                 Login login = new Login(user, password,keepuser,keeppassword);
                 Observer<Boolean> observer=new Observer<Boolean>() {
                     @Override
@@ -204,6 +203,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onNext(Boolean aBoolean) {
                         if(aBoolean) {
+                            UtilX.LogX("on activity");
                             UserData.getUserData().setName(user);
                             UserData.getUserData().setPassword(password);
                             login.wirteDate(LoginActivity.this);
@@ -256,5 +256,9 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        statusLayoutManager.goneLoading();
+        super.onDestroy();
+    }
 }

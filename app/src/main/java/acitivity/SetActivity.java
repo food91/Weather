@@ -61,13 +61,28 @@ public class SetActivity extends BaseActivity {
     XSwitchView xsSetAcWeathervocie;
 
 
+
+    protected void init() {
+        showContent();
+        StatusBarUtil.setColor(this, 0, 0);
+        setSupportActionBar(toolbarSetAc);
+        toolbarSetAc.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
     @Override
-    protected void setContentViewLayout(int... i) {
+    protected void setContentViewLayout(int... layout) {
         super.setContentViewLayout(R.layout.activity_set);
     }
 
     @Override
     protected void initView() {
+        showContent();
         ButterKnife.bind(this);
+        init();
     }
 }

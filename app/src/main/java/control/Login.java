@@ -93,6 +93,7 @@ public class Login {
         Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
+                Thread.sleep(2500);
                 UserEntityRepository  userEntityRepository=new UserEntityRepository(MyApplication.getApplicationInstance());
                 UserEntity userData=userEntityRepository.QueryId(id);
                 if(userData!=null&&userData.userid.equals(id)&&userData.password.equals(pw))

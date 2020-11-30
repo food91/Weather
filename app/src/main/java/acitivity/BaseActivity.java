@@ -43,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initStatusLayout((int)layout[0]);
     }
 
-    private void initStatusLayout(@LayoutRes int  layout){
+    protected void initStatusLayout(@LayoutRes int  layout){
         statusLayoutManager = StateLayoutManager.newBuilder(this)
                 .contentView(layout)
                 .emptyDataView(R.layout.activity_emptydata)
@@ -62,14 +62,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                     @Override
                     public void onRetry() {
                         //点击重试
-                        // showContent();
+                         showContent();
                     }
                 })
                 .onNetworkListener(new OnNetworkListener() {
                     @Override
                     public void onNetwork() {
                         //网络异常，点击重试
-                        // showLoading();
+                        showContent();
                     }
                 })
                 .build();

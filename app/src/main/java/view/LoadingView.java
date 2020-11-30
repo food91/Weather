@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 
 import com.xiekun.myapplication.R;
 
+import util.UtilX;
+
 public class LoadingView extends LinearLayout {
 
     private ShapeView shapeView;
@@ -57,20 +59,15 @@ public class LoadingView extends LinearLayout {
 
 
     private void initLayout(){
+        UtilX.LogX("loading  init");
         mTranslationYDistance=dip2px(80);
         inflate(getContext(), R.layout.loadingview_layout,this);
         shapeView=findViewById(R.id.shapeview_loading);
         circleView=findViewById(R.id.circleview_loading);
-        post(new Runnable() {
-            @Override
-            public void run() {
-                isRunAnimator=true;
-                startFailAnimator();
-            }
-        });
     }
 
     private void startFailAnimator(){
+        UtilX.LogX("loadingview startFailAnimator-----");
         if(!isRunAnimator)
             return;
         ValueAnimator valueAnimatorCircle= ValueAnimator.ofFloat((float) 1f,0.3f);
@@ -196,12 +193,21 @@ public class LoadingView extends LinearLayout {
 
     @Override
     public void setVisibility(int visibility) {
+        UtilX.LogX("loading  setvisiblity");
         super.setVisibility(visibility);
         if(visibility== View.GONE||visibility==View.INVISIBLE){
             isRunAnimator=false;
             shapeView.clearAnimation();
             circleView.clearAnimation();
         }
-
+        if(visibility==View.VISIBLE){
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    isRunAnimator=true;
+                    startFailAnimator();
+                }
+            });
+        }
     }
 }

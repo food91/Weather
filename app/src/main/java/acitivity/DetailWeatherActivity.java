@@ -146,9 +146,12 @@ public class DetailWeatherActivity extends BaseActivity {
      */
     @BindView(R.id.md_index_desc2)
     TextViewRidus mdIndexDesc2;
-    
 
 
+    @Override
+    protected void setContentViewLayout(int... i) {
+        super.setContentViewLayout(R.layout.activity_detail_weather);
+    }
 
     @Override
     protected void initView() {
@@ -182,6 +185,7 @@ public class DetailWeatherActivity extends BaseActivity {
      * Init.
      */
     protected void init() {
+        showContent();
         getData();
         setSupportActionBar(mToolbar);
         weatherDetailsView = findViewById(R.id.weatherd_view_wdv);
