@@ -22,12 +22,12 @@ public class StateFrameLayout extends FrameLayout {
     /**
      *  loading 加载id
      */
-    public static final int LAYOUT_LOADING_ID = 1;
+    public static final int LAYOUT_LOADING_ID = 2;
 
     /**
      *  内容id
      */
-    public static final int LAYOUT_CONTENT_ID = 2;
+    public static final int LAYOUT_CONTENT_ID = 1;
 
     /**
      *  异常id

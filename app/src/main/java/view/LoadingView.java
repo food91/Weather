@@ -161,7 +161,7 @@ public class LoadingView extends LinearLayout {
             @Override
             public void onAnimationRepeat(Animator animation) {
                 shapeView.exChangeShapeView();
-                startUpAnimation();
+                startFailAnimator();
 
             }
         });

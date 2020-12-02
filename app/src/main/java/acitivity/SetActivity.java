@@ -16,7 +16,6 @@ import view.XSwitchView;
 
 public class SetActivity extends BaseActivity {
 
-
     @BindView(R.id.tv_set_ac_tip)
     TextView tvSetAcTip;
     @BindView(R.id.tv_set_ac_tip_detail)
@@ -62,9 +61,11 @@ public class SetActivity extends BaseActivity {
 
 
 
+
+
     protected void init() {
         showContent();
-        StatusBarUtil.setColor(this, 0, 0);
+        StatusBarUtil.setColor(this,0);
         setSupportActionBar(toolbarSetAc);
         toolbarSetAc.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

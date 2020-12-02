@@ -20,7 +20,7 @@
                 android:id="@+id/main_view_need_offset"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+
                 >
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/weather_main_toolbar"

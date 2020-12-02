@@ -78,9 +78,6 @@ public class WeatherActivity extends BaseActivity {
     @BindView(R.id.drawer_layout_ll_set)
     LinearLayout linearLayoutset;
 
-
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -88,7 +85,6 @@ public class WeatherActivity extends BaseActivity {
     }
 
     public void initDefaultFragment() {
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         weatherfragment=new WeatherFragment();
         aboutFragment = new AboutFragment();
@@ -106,7 +102,6 @@ public class WeatherActivity extends BaseActivity {
     }
 
     private void onclick() {
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,9 +193,8 @@ public class WeatherActivity extends BaseActivity {
                 return true;
             }
         });
-        Logger.d("this is Version =="+Build.VERSION.SDK_INT);
         DrawerLayout drawerLayout=findViewById(R.id.drawer_layout);
-         StatusBarUtil.setTranslucentForDrawerLayout(this,
+        StatusBarUtil.setTranslucentForDrawerLayout(this,
                  drawerLayout, 0);
      }
 
