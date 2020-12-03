@@ -101,6 +101,11 @@ public class LoginActivity extends BaseActivity {
         onclick();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        statusLayoutManager.goneLoading();
+    }
 
     private boolean userisnull(String user, String password) {
         if (UtilX.IsStringNull(user) || UtilX.IsStringNull(password)) {
@@ -203,6 +208,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onNext(Boolean aBoolean) {
                         if(aBoolean) {
+
                             UtilX.LogX("on activity");
                             UserData.getUserData().setName(user);
                             UserData.getUserData().setPassword(password);
@@ -210,6 +216,7 @@ public class LoginActivity extends BaseActivity {
                             Intent intent = new Intent(LoginActivity.this, WeatherActivity.class);
                             //启动
                             startActivity(intent);
+
                             finish();
                         }else {
                             Toast.makeText(LoginActivity.this,
@@ -258,7 +265,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        statusLayoutManager.goneLoading();
+
         super.onDestroy();
     }
 }

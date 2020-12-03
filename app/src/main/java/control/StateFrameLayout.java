@@ -117,6 +117,7 @@ public class StateFrameLayout extends FrameLayout {
         if (id == StateFrameLayout.LAYOUT_LOADING_ID){
             //如果是loading，则设置不可点击
             resView.setOnClickListener(null);
+        //    mStatusLayoutManager.goneLoading();
         }
         layoutSparseArray.put(id, resView);
         addView(resView);

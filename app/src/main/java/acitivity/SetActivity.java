@@ -1,11 +1,16 @@
 package acitivity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 
 import com.jaeger.library.StatusBarUtil;
 import com.xiekun.myapplication.R;
@@ -64,7 +69,7 @@ public class SetActivity extends BaseActivity {
 
     protected void init() {
         showContent();
-        StatusBarUtil.setColor(this, 0, 0);
+        StatusBarUtil.setColor(this, Color.parseColor("#ff00ddff"),0);
         setSupportActionBar(toolbarSetAc);
         toolbarSetAc.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,5 +89,44 @@ public class SetActivity extends BaseActivity {
         showContent();
         ButterKnife.bind(this);
         init();
+        onclick();
+    }
+
+    private void onclick(){
+        xsSetAcTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
+            @Override
+            public void toggleToOn(XSwitchView view) {
+
+            }
+
+            @Override
+            public void toggleToOff(XSwitchView view) {
+
+            }
+        });
+        xsSetAcWarm.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
+            @Override
+            public void toggleToOn(XSwitchView view) {
+                Notification notification = new NotificationCompat.Builder(SetActivity.this,
+                        "1").
+                        build();
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(SetActivity.this,
+                        "default");
+                builder.setSmallIcon(R.drawable.icon_network_error);
+                builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.ic_about));
+                builder.setAutoCancel(true);
+                builder.setContentTitle("普通通知标题");
+                builder.setContentInfo("这是一条通知信息，请查收");
+                builder.setContentText("这是一条通知文本，请阅读");
+                manager.notify(1,builder.build());
+                view.setOpened(true);
+            }
+
+            @Override
+            public void toggleToOff(XSwitchView view) {
+
+            }
+        });
     }
 }

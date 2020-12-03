@@ -64,10 +64,12 @@ public class LoadingView extends LinearLayout {
         inflate(getContext(), R.layout.loadingview_layout,this);
         shapeView=findViewById(R.id.shapeview_loading);
         circleView=findViewById(R.id.circleview_loading);
+        isRunAnimator=true;
+
     }
 
     private void startFailAnimator(){
-        UtilX.LogX("loadingview startFailAnimator-----");
+        UtilX.LogX("loadingview startFailAnimator-----"+isRunAnimator);
         if(!isRunAnimator)
             return;
         ValueAnimator valueAnimatorCircle= ValueAnimator.ofFloat((float) 1f,0.3f);
@@ -161,7 +163,7 @@ public class LoadingView extends LinearLayout {
             @Override
             public void onAnimationRepeat(Animator animation) {
                 shapeView.exChangeShapeView();
-                startUpAnimation();
+                startFailAnimator();
 
             }
         });
@@ -193,18 +195,19 @@ public class LoadingView extends LinearLayout {
 
     @Override
     public void setVisibility(int visibility) {
-        UtilX.LogX("loading  setvisiblity");
+
         super.setVisibility(visibility);
         if(visibility== View.GONE||visibility==View.INVISIBLE){
             isRunAnimator=false;
             shapeView.clearAnimation();
             circleView.clearAnimation();
+            UtilX.LogX("loading  setvisiblity  is=="+isRunAnimator);
         }
         if(visibility==View.VISIBLE){
+            isRunAnimator=true;
             post(new Runnable() {
                 @Override
                 public void run() {
-                    isRunAnimator=true;
                     startFailAnimator();
                 }
             });

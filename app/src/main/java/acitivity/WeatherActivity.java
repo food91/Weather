@@ -78,7 +78,18 @@ public class WeatherActivity extends BaseActivity {
     @BindView(R.id.drawer_layout_ll_set)
     LinearLayout linearLayoutset;
 
+    @Override
+    protected void setContentViewLayout(int... i) {
+        super.setContentViewLayout(R.layout.drawerlayout);
+    }
 
+    @Override
+    protected void initView() {
+        ButterKnife.bind(this);
+        init();
+        initDefaultFragment();
+        onclick();
+    }
 
 
     @Override
@@ -128,23 +139,10 @@ public class WeatherActivity extends BaseActivity {
         });
     }
 
-
-
-
-     public void init() {
-        showContent();
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_format_list_bulleted_black_24dp);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.weather_fragment,
-                R.id.nav_mycare, R.id.nav_send,R.id.nav_share,R.id.nav_about,R.id.nav_searh
-                )
-                .setDrawerLayout(drawerLayout)
-                .build();
+    private void setNavigationView(){
         NavController navController = Navigation.findNavController(this, R.id.weather_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        Logger.d("user=="+UserData.getUserData().toString());
         tv_head_id=navigationView.getHeaderView(0).findViewById(R.id.tv_nav_header_id);
         tv_head_id.setText(UserData.getUserData().getName());
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -155,12 +153,12 @@ public class WeatherActivity extends BaseActivity {
                 switch (item.getItemId()){
                     case R.id.nav_share:
                         UtilX.allShare(WeatherActivity.this);
-                       break;
+                        break;
                     case R.id.nav_send:
                         showEditTextDialog();
                         break;
                     case R.id.nav_mycare:
-                      fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.hide(searchFragment)
                                 .hide(weatherfragment)
                                 .hide(aboutFragment)
@@ -198,8 +196,23 @@ public class WeatherActivity extends BaseActivity {
                 return true;
             }
         });
-        Logger.d("this is Version =="+Build.VERSION.SDK_INT);
-        DrawerLayout drawerLayout=findViewById(R.id.drawer_layout);
+    }
+
+    private void setDrawerLayout(){
+        drawerLayout = findViewById(R.id.drawer_layout);
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.weather_fragment,
+                R.id.nav_mycare, R.id.nav_send,R.id.nav_share,R.id.nav_about,R.id.nav_searh
+        )
+                .setDrawerLayout(drawerLayout)
+                .build();
+    }
+
+     public void init() {
+        showContent();
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_format_list_bulleted_black_24dp);
+        setDrawerLayout();
+        setNavigationView();
          StatusBarUtil.setTranslucentForDrawerLayout(this,
                  drawerLayout, 0);
      }
@@ -240,16 +253,5 @@ public class WeatherActivity extends BaseActivity {
     }
 
 
-    @Override
-    protected void setContentViewLayout(int... i) {
-        super.setContentViewLayout(R.layout.drawerlayout);
-    }
 
-    @Override
-    protected void initView() {
-        ButterKnife.bind(this);
-        init();
-        initDefaultFragment();
-        onclick();
-    }
 }

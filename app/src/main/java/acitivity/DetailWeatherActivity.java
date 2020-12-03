@@ -173,18 +173,14 @@ public class DetailWeatherActivity extends BaseActivity {
         setToolbar();
     }
 
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        mViewNeedOffset = findViewById(R.id.view_need_offset);
-        mTextViewRidus = findViewById(R.id.md_wap);
-        StatusBarUtil.setTranslucentForImageView(this, 0, mViewNeedOffset);
-    }
 
     /**
      * Init.
      */
     protected void init() {
+        mViewNeedOffset = findViewById(R.id.view_need_offset);
+        mTextViewRidus = findViewById(R.id.md_wap);
+        StatusBarUtil.setTranslucentForImageView(this, 0, mViewNeedOffset);
         showContent();
         getData();
         setSupportActionBar(mToolbar);
