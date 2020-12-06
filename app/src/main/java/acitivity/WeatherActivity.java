@@ -192,7 +192,6 @@ public class WeatherActivity extends BaseActivity {
                         fragmentTransaction.commit();
                         break;
                 }
-
                 return true;
             }
         });
