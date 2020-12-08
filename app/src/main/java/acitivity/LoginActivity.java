@@ -1,11 +1,14 @@
 package acitivity;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
@@ -34,10 +37,12 @@ import control.OnNetworkListener;
 import control.OnRetryListener;
 import control.OnShowHideViewListener;
 import control.StateLayoutManager;
+import control.TaskNotificationManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import service.TaskManageNotificationService;
 import util.GsonUtilX;
 import util.UtilX;
 
@@ -101,7 +106,27 @@ public class LoginActivity extends BaseActivity {
         onclick();
     }
 
-    @Override
+    private void startService(){
+        Intent intent=new Intent(this, TaskManageNotificationService.class);
+        startService(intent);
+        bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+                TaskManageNotificationService.LocalBinder localBinder=
+                        (TaskManageNotificationService.LocalBinder) iBinder;
+                TaskNotificationManager.getInstance().onSetActivityListener=localBinder.getService();
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+
+            }
+        }, Context.BIND_AUTO_CREATE);
+    }
+
+   @Override
     protected void onPause() {
         super.onPause();
         statusLayoutManager.goneLoading();
@@ -245,6 +270,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void init() {
+        startService();
         showContent();
         SharedPreferences sharedPreferences= getSharedPreferences(LoginData.LOGIN, Context.MODE_APPEND);
         String userId=sharedPreferences.getString(LoginData.LOGINDATA,"");

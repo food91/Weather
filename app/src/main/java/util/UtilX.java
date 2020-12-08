@@ -37,6 +37,13 @@ public class UtilX {
         context.startActivity(share_intent);
     }
 
+    public static int getLocalTime(){
+        Calendar calendar=Calendar.getInstance();
+        int hour=calendar.get(Calendar.HOUR_OF_DAY);
+        return hour;
+    }
+
+
     /**
      * 返回当前程序版本号
      */
