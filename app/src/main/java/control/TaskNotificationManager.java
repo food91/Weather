@@ -51,6 +51,7 @@ public class TaskNotificationManager {
         onSetActivityListener.WeatherVoice(open);
     }
 
+    
 
     public void applyRight(BaseActivity activity,RequestCallback requestCallback){
         PermissionX.init(activity)
@@ -76,5 +77,7 @@ public class TaskNotificationManager {
                 })
                 .request(requestCallback);
     }
+
+
 
 }

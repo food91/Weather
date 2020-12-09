@@ -125,25 +125,7 @@ public class SetActivity extends BaseActivity {
         onclick();
     }
 
-    public void sendChatMsg() {
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(getString(R.string.app_name), getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
-            mChannel.setDescription("notication channel");
-            mChannel.setShowBadge(false);
-            manager.createNotificationChannel(mChannel);
-        }
-        Notification notification = new NotificationCompat.Builder(this, Constant.CHANNEL_1)
-                .setContentTitle("收到一条聊天消息")
-                .setContentText("老八问候你吃了吗")
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
-                .setAutoCancel(true)
-                .setNumber(2)
-                .build();
-        manager.notify(1, notification);
-    }
+
 
     private void onclick(){
         xsSetAcTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {

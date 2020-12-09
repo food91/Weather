@@ -31,30 +31,47 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
 
     }
 
+    private void getLocation(){
+
+    }
+
 
     @Override
     public void OpenNotiTime(boolean open, int ...h) {
-        if(!open){
+        if(!open||h==null){
             return;
         }
         //获得时间
-        sendChatMsg();
+        int localHour=UtilX.getLocalTime();
+        for(int i=0;i<h.length;i++){
+            if(localHour==h[i]){
+                if(i==0){
+                    sendChatMsg("今日天气",getTodayWeather());
+                }
+                if(i==1){
+                    sendChatMsg("明日天气预报",getTomorrowWeather());
+                }
+            }
+        }
     }
 
-    public void sendChatMsg() {
+    private String getTomorrowWeather(){
+
+    }
+
+    private String getTodayWeather(){
+
+    }
+
+    public void sendChatMsg(String title ,String text) {
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(getString(R.string.app_name), getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
-            mChannel.setDescription("notication channel");
-            mChannel.setShowBadge(false);
-            manager.createNotificationChannel(mChannel);
-        }
         Notification notification = new NotificationCompat.Builder(this, Constant.CHANNEL_1)
-                .setContentTitle("收到一条聊天消息")
-                .setContentText("老八问候你吃了吗")
+                .setContentTitle(title)
+                .setContentText(text)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                        R.drawable.ic_launcher_background))
                 .setAutoCancel(true)
                 .setNumber(2)
                 .build();
@@ -92,12 +109,7 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
                 new TencentLocationListener() {
                     @Override
                     public void onLocationChanged(TencentLocation tencentLocation, int i, String s) {
-                        UtilX.LogX("s==="+s+"l=="+tencentLocation.getLatitude()
-                                +"d =="+tencentLocation.getLongitude()
-                                +"--i=="+i);
-                        String str="s==="+s+"l=="+tencentLocation.getLatitude()
-                                +"d =="+tencentLocation.getLongitude()
-                                +"--i=="+i;
+
                         Toast.makeText(activity,str,Toast.LENGTH_LONG).show();
                     }
 
