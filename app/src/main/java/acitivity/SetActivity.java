@@ -156,7 +156,6 @@ public class SetActivity extends BaseActivity {
             @Override
             public void toggleToOn(XSwitchView view) {
                 view.setOpened(true);
-                sendChatMsg();
                 UtilX.LogX("toggleToOn");
             }
             @Override

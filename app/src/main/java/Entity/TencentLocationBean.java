@@ -16,6 +16,16 @@ public class TencentLocationBean {
     private String request_id;
     private ResultBean result;
 
+    @Override
+    public String toString() {
+        return "TencentLocationBean{" +
+                "status=" + status +
+                ", message='" + message + '\'' +
+                ", request_id='" + request_id + '\'' +
+                ", result=" + result +
+                '}';
+    }
+
     public int getStatus() {
         return status;
     }

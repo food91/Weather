@@ -5,11 +5,13 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,17 +23,29 @@ import com.tencent.map.geolocation.TencentLocationManager;
 import com.xiekun.myapplication.R;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
+import Entity.TencentLocationBean;
 import control.OnSetActivityListener;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import mInterface.ApiUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import util.Constant;
 import util.UtilX;
 
 public class TaskManageNotificationService extends Service implements OnSetActivityListener {
 
     private void showNotification(){
-
-    }
-
-    private void getLocation(){
 
     }
 
@@ -53,14 +67,17 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
                 }
             }
         }
+        getLocation(this);
     }
 
     private String getTomorrowWeather(){
-
+        String res="";
+        return res;
     }
 
     private String getTodayWeather(){
-
+        String res="";
+        return res;
     }
 
     public void sendChatMsg(String title ,String text) {
@@ -103,14 +120,60 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
 
     }
 
-    private void getLocation(Activity activity){
-        TencentLocationManager mLocationManager = TencentLocationManager.getInstance(activity);
+    private void getLocation(Context context){
+        TencentLocationManager mLocationManager = TencentLocationManager.getInstance(context);
         mLocationManager.requestSingleFreshLocation(null,
                 new TencentLocationListener() {
                     @Override
                     public void onLocationChanged(TencentLocation tencentLocation, int i, String s) {
+                        //拦截器获取日志
+                        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                            @Override
+                            public void log(String message) {
+                                //打印retrofit日志
+                                Log.i("RetrofitLog","retrofitBack = "+message);
+                            }
+                        });
+                        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                        OkHttpClient client = new OkHttpClient.Builder()//okhttp设置部分，此处还可再设置网络参数
+                                .addInterceptor(loggingInterceptor)
+                                .build();
 
-                        Toast.makeText(activity,str,Toast.LENGTH_LONG).show();
+                        Retrofit retrofit=new Retrofit.Builder()
+                                .baseUrl(ApiUrl.TencentApiUrl)
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                                .client(client)
+                                .build();
+                        Map<String,String> map=new HashMap<>();
+                        map.put("location",tencentLocation.getLatitude()+","+tencentLocation.getLongitude());
+                        map.put("key",ApiUrl.TencentApiKey);
+                        Observable<TencentLocationBean> observable=retrofit.create(ApiUrl.IPLocation.class).
+                                getCity(ApiUrl.TencentApiUrlpath,map
+                                      );
+                        observable.subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Observer<TencentLocationBean>() {
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onNext(TencentLocationBean tencentLocationBean) {
+                                            UtilX.LogX(tencentLocationBean.toString());
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+
+                                    }
+                                });
                     }
 
                     @Override
