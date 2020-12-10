@@ -34,7 +34,7 @@ public class TaskNotificationManager {
     }
 
     public void OpenNotiTime(boolean open){
-        onSetActivityListener.OpenNotiTime(open);
+        onSetActivityListener.OpenNotiTime(open,7,21);
     }
 
     public void abnormalWeatherTip(boolean open){

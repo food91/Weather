@@ -38,13 +38,7 @@ public class MyApplication extends Application {
         Logger.addLogAdapter(new AndroidLogAdapter());
         Logger.d("-----------init");
         UtilX.isDebug=true;
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(Constant.CHANNEL_1, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
-            mChannel.setDescription("notication channel");
-            mChannel.setVibrationPattern(new long[]{100, 200, 100, 200});
-            notificationManager .createNotificationChannel(mChannel);
-        }
+
     }
 
 }
