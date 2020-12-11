@@ -2,32 +2,21 @@ package fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.textfield.TextInputEditText;
-import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.xiekun.myapplication.R;
 
@@ -36,11 +25,10 @@ import acitivity.DetailWeatherActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import control.RequestRetrofit;
 import control.WeatherControl;
-import control.WeatherGerHttp;
 import data.SearchViewModel;
 import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -78,7 +66,7 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                loadinggif();
                String city=intvSearch.getText().toString()+"";
-               Observable observable= WeatherGerHttp.GetHttpData(city, (long) 1.5);
+               Observable observable= RequestRetrofit.GetHttpData(city, (long) 1.5);
                observable.subscribeOn(Schedulers.io()).
                        observeOn(AndroidSchedulers.mainThread())
                        .subscribe(new Observer<WeatherData>() {

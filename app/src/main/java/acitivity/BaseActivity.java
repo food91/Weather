@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.xiekun.myapplication.R;
 
-import control.OnNetworkListener;
-import control.OnRetryListener;
+import mInterface.OnNetworkListener;
+import mInterface.OnRetryListener;
 import control.StateLayoutManager;
 import util.UtilX;
 

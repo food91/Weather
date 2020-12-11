@@ -10,8 +10,10 @@ import com.tencent.map.geolocation.TencentLocationManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import Entity.TencentLocationBean;
+import Entity.WeatherData;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,6 +25,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import util.Constant;
 
 public class RequestRetrofit {
 
@@ -37,6 +40,10 @@ public class RequestRetrofit {
 
     public static Retrofit createRetrofit(String baseurl){
 
+        Retrofit.Builder retrofitBuilder=new Retrofit.Builder()
+                .baseUrl(baseurl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
         //拦截器获取日志
          if(HttpLog){
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
@@ -47,72 +54,87 @@ public class RequestRetrofit {
             }
         });
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
+             OkHttpClient client = new OkHttpClient.Builder()//okhttp设置部分，此处还可再设置网络参数
+                     .addInterceptor(loggingInterceptor)
+                     .build();
+             retrofitBuilder.client(client);
          }
-        Retrofit.Builder retrofitBuilder=new Retrofit.Builder()
-                .baseUrl(baseurl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
-                if(HttpLog){
-                    OkHttpClient client = new OkHttpClient.Builder()//okhttp设置部分，此处还可再设置网络参数
-                            .addInterceptor(loggingInterceptor)
-                            .build();
-                    retrofitBuilder.client(client)
-                }
          return  retrofitBuilder .build();
     }
 
+    public static void ReviceTencentCity(){
+
+    }
+
     public static void sendNetMessage(Map<String,String> map, Retrofit retrofit
-    ,Observer<Tz> observer){
+    , Observer<Object> observer){
+
         Observable<TencentLocationBean> observable=retrofit.create(
                 ApiUrl.IPLocation.class).
-                getCity(ApiUrl.TencentApiUrlpath,map
+                getCity(Constant.TencentApiUrlpath,map
                 );
+
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer<T>);
+                .subscribe(observer);
     }
 
+    public static void ReviceLocationMessage(TencentLocation tencentLocation
+    ,Observer<Object> observer){
+        Retrofit retrofit=RequestRetrofit.createRetrofit(Constant.TencentApiUrl);
+        Map<String,String> map=new HashMap<>();
+        map.put("location",tencentLocation.getLatitude()+","+tencentLocation.getLongitude());
+        map.put("key",Constant.TencentApiKey);
+        sendNetMessage(map,retrofit,observer);
+    }
 
-    private void getLocation(Observer<TencentLocationBean> observer,Context context){
+    public static void getLocation( Context context,
+                                    TencentLocationListener tencentLocationListener
+                            ){
         TencentLocationManager mLocationManager = TencentLocationManager.getInstance(context);
         mLocationManager.requestSingleFreshLocation(null,
-                new TencentLocationListener() {
-                    @Override
-                    public void onLocationChanged(TencentLocation tencentLocation, int i, String s) {
-
-                        Retrofit retrofit=RequestRetrofit.createRetrofit(ApiUrl.TencentApiUrl);
-                        Map<String,String> map=new HashMap<>();
-                        map.put("location",tencentLocation.getLatitude()+","+tencentLocation.getLongitude());
-                        map.put("key",ApiUrl.TencentApiKey);
-                        sendNetMessage(map, retrofit, new Observer<TencentLocationBean>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onNext(TencentLocationBean tencentLocationBean) {
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onStatusUpdate(String s, int i, String s1) {
-
-                    }
-                }, Looper.getMainLooper());
+                tencentLocationListener, Looper.getMainLooper());
     }
+
+    public static Observable<WeatherData> GetHttpData(String cityname){
+
+        Retrofit retrofit =RequestRetrofit.createRetrofit(Constant.WEATHERURL);
+        ApiUrl.GetRuest_Interface request = retrofit.create(ApiUrl.GetRuest_Interface.class);
+        Observable<WeatherData> call = request.get(Constant.WEATHERID,
+                Constant.WEATHERPASSWORD,
+                Constant.VERSION,cityname);
+
+        return call;
+    }
+
+    /**
+     * Get http data.
+     * 请求7天天气信息
+     * @return
+     */
+    public static Observable<WeatherData> GetHttpData(String cityname,Long time){
+        //拦截器获取日志
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                //打印retrofit日志
+                Log.i("RetrofitLog","retrofitBack = "+message);
+            }
+        });
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()//okhttp设置部分，此处还可再设置网络参数
+                .addInterceptor(loggingInterceptor)
+                .build();
+
+
+        Retrofit retrofit = RequestRetrofit.createRetrofit(Constant.WEATHERURL);
+        ApiUrl.GetRuest_Interface request = retrofit.create(ApiUrl.GetRuest_Interface.class);
+        Observable<WeatherData> call = request.get(Constant.WEATHERID,
+                Constant.WEATHERPASSWORD,
+                Constant.VERSION,cityname)
+                .delay(time, TimeUnit.SECONDS);
+        return call;
+    }
+
 
 }

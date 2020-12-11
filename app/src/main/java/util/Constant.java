@@ -5,6 +5,27 @@ public class Constant {
     //消息
     public static String CHANNEL_1 = "channel1";
 
+    //腾讯地图API
+    public static String TencentApiUrl="https://apis.map.qq.com/";
+    public static String TencentApiUrlpath="ws/geocoder/v1/";
+    //腾讯key
+    public static String TencentApiKey="ZLFBZ-3MK6S-I2ZOK-6IQKU-XL2B7-6VBOE";
 
+    /**
+     * The constant WEATHERURL.
+     */
+    public final static String WEATHERURL="http://tianqiapi.com/";
+    /**
+     * The constant WEATHERID.
+     */
+    public final static String WEATHERID="87699471";
+    /**
+     * The constant WEATHERPASSWORD.
+     */
+    public final static String WEATHERPASSWORD="oSys9sgp";
+    /**
+     * The constant VERSION.
+     */
+    public final static String VERSION="v1";
 
 }

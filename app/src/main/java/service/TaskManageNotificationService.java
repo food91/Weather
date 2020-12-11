@@ -1,54 +1,33 @@
 package service;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.tencent.map.geolocation.TencentLocation;
-import com.tencent.map.geolocation.TencentLocationListener;
-import com.tencent.map.geolocation.TencentLocationManager;
 import com.xiekun.myapplication.R;
 
 
-import org.reactivestreams.Subscriber;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import Entity.TencentLocationBean;
 import Entity.WeatherData;
-import control.OnSetActivityListener;
-import control.WeatherGerHttp;
+import control.RequestRetrofit;
+import mInterface.OnSetActivityListener;
+import control.TaskNotificationManager;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import mInterface.ApiUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import util.Constant;
 import util.UtilX;
 
 public class TaskManageNotificationService extends Service implements OnSetActivityListener {
-
 
     @Override
     public void OpenNotiTime(boolean open, int ...h) {
@@ -60,10 +39,57 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
         for(int i=0;i<h.length;i++){
             if(localHour==h[i]){
                 if(i==0){
-                  //  sendChatMsg("今日天气",getTodayWeather());
+                    TaskNotificationManager.getInstance().getWeather(this,
+                            new Observer<Object>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
+
+                                }
+
+                                @Override
+                                public void onNext(Object o) {
+                                    WeatherData weatherData= (WeatherData) o;
+                                    String title=weatherData.getCity();
+                                    String text="今日温度"+weatherData.getData().get(0).getTem();
+                                    sendChatMsg(title,text);
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+                                }
+                            });
                 }
                 if(i==1){
-              //      sendChatMsg("明日天气预报",getTomorrowWeather());
+                    TaskNotificationManager.getInstance().getWeather(this, new Observer<Object>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(Object o) {
+                            WeatherData weatherData= (WeatherData) o;
+                            String title=weatherData.getCity();
+                            String text="明日温度"+weatherData.getData().get(1).getTem();
+                            sendChatMsg(title,text);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
                 }
             }
         }
@@ -72,35 +98,12 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
     }
 
     private void SendCityWeather(){
-        getLocation(new Observer<TencentLocationBean>() {
-            @Override
-            public void onSubscribe(Disposable d) {
 
-            }
-
-            @Override
-            public void onNext(TencentLocationBean tencentLocationBean) {
-                    String city=tencentLocationBean.getResult().getAddress_component().getCity();
-                    city=city.replace("市","");
-                    UtilX.LogX("city="+city);
-                    getCityWeather(city);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
     }
 
 
     private void getCityWeather(String city){
-        Observable<WeatherData> weatherDataObservable=WeatherGerHttp.GetHttpData(city);
+        Observable<WeatherData> weatherDataObservable= RequestRetrofit.GetHttpData(city);
         weatherDataObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WeatherData>() {
@@ -133,12 +136,7 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
         return res;
     }
 
-    private String getTodayWeather(){
-        String res="";
-        return res;
-    }
-
-    public void sendChatMsg(String title ,String text) {
+    public void sendChatMsg(String title ,String text,int ...time) {
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(Constant.CHANNEL_1, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);

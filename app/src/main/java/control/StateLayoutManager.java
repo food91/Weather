@@ -2,13 +2,15 @@ package control;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import androidx.annotation.LayoutRes;
 
+import mInterface.OnNetworkListener;
+import mInterface.OnRetryListener;
+import mInterface.OnShowHideViewListener;
 import util.UtilX;
 import view.AbsViewStubLayout;
 

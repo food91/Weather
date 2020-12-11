@@ -1,6 +1,7 @@
 package control;
 
 import android.Manifest;
+import android.content.Context;
 
 import com.permissionx.guolindev.PermissionX;
 import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam;
@@ -8,11 +9,21 @@ import com.permissionx.guolindev.callback.ForwardToSettingsCallback;
 import com.permissionx.guolindev.callback.RequestCallback;
 import com.permissionx.guolindev.request.ExplainScope;
 import com.permissionx.guolindev.request.ForwardScope;
+import com.tencent.map.geolocation.TencentLocation;
+import com.tencent.map.geolocation.TencentLocationListener;
 
 
 import java.util.List;
 
+import Entity.TencentLocationBean;
+import Entity.WeatherData;
 import acitivity.BaseActivity;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import mInterface.OnSetActivityListener;
 
 public class TaskNotificationManager {
 
@@ -34,7 +45,7 @@ public class TaskNotificationManager {
     }
 
     public void OpenNotiTime(boolean open){
-        onSetActivityListener.OpenNotiTime(open,7,21);
+        onSetActivityListener.OpenNotiTime(open,2,19);
     }
 
     public void abnormalWeatherTip(boolean open){
@@ -51,7 +62,47 @@ public class TaskNotificationManager {
         onSetActivityListener.WeatherVoice(open);
     }
 
-    
+    public void getWeather(Context context,Observer<Object> objectObserver){
+        //返回经纬度
+        RequestRetrofit.getLocation(context, new TencentLocationListener() {
+            @Override
+            public void onLocationChanged(TencentLocation tencentLocation, int i, String s) {
+                //接受到经纬度，经纬度,返回当前城市名
+                RequestRetrofit.ReviceLocationMessage(tencentLocation, new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        TencentLocationBean tencentLocationBean= (TencentLocationBean) o;
+                        String city=tencentLocationBean.getResult().getAddress_component().getCity();
+                        city=city.replace("市","");
+                        Observable<WeatherData> observable= RequestRetrofit.GetHttpData(city);
+                        observable.observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(objectObserver);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onStatusUpdate(String s, int i, String s1) {
+
+            }
+        });
+    }
 
     public void applyRight(BaseActivity activity,RequestCallback requestCallback){
         PermissionX.init(activity)

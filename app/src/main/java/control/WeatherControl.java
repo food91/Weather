@@ -45,7 +45,6 @@ import io.reactivex.schedulers.Schedulers;
 public class WeatherControl {
 
     private StaggeredGridAdapter staggeredGridAdapter;
-    private WeatherGerHttp weatherGerHttp;
     private WeatherBaseAdapter mweatherBaseAdapter;
 
     private static final String[] WEA_IMG = {"xue", "lei", "shachen", "wu", "bingbao", "yun", "yu", "yin", "qing"};
@@ -76,7 +75,7 @@ public class WeatherControl {
      */
     public WeatherControl(StaggeredGridAdapter staggeredGridAdapter, Context context) throws IOException {
         this.staggeredGridAdapter = (StaggeredGridAdapter) staggeredGridAdapter;
-        weatherGerHttp = new WeatherGerHttp();
+
         GetAllCity(context);
     }
 
@@ -99,17 +98,6 @@ public class WeatherControl {
 
         }
 
-    }
-
-
-    /**
-     * Instantiates a new Weather control.
-     *
-     * @param context the context
-     * @throws IOException the io exception
-     */
-    public WeatherControl(Context context) throws IOException {
-        weatherGerHttp = new WeatherGerHttp();
     }
 
 
@@ -304,7 +292,7 @@ public class WeatherControl {
      */
     public void UpdataWeatherViewFromHttp(String cityname, WeatherBaseAdapter adapter) {
 
-        Observable call = WeatherGerHttp.GetHttpData(cityname);
+        Observable call = RequestRetrofit.GetHttpData(cityname);
         call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WeatherData>() {
                     @Override
