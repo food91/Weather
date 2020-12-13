@@ -28,4 +28,7 @@ public class Constant {
      */
     public final static String VERSION="v1";
 
+    public final static int NOTIFICATIONTIME=7;
+    public final static int NOTIFICATIONTIME2=19;
+
 }

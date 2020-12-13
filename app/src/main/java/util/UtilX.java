@@ -128,6 +128,11 @@ public class UtilX {
         return max;
     }
 
+    public static long GetMillsTime(int ){
+        long time1=System.currentTimeMillis();
+
+    }
+
     /**
      * Minint int.
      *

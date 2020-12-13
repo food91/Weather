@@ -24,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import mInterface.OnSetActivityListener;
+import util.Constant;
 
 public class TaskNotificationManager {
 
@@ -45,7 +46,8 @@ public class TaskNotificationManager {
     }
 
     public void OpenNotiTime(boolean open){
-        onSetActivityListener.OpenNotiTime(open,2,19);
+        onSetActivityListener.OpenNotiTime(open, Constant.NOTIFICATIONTIME,
+                Constant.NOTIFICATIONTIME2);
     }
 
     public void abnormalWeatherTip(boolean open){
@@ -103,6 +105,8 @@ public class TaskNotificationManager {
             }
         });
     }
+
+
 
     public void applyRight(BaseActivity activity,RequestCallback requestCallback){
         PermissionX.init(activity)
