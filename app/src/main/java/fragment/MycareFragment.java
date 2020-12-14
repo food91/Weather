@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,7 +25,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import control.WeatherControl;
-import data.MycareViewModel;
 
 
 public class MycareFragment extends Fragment {

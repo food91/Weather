@@ -15,6 +15,7 @@ import com.xiekun.myapplication.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import Entity.WeatherData;
 
@@ -128,9 +129,11 @@ public class UtilX {
         return max;
     }
 
-    public static long GetMillsTime(int ){
+    public static long getMillsTimeToday(){
         long time1=System.currentTimeMillis();
-
+        long hour=UtilX.getLocalTimeHour()*3600000;
+        long min=getLocalTimeMinute()*60000;
+        return time1-hour-min;
     }
 
     /**
@@ -261,6 +264,13 @@ public class UtilX {
             }
         }
         return weatherBitmap;
+    }
+
+    public static int  getLocalTimeMinute(){
+
+        Calendar calendar=Calendar.getInstance();
+        return calendar.get(Calendar.MINUTE);
+
     }
 
     public static int  getLocalTimeHour(){

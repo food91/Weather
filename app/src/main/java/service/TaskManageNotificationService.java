@@ -4,7 +4,9 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -17,8 +19,11 @@ import androidx.core.app.NotificationCompat;
 import com.xiekun.myapplication.R;
 
 
+import java.util.Date;
+
 import Entity.WeatherData;
 import control.RequestRetrofit;
+import mBroadcast.NotificationReceiverBroadcast;
 import mInterface.OnSetActivityListener;
 import control.TaskNotificationManager;
 import io.reactivex.Observable;
@@ -35,16 +40,38 @@ import util.UtilX;
 public class TaskManageNotificationService extends Service implements OnSetActivityListener {
 
 
-    private void TimerBroastSend(){
+    private void openNotication(String title,String text){
         AlarmManager alarmManager= (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int localHour=UtilX.getLocalTimeHour();
-        //大于晚上7点，推送今天天气信息
-        if(localHour>=Constant.NOTIFICATIONTIME2){
-            long timeMills=System.currentTimeMillis();
-            //小于晚7点，且大于早7点，推送今天消息
-        }else(localHour>Constant.NOTIFICATIONTIME){
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        //getTime()：日期的该方法同样可以表示从1970年1月1日0点至今所经历的毫秒数
+        int type = AlarmManager.RTC_WAKEUP;
+        long triggerAtMillis =UtilX.getMillsTimeToday();
+        //一天的毫秒数
+        long intervalMillis = 86400000;
+        Intent intent=new Intent(this, NotificationReceiverBroadcast.class);
+        intent.putExtra(Constant.BROADCAST_NOTIFICATION_TITLE,title);
+        intent.putExtra(Constant.BROADCAST_NOTIFICATION_TEXT,text);
+        intent.setAction(Constant.ACTION_NOTIFICATION);
+        PendingIntent contentIntent = PendingIntent.getActivity( this , 0 ,intent, 0 );
+        manager.setInexactRepeating(type, triggerAtMillis, intervalMillis, contentIntent);
+    }
 
+    private void TimerBroastSend(){
+
+        int localHour=UtilX.getLocalTimeHour();
+        //大于晚上7点，推送明天天气信息，并且设置时间，明天早上推送
+        if(localHour>=Constant.NOTIFICATIONTIME2){
+          //推送明天消息
+            reviceWeatherInfo(1);
+
+        }else if(localHour>Constant.NOTIFICATIONTIME){
+            //推送今天消息
+            reviceWeatherInfo(0);
         }
+    }
+
+    private void sendNotication(long timeMills){
+
     }
 
 
@@ -100,33 +127,6 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
         }
     }
 
-    /**
-     * Send chat msg.
-     *
-     * @param title the title
-     * @param text  the text
-     * @param time  the time
-     */
-    public void sendChatMsg(String title ,String text,int ...time) {
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(Constant.CHANNEL_1, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
-            mChannel.setDescription("notication channel");
-            mChannel.setVibrationPattern(new long[]{100, 200, 100, 200});
-            manager .createNotificationChannel(mChannel);
-        }
-        Notification notification = new NotificationCompat.Builder(this, Constant.CHANNEL_1)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.ic_launcher_background))
-                .setAutoCancel(true)
-                .setNumber(2)
-                .build();
-        manager.notify(1, notification);
-    }
 
     @Override
     public void weatherTip(boolean open) {

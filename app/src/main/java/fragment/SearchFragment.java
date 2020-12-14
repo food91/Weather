@@ -27,7 +27,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import control.RequestRetrofit;
 import control.WeatherControl;
-import data.SearchViewModel;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

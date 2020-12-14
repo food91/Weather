@@ -14,8 +14,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.xiekun.myapplication.R;
 
-import data.ShareViewModel;
-
 
 public class ShareFragment extends Fragment {
 

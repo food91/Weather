@@ -1,4 +1,4 @@
-package data;
+package Entity;
 
 import androidx.lifecycle.ViewModel;
 

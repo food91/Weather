@@ -5,6 +5,7 @@ package acitivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
-import com.jaeger.library.StatusBarUtil;
+
 import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
@@ -206,14 +207,25 @@ public class WeatherActivity extends BaseActivity {
                 .build();
     }
 
+    /**
+     * 获取状态栏高度
+     * @param context
+     * @return
+     */
+    public static int getStatusBarHeight(Context context) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int height = resources.getDimensionPixelSize(resourceId);
+        return height;
+    }
+
      public void init() {
         showContent();
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_format_list_bulleted_black_24dp);
         setDrawerLayout();
         setNavigationView();
-         StatusBarUtil.setTranslucentForDrawerLayout(this,
-                 drawerLayout, 0);
+
      }
 
     private void showEditTextDialog() {
@@ -250,7 +262,5 @@ public class WeatherActivity extends BaseActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
-
 
 }

@@ -1,14 +1,14 @@
-package data;
+package Entity;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class AboutViewModel extends ViewModel {
+public class ShareViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private LiveData<String> mText;
 
-    public AboutViewModel() {
+    public ShareViewModel() {
         mText = new MutableLiveData<>();
     }
 

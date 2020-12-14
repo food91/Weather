@@ -31,4 +31,10 @@ public class Constant {
     public final static int NOTIFICATIONTIME=7;
     public final static int NOTIFICATIONTIME2=19;
 
+    //广播接收标识，发送定时notification
+    public final static String ACTION_NOTIFICATION="broadcast_notification";
+    public final static String BROADCAST_NOTIFICATION_TITLE="notification_title";
+    public final static String BROADCAST_NOTIFICATION_TEXT="notification_text";
+
+
 }

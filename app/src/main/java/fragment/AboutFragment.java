@@ -18,8 +18,6 @@ import com.xiekun.myapplication.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import data.AboutViewModel;
-import util.UtilX;
 
 
 public class AboutFragment extends Fragment {
