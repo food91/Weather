@@ -1,23 +1,37 @@
 package util;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam;
+import com.permissionx.guolindev.callback.ForwardToSettingsCallback;
+import com.permissionx.guolindev.callback.RequestCallback;
+import com.permissionx.guolindev.request.ExplainScope;
+import com.permissionx.guolindev.request.ForwardScope;
 import com.xiekun.myapplication.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import Entity.SetActivityBean;
+import Entity.UserData;
 import Entity.WeatherData;
+import acitivity.BaseActivity;
+import acitivity.MyApplication;
 
 /**
  * The type Util x.
@@ -127,6 +141,56 @@ public class UtilX {
             }
         }
         return max;
+    }
+
+    public static void applyRight(BaseActivity activity, RequestCallback requestCallback,String ...str_permission){
+        PermissionX.init(activity)
+                .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                .onExplainRequestReason(new ExplainReasonCallbackWithBeforeParam() {
+                    @Override
+                    public void onExplainReason(ExplainScope scope, List<String> deniedList, boolean beforeRequest) {
+                        scope.showRequestReasonDialog(deniedList,
+                                "即将申请的权限是程序必须依赖的权限",
+                                "我已明白"
+                                ,"取消");
+                    }
+                })
+                .onForwardToSettings(new ForwardToSettingsCallback() {
+                    @Override
+                    public void onForwardToSettings(ForwardScope scope, List<String> deniedList) {
+                        scope.showForwardToSettingsDialog(deniedList, "您需要去应用程序设置当中手动开启权限",
+                                "我已明白",
+                                "取消");
+                    }
+                })
+                .request(requestCallback);
+    }
+
+    public static void applyRight(BaseActivity activity, RequestCallback requestCallback){
+        PermissionX.init(activity)
+                .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                .onExplainRequestReason(new ExplainReasonCallbackWithBeforeParam() {
+                    @Override
+                    public void onExplainReason(ExplainScope scope, List<String> deniedList, boolean beforeRequest) {
+                        scope.showRequestReasonDialog(deniedList,
+                                "即将申请的权限是程序必须依赖的权限",
+                                "我已明白"
+                                ,"取消");
+                    }
+                })
+                .onForwardToSettings(new ForwardToSettingsCallback() {
+                    @Override
+                    public void onForwardToSettings(ForwardScope scope, List<String> deniedList) {
+                        scope.showForwardToSettingsDialog(deniedList, "您需要去应用程序设置当中手动开启权限",
+                                "我已明白",
+                                "取消");
+                    }
+                })
+                .request(requestCallback);
     }
 
     public static long getMillsTimeToday(){
@@ -320,4 +384,17 @@ public class UtilX {
             }
             return true;
         }
+
+    public static void readSetFile(){
+        SharedPreferences setstr= MyApplication.getApplicationInstance().getSharedPreferences(UserData.getUserData().getName(),0);
+        if(setstr==null){
+            return;
+        }
+        String ac_str=setstr.getString(Constant.SET_FILE_NAME,"");
+        if(ac_str==null){
+            return;
+        }
+        SetActivityBean setActivityBean=new Gson().fromJson(ac_str, SetActivityBean.class);
+        UserData.getUserData().setSetActivityBean(setActivityBean);
+    }
     }

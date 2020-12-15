@@ -132,7 +132,7 @@ public class SetActivity extends BaseActivity {
             @Override
             public void toggleToOn(XSwitchView view) {
                 //申请权限
-                taskNotificationManager.applyRight(SetActivity.this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){

@@ -1,7 +1,10 @@
 package control;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 
 import com.permissionx.guolindev.PermissionX;
 import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam;
@@ -23,8 +26,10 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import mBroadcast.NotificationReceiverBroadcast;
 import mInterface.OnSetActivityListener;
 import util.Constant;
+import util.UtilX;
 
 public class TaskNotificationManager {
 
@@ -108,31 +113,50 @@ public class TaskNotificationManager {
 
 
 
-    public void applyRight(BaseActivity activity,RequestCallback requestCallback){
-        PermissionX.init(activity)
-                .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                .onExplainRequestReason(new ExplainReasonCallbackWithBeforeParam() {
+    public void recevierWeatherInfo(Context context,int day){
+        TaskNotificationManager.getInstance().getWeather(this,
+                new Observer<Object>() {
                     @Override
-                    public void onExplainReason(ExplainScope scope, List<String> deniedList, boolean beforeRequest) {
-                        scope.showRequestReasonDialog(deniedList,
-                                "即将申请的权限是程序必须依赖的权限",
-                                "我已明白"
-                                ,"取消");
+                    public void onSubscribe(Disposable d) {
+
                     }
-                })
-                .onForwardToSettings(new ForwardToSettingsCallback() {
+
                     @Override
-                    public void onForwardToSettings(ForwardScope scope, List<String> deniedList) {
-                        scope.showForwardToSettingsDialog(deniedList, "您需要去应用程序设置当中手动开启权限",
-                                "我已明白",
-                                "取消");
+                    public void onNext(Object o) {
+                        WeatherData weatherData= (WeatherData) o;
+                        String title=weatherData.getCity();
+                        String text="";
+                        if(day==0)
+                            text="今日温度";
+                        else
+                            text="明日温度"
+                        text+=weatherData.getData().get(day).getTem();
+                        NotificationManagerX.getInstance().sendChatMsg(context,title,text);
                     }
-                })
-                .request(requestCallback);
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
-
+    public void openNotication(Context context,int day){
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        int type = AlarmManager.RTC_WAKEUP;
+        long triggerAtMillis = UtilX.getMillsTimeToday();
+        //一天的毫秒数
+        long intervalMillis = 86400000;
+        Intent intent=new Intent(context, NotificationReceiverBroadcast.class);
+        intent.setAction(Constant.ACTION_NOTIFICATION);
+        intent.putExtra(Constant.BROADCAST_NOTIFICATION_DAY,day);
+        PendingIntent contentIntent = PendingIntent.getActivity( this , 0 ,intent, 0 );
+        manager.setInexactRepeating(type, triggerAtMillis, intervalMillis, contentIntent);
+    }
 
 }

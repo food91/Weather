@@ -8,6 +8,15 @@ public class UserData {
     private static volatile UserData INSTANCE;
     private String name;
     private String password;
+    private SetActivityBean setActivityBean=null;
+
+    public SetActivityBean getSetActivityBean() {
+        return setActivityBean;
+    }
+
+    public void setSetActivityBean(SetActivityBean setActivityBean) {
+        this.setActivityBean = setActivityBean;
+    }
 
     /**
      * Sets name.

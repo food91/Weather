@@ -12,6 +12,9 @@ import androidx.core.app.NotificationCompat;
 
 import com.xiekun.myapplication.R;
 
+import Entity.WeatherData;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import util.Constant;
 
 public class NotificationManagerX {
@@ -29,7 +32,7 @@ public class NotificationManagerX {
      * @param text  the text   通知内容
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public  void sendChatMsg(Context context, String title , String text) {
+    public  void sendChatMsg(Context context,String title,String text) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(Constant.CHANNEL_1, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
@@ -49,4 +52,5 @@ public class NotificationManagerX {
                 .build();
         manager.notify(1, notification);
     }
+
 }

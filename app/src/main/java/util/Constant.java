@@ -35,6 +35,10 @@ public class Constant {
     public final static String ACTION_NOTIFICATION="broadcast_notification";
     public final static String BROADCAST_NOTIFICATION_TITLE="notification_title";
     public final static String BROADCAST_NOTIFICATION_TEXT="notification_text";
+    //通知 控制今天还是明天的天气
+    public static final String BROADCAST_NOTIFICATION_DAY="notification_day";
 
+    //配置文件存储名称
+    public static final String SET_FILE_NAME="setfilename";
 
 }
