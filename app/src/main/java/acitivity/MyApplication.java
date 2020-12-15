@@ -45,14 +45,6 @@ public class MyApplication extends Application {
         Logger.addLogAdapter(new AndroidLogAdapter());
         Logger.d("-----------init");
         UtilX.isDebug=true;
-        //读配置文件
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                UtilX.allShare();
-                UtilX.readSetFile();
-            }
-        }).start();
     }
 
 

@@ -143,11 +143,9 @@ public class UtilX {
         return max;
     }
 
-    public static void applyRight(BaseActivity activity, RequestCallback requestCallback,String ...str_permission){
+    public static void applyRight(BaseActivity activity, RequestCallback requestCallback,List<String> str_permission){
         PermissionX.init(activity)
-                .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
+                .permissions(str_permission)
                 .onExplainRequestReason(new ExplainReasonCallbackWithBeforeParam() {
                     @Override
                     public void onExplainReason(ExplainScope scope, List<String> deniedList, boolean beforeRequest) {
@@ -396,5 +394,15 @@ public class UtilX {
         }
         SetActivityBean setActivityBean=new Gson().fromJson(ac_str, SetActivityBean.class);
         UserData.getUserData().setSetActivityBean(setActivityBean);
+    }
+
+    public static void  saveSetFile(){
+        if(UserData.getUserData()==null||UserData.getUserData().getName()==null){
+            return;
+        }
+        SharedPreferences sharedPreferences=MyApplication.getApplicationInstance().getSharedPreferences(UserData.getUserData().getName(),0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();//获取编辑器
+        editor.putString(Constant.SET_FILE_NAME,new Gson().toJson(UserData.getUserData().getSetActivityBean()));
+        editor.apply();
     }
     }

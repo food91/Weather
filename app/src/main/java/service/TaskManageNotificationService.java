@@ -55,38 +55,49 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
     }
 
     @Override
-    public void OpenNotiTime(boolean open, int ...h) {
+    public void OpenWeatherTip(boolean open, int ...h) {
         if(!open||h==null){
             return;
         }
+        SendTimeNotication();
         TaskNotificationManager.getInstance().openNotication(this,0);
-        TaskNotificationManager.getInstance().openNotication(this,0);
+        TaskNotificationManager.getInstance().openNotication(this,1);
     }
 
 
     @Override
-    public void weatherTip(boolean open) {
-
+    public void OpenWeatherDamage(boolean open) {
+        if(!open){
+            return;
+        }
     }
 
     @Override
     public void abnormalWeatherTip(boolean open) {
-
+        if(!open){
+            return;
+        }
     }
 
     @Override
     public void nightStop(boolean open) {
-
+        if(!open){
+            return;
+        }
     }
 
     @Override
     public void nightUpdate(boolean open) {
-
+        if(!open){
+            return;
+        }
     }
 
     @Override
     public void WeatherVoice(boolean open) {
-
+        if(!open){
+            return;
+        }
     }
 
 
@@ -122,8 +133,7 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        long hour=UtilX.getLocalTimeHour();
-
+        TaskNotificationManager.getInstance().startSetActivity();
         return super.onStartCommand(intent, flags, startId);
     }
 

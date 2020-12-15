@@ -1,26 +1,21 @@
 package control;
 
-import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
-import com.permissionx.guolindev.PermissionX;
-import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam;
-import com.permissionx.guolindev.callback.ForwardToSettingsCallback;
-import com.permissionx.guolindev.callback.RequestCallback;
-import com.permissionx.guolindev.request.ExplainScope;
-import com.permissionx.guolindev.request.ForwardScope;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
 
 
-import java.util.List;
-
+import Entity.SetActivityBean;
 import Entity.TencentLocationBean;
+import Entity.UserData;
 import Entity.WeatherData;
-import acitivity.BaseActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -28,6 +23,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import mBroadcast.NotificationReceiverBroadcast;
 import mInterface.OnSetActivityListener;
+import service.TaskManageNotificationService;
 import util.Constant;
 import util.UtilX;
 
@@ -44,30 +40,39 @@ public class TaskNotificationManager {
 
     private TaskNotificationManager(){};
 
-    public OnSetActivityListener onSetActivityListener;
+    public OnSetActivityListener onSetActivityListener=new OnSetActivityListener() {
+        @Override
+        public void OpenWeatherTip(boolean open, int... h) {
+            onSetActivityListener.OpenWeatherTip(open, Constant.NOTIFICATIONTIME,
+                    Constant.NOTIFICATIONTIME2);
+        }
 
-    public void morningWeatherTipSwitch(boolean open){
-        onSetActivityListener.OpenNotiTime(open);
-    }
+        @Override
+        public void OpenWeatherDamage(boolean open) {
+            onSetActivityListener.OpenWeatherDamage(open);
+        }
 
-    public void OpenNotiTime(boolean open){
-        onSetActivityListener.OpenNotiTime(open, Constant.NOTIFICATIONTIME,
-                Constant.NOTIFICATIONTIME2);
-    }
+        @Override
+        public void abnormalWeatherTip(boolean open) {
+            onSetActivityListener.abnormalWeatherTip(open);
+        }
 
-    public void abnormalWeatherTip(boolean open){
-        onSetActivityListener.abnormalWeatherTip(open);
-    }
-    public void nightStop(boolean open){
-        onSetActivityListener.nightStop(open);
-    }
-    public void nightUpdate(boolean open){
-        onSetActivityListener.nightUpdate(open);
-    }
+        @Override
+        public void nightStop(boolean open) {
+            onSetActivityListener.nightStop(open);
+        }
 
-    public void WeatherVoice(boolean open){
-        onSetActivityListener.WeatherVoice(open);
-    }
+        @Override
+        public void nightUpdate(boolean open) {
+            onSetActivityListener.nightUpdate(open);
+        }
+
+        @Override
+        public void WeatherVoice(boolean open) {
+            onSetActivityListener.WeatherVoice(open);
+        }
+    };
+
 
     public void getWeather(Context context,Observer<Object> objectObserver){
         //返回经纬度
@@ -111,7 +116,19 @@ public class TaskNotificationManager {
         });
     }
 
-
+    public void startSetActivity(){
+        if(UserData.getUserData()==null||UserData.getUserData().getSetActivityBean()==null){
+            UtilX.LogX("UserDay is null");
+            return;
+        }
+        SetActivityBean setActivityBean=UserData.getUserData().getSetActivityBean();
+        onSetActivityListener.OpenWeatherTip(setActivityBean.isSetAc_WeatherReport());
+        onSetActivityListener.OpenWeatherDamage(setActivityBean.isSetAc_WeatherReport());
+        onSetActivityListener.abnormalWeatherTip(setActivityBean.isSetAc_WeatherAbnormal());
+        onSetActivityListener.nightStop(setActivityBean.isSetAc_NightStop());
+        onSetActivityListener.nightUpdate(setActivityBean.isSetAc_NightUpdate());
+        onSetActivityListener.WeatherVoice(setActivityBean.isWeatherVoice());
+    }
 
     public void recevierWeatherInfo(Context context,int day){
         TaskNotificationManager.getInstance().getWeather(this,
@@ -129,7 +146,7 @@ public class TaskNotificationManager {
                         if(day==0)
                             text="今日温度";
                         else
-                            text="明日温度"
+                            text="明日温度";
                         text+=weatherData.getData().get(day).getTem();
                         NotificationManagerX.getInstance().sendChatMsg(context,title,text);
                     }
@@ -159,4 +176,21 @@ public class TaskNotificationManager {
         manager.setInexactRepeating(type, triggerAtMillis, intervalMillis, contentIntent);
     }
 
+    public static void GoService(Context constant){
+        Intent intent=new Intent(constant, TaskManageNotificationService.class);
+        constant.startService(intent);
+        constant.bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                TaskManageNotificationService.LocalBinder localBinder=
+                        (TaskManageNotificationService.LocalBinder) iBinder;
+                TaskNotificationManager.getInstance().onSetActivityListener=localBinder.getService();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+
+            }
+        }, Context.BIND_AUTO_CREATE);
+    }
 }

@@ -1,21 +1,11 @@
 package acitivity;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.IBinder;
 import android.view.View;
 import android.widget.TextView;
 
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
 
 
 import com.jaeger.library.StatusBarUtil;
@@ -24,11 +14,10 @@ import com.xiekun.myapplication.R;
 
 import java.util.List;
 
+import Entity.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import control.TaskNotificationManager;
-import service.TaskManageNotificationService;
-import util.Constant;
 import util.UtilX;
 import view.XSwitchView;
 
@@ -79,8 +68,6 @@ public class SetActivity extends BaseActivity {
     private TaskNotificationManager taskNotificationManager;
 
     protected void init() {
-        //测试，完成后需撤销
-        GoService();
         taskNotificationManager=TaskNotificationManager.getInstance();
         showContent();
         StatusBarUtil.setColor(this, Color.parseColor("#ff00ddff"),0);
@@ -91,25 +78,15 @@ public class SetActivity extends BaseActivity {
                 finish();
             }
         });
+        xsSetAcTip.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_WeatherReport());
+        xsSetAbnormalTip.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_WeatherAbnormal());
+        xsSetAcNightupdate.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_NightUpdate());
+        xsSetAcWarm.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_WeatherDamage());
+        xsSetAcWeathervocie.setOpened(UserData.getUserData().getSetActivityBean().isWeatherVoice());
+        xsSetNightTip.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_NightUpdate());
     }
 
-    private void GoService(){
-        Intent intent=new Intent(this, TaskManageNotificationService.class);
-        startService(intent);
-        bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                TaskManageNotificationService.LocalBinder localBinder=
-                        (TaskManageNotificationService.LocalBinder) iBinder;
-                TaskNotificationManager.getInstance().onSetActivityListener=localBinder.getService();
-            }
 
-            @Override
-            public void onServiceDisconnected(ComponentName componentName) {
-
-            }
-        }, Context.BIND_AUTO_CREATE);
-    }
 
 
     @Override
@@ -128,6 +105,7 @@ public class SetActivity extends BaseActivity {
 
 
     private void onclick(){
+        //7-19天气提醒
         xsSetAcTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
@@ -138,32 +116,170 @@ public class SetActivity extends BaseActivity {
                         if(allGranted){
                             //获得了权限，开启开关，启动service
                             view.setOpened(true);
-                            taskNotificationManager.OpenNotiTime(true);
+                            taskNotificationManager.onSetActivityListener.OpenWeatherTip(true);
+                            UserData.getUserData().getSetActivityBean().setSetAc_WeatherReport(true);
                         }else{
                             view.setOpened(true);
                             view.setOpened(false);
-                            taskNotificationManager.OpenNotiTime(false);
+                            taskNotificationManager.onSetActivityListener.OpenWeatherTip(false);
+                            UserData.getUserData().getSetActivityBean().setSetAc_WeatherReport(false);
                         }
                     }
                 });
             }
             @Override
             public void toggleToOff(XSwitchView view) {
+                taskNotificationManager.onSetActivityListener.OpenWeatherTip(false);
+                UserData.getUserData().getSetActivityBean().setSetAc_WeatherReport(false);
                 view.setOpened(false);
             }
         });
+        //天气预警提醒
         xsSetAcWarm.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                view.setOpened(true);
-                UtilX.LogX("toggleToOn");
+                UtilX.applyRight(this, new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
+                        if(allGranted){
+                            view.setOpened(true);
+                            taskNotificationManager.onSetActivityListener.OpenWeatherDamage(true);
+                            UserData.getUserData().getSetActivityBean().setSetAc_WeatherDamage(true);
+                        }else{
+                            view.setOpened(true);
+                            view.setOpened(false);
+                            taskNotificationManager.onSetActivityListener.OpenWeatherDamage(false);
+                            UserData.getUserData().getSetActivityBean().setSetAc_WeatherDamage(false);
+                        }
+                    }
+                });
+
             }
             @Override
             public void toggleToOff(XSwitchView view) {
                 view.setOpened(false);
+                taskNotificationManager.onSetActivityListener.OpenWeatherDamage(false);
+                UserData.getUserData().getSetActivityBean().setSetAc_WeatherDamage(false);
+            }
+        });
+        //天气异常提醒
+        xsSetAbnormalTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
+            @Override
+            public void toggleToOn(XSwitchView view) {
+                UtilX.applyRight(this, new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
+                        if(allGranted){
+                            view.setOpened(true);
+                            taskNotificationManager.onSetActivityListener.abnormalWeatherTip(true);
+                            UserData.getUserData().getSetActivityBean().setSetAc_WeatherAbnormal(true);
+                        }else{
+                            view.setOpened(true);
+                            view.setOpened(false);
+                            taskNotificationManager.onSetActivityListener.abnormalWeatherTip(false);
+                            UserData.getUserData().getSetActivityBean().setSetAc_WeatherAbnormal(false);
+                        }
+                    }
+                });
+
+            }
+            @Override
+            public void toggleToOff(XSwitchView view) {
+                view.setOpened(false);
+                taskNotificationManager.onSetActivityListener.abnormalWeatherTip(false);
+                UserData.getUserData().getSetActivityBean().setSetAc_WeatherAbnormal(false);
+            }
+        });
+        //夜间免打搅
+        xsSetNightTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
+            @Override
+            public void toggleToOn(XSwitchView view) {
+                UtilX.applyRight(this, new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
+                        if(allGranted){
+                            view.setOpened(true);
+                            taskNotificationManager.onSetActivityListener.nightStop(true);
+                            UserData.getUserData().getSetActivityBean().setSetAc_NightStop(true);
+                        }else{
+                            view.setOpened(true);
+                            view.setOpened(false);
+                            taskNotificationManager.onSetActivityListener.nightStop(false);
+                            UserData.getUserData().getSetActivityBean().setSetAc_NightStop(false);
+                        }
+                    }
+                });
+
+            }
+            @Override
+            public void toggleToOff(XSwitchView view) {
+                view.setOpened(false);
+                taskNotificationManager.onSetActivityListener.nightStop(false);
+                UserData.getUserData().getSetActivityBean().setSetAc_NightStop(false);
+            }
+        });
+        //夜间自动更新
+        xsSetAcNightupdate.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
+            @Override
+            public void toggleToOn(XSwitchView view) {
+                UtilX.applyRight(this, new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
+                        if(allGranted){
+                            view.setOpened(true);
+                            taskNotificationManager.onSetActivityListener.nightUpdate(true);
+                            UserData.getUserData().getSetActivityBean().setSetAc_NightUpdate(true);
+                        }else{
+                            view.setOpened(true);
+                            view.setOpened(false);
+                            taskNotificationManager.onSetActivityListener.nightUpdate(false);
+                            UserData.getUserData().getSetActivityBean().setSetAc_NightUpdate(false);
+                        }
+                    }
+                });
+
+            }
+            @Override
+            public void toggleToOff(XSwitchView view) {
+                view.setOpened(false);
+                taskNotificationManager.onSetActivityListener.nightUpdate(false);
+                UserData.getUserData().getSetActivityBean().setSetAc_NightUpdate(false);
+            }
+        });
+        //天气音效
+        xsSetAcWarm.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
+            @Override
+            public void toggleToOn(XSwitchView view) {
+                UtilX.applyRight(this, new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
+                        if(allGranted){
+                            view.setOpened(true);
+                            taskNotificationManager.onSetActivityListener.WeatherVoice(true);
+                            UserData.getUserData().getSetActivityBean().setWeatherVoice(true);
+                        }else{
+                            view.setOpened(true);
+                            view.setOpened(false);
+                            taskNotificationManager.onSetActivityListener.WeatherVoice(false);
+                            UserData.getUserData().getSetActivityBean().setWeatherVoice(false);
+                        }
+                    }
+                });
+
+            }
+            @Override
+            public void toggleToOff(XSwitchView view) {
+                view.setOpened(false);
+                taskNotificationManager.onSetActivityListener.WeatherVoice(false);
+                UserData.getUserData().getSetActivityBean().setWeatherVoice(false);
             }
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        //保存配置文件
+        UtilX.saveSetFile();
+        super.onDestroy();
+    }
 }

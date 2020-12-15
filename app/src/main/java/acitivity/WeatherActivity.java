@@ -2,6 +2,7 @@ package acitivity;
 
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -36,14 +37,20 @@ import com.google.android.material.navigation.NavigationView;
 
 
 import com.orhanobut.logger.Logger;
+import com.permissionx.guolindev.callback.RequestCallback;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.xiekun.myapplication.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Entity.UserData;
+import Entity.WeatherData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import control.TaskNotificationManager;
 import fragment.AboutFragment;
 import fragment.MycareFragment;
 import fragment.SearchFragment;
@@ -225,7 +232,33 @@ public class WeatherActivity extends BaseActivity {
         toolbar.setNavigationIcon(R.drawable.ic_format_list_bulleted_black_24dp);
         setDrawerLayout();
         setNavigationView();
-
+         TaskNotificationManager.GoService(this);
+         //读配置文件
+         new Thread(new Runnable() {
+             @Override
+             public void run() {
+                 List<String> list=new ArrayList<>();
+                 list.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                 list.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                 UtilX.applyRight(WeatherActivity.this, new RequestCallback() {
+                     @Override
+                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
+                                if(!allGranted){
+                                    QMUIDialog.MessageDialogBuilder builder=new QMUIDialog.MessageDialogBuilder(WeatherActivity.this);
+                                            builder.setMessage("权限申请被拒绝，设置文件将失效，需要重新开启权限，请打开设置-应用-权限管理")
+                                                    .addAction("确定", new QMUIDialogAction.ActionListener() {
+                                                        @Override
+                                                        public void onClick(QMUIDialog dialog, int index) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    }).create(mCurrentDialogStyle).show();
+                                }else{
+                                    UtilX.readSetFile();
+                                }
+                     }
+                 },);
+             }
+         }).start();
      }
 
     private void showEditTextDialog() {
