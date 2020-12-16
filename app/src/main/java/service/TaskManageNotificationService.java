@@ -39,9 +39,6 @@ import util.UtilX;
  */
 public class TaskManageNotificationService extends Service implements OnSetActivityListener {
 
-
-
-
     private void SendTimeNotication(){
         int localHour=UtilX.getLocalTimeHour();
         //大于晚上7点，推送明天天气信息，并且设置时间，明天早上推送
@@ -55,8 +52,8 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
     }
 
     @Override
-    public void OpenWeatherTip(boolean open, int ...h) {
-        if(!open||h==null){
+    public void OpenWeatherTip(boolean open) {
+        if(!open){
             return;
         }
         SendTimeNotication();
@@ -133,7 +130,7 @@ public class TaskManageNotificationService extends Service implements OnSetActiv
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        TaskNotificationManager.getInstance().startSetActivity();
+    //    TaskNotificationManager.getInstance().startSetActivity();
         return super.onStartCommand(intent, flags, startId);
     }
 

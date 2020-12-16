@@ -78,6 +78,9 @@ public class SetActivity extends BaseActivity {
                 finish();
             }
         });
+        if(UserData.getUserData()==null||UserData.getUserData().getSetActivityBean()==null){
+            return;
+        }
         xsSetAcTip.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_WeatherReport());
         xsSetAbnormalTip.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_WeatherAbnormal());
         xsSetAcNightupdate.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_NightUpdate());
@@ -138,7 +141,7 @@ public class SetActivity extends BaseActivity {
         xsSetAcWarm.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){
@@ -166,7 +169,7 @@ public class SetActivity extends BaseActivity {
         xsSetAbnormalTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){
@@ -194,7 +197,7 @@ public class SetActivity extends BaseActivity {
         xsSetNightTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){
@@ -222,7 +225,7 @@ public class SetActivity extends BaseActivity {
         xsSetAcNightupdate.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){
@@ -247,10 +250,10 @@ public class SetActivity extends BaseActivity {
             }
         });
         //天气音效
-        xsSetAcWarm.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
+        xsSetAcWeathervocie.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){

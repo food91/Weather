@@ -6,7 +6,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.IBinder;
+
+import androidx.annotation.RequiresApi;
 
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
@@ -27,7 +30,7 @@ import service.TaskManageNotificationService;
 import util.Constant;
 import util.UtilX;
 
-public class TaskNotificationManager {
+public class TaskNotificationManager{
 
     public static TaskNotificationManager instance=null;
 
@@ -40,38 +43,7 @@ public class TaskNotificationManager {
 
     private TaskNotificationManager(){};
 
-    public OnSetActivityListener onSetActivityListener=new OnSetActivityListener() {
-        @Override
-        public void OpenWeatherTip(boolean open, int... h) {
-            onSetActivityListener.OpenWeatherTip(open, Constant.NOTIFICATIONTIME,
-                    Constant.NOTIFICATIONTIME2);
-        }
-
-        @Override
-        public void OpenWeatherDamage(boolean open) {
-            onSetActivityListener.OpenWeatherDamage(open);
-        }
-
-        @Override
-        public void abnormalWeatherTip(boolean open) {
-            onSetActivityListener.abnormalWeatherTip(open);
-        }
-
-        @Override
-        public void nightStop(boolean open) {
-            onSetActivityListener.nightStop(open);
-        }
-
-        @Override
-        public void nightUpdate(boolean open) {
-            onSetActivityListener.nightUpdate(open);
-        }
-
-        @Override
-        public void WeatherVoice(boolean open) {
-            onSetActivityListener.WeatherVoice(open);
-        }
-    };
+    public OnSetActivityListener onSetActivityListener;
 
 
     public void getWeather(Context context,Observer<Object> objectObserver){
@@ -131,13 +103,14 @@ public class TaskNotificationManager {
     }
 
     public void recevierWeatherInfo(Context context,int day){
-        TaskNotificationManager.getInstance().getWeather(this,
+        TaskNotificationManager.getInstance().getWeather(context,
                 new Observer<Object>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onNext(Object o) {
                         WeatherData weatherData= (WeatherData) o;
@@ -172,7 +145,7 @@ public class TaskNotificationManager {
         Intent intent=new Intent(context, NotificationReceiverBroadcast.class);
         intent.setAction(Constant.ACTION_NOTIFICATION);
         intent.putExtra(Constant.BROADCAST_NOTIFICATION_DAY,day);
-        PendingIntent contentIntent = PendingIntent.getActivity( this , 0 ,intent, 0 );
+        PendingIntent contentIntent = PendingIntent.getActivity( context , 0 ,intent, 0 );
         manager.setInexactRepeating(type, triggerAtMillis, intervalMillis, contentIntent);
     }
 

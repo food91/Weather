@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.xiekun.myapplication.R;
 
+import Entity.SearchViewModel;
 import Entity.WeatherData;
 import acitivity.DetailWeatherActivity;
 import butterknife.BindView;
@@ -46,7 +47,6 @@ public class SearchFragment extends Fragment {
     private SearchViewModel searchViewModel;
     private WeatherControl weatherControl;
     private ConstraintLayout constraintLayout;
-
 
     //获取随机图片
     private static final String url="http://img.xjh.me/random_img.php?type=bg&ctype=nature&return=302&device=mobile";

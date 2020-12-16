@@ -8,6 +8,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.jaeger.library.StatusBarUtil;
 import com.xiekun.myapplication.R;
 
 import mInterface.OnNetworkListener;
@@ -121,6 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void showLoading(){
         try {
             statusLayoutManager.showLoading();
+            StatusBarUtil.setTranslucent(this,0);
         } catch (Exception e) {
             e.printStackTrace();
         }

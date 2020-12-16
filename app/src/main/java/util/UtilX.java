@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import Entity.LoginData;
 import Entity.SetActivityBean;
 import Entity.UserData;
 import Entity.WeatherData;
@@ -76,11 +77,9 @@ public class UtilX {
     }
 
     public static void LogX(String string){
-
         if(isDebug){
             Logger.d(string);
         }
-
     }
 
 
@@ -97,9 +96,6 @@ public class UtilX {
         return formatStr;
 
     }
-
-
-
     /**
      * Centigrade string to int int.
      * 将摄氏度转化为int
@@ -384,11 +380,14 @@ public class UtilX {
         }
 
     public static void readSetFile(){
-        SharedPreferences setstr= MyApplication.getApplicationInstance().getSharedPreferences(UserData.getUserData().getName(),0);
-        if(setstr==null){
+        SharedPreferences sharedPreferences= MyApplication.getApplicationInstance().getSharedPreferences(UserData.getUserData().getName(),0);
+        if(sharedPreferences==null){
+            SharedPreferences.Editor editor = sharedPreferences.edit();//获取编辑器
+            editor.putString(Constant.SET_FILE_NAME,new Gson().toJson(UserData.getUserData().getSetActivityBean()));
+            editor.apply();
             return;
         }
-        String ac_str=setstr.getString(Constant.SET_FILE_NAME,"");
+        String ac_str=sharedPreferences.getString(Constant.SET_FILE_NAME,"");
         if(ac_str==null){
             return;
         }
@@ -405,4 +404,4 @@ public class UtilX {
         editor.putString(Constant.SET_FILE_NAME,new Gson().toJson(UserData.getUserData().getSetActivityBean()));
         editor.apply();
     }
-    }
+}

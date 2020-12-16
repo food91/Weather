@@ -4,12 +4,15 @@ package acitivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -36,6 +39,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 
 
+import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.permissionx.guolindev.callback.RequestCallback;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
@@ -55,6 +59,7 @@ import fragment.AboutFragment;
 import fragment.MycareFragment;
 import fragment.SearchFragment;
 import fragment.WeatherFragment;
+import service.TaskManageNotificationService;
 import util.UtilX;
 
 
@@ -107,7 +112,6 @@ public class WeatherActivity extends BaseActivity {
     }
 
     public void initDefaultFragment() {
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         weatherfragment=new WeatherFragment();
         aboutFragment = new AboutFragment();
@@ -125,7 +129,6 @@ public class WeatherActivity extends BaseActivity {
     }
 
     private void onclick() {
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,18 +215,7 @@ public class WeatherActivity extends BaseActivity {
         )
                 .setDrawerLayout(drawerLayout)
                 .build();
-    }
-
-    /**
-     * 获取状态栏高度
-     * @param context
-     * @return
-     */
-    public static int getStatusBarHeight(Context context) {
-        Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
-        int height = resources.getDimensionPixelSize(resourceId);
-        return height;
+        StatusBarUtil.setTranslucentForDrawerLayout(this,drawerLayout,0);
     }
 
      public void init() {
@@ -232,15 +224,12 @@ public class WeatherActivity extends BaseActivity {
         toolbar.setNavigationIcon(R.drawable.ic_format_list_bulleted_black_24dp);
         setDrawerLayout();
         setNavigationView();
-         TaskNotificationManager.GoService(this);
-         //读配置文件
-         new Thread(new Runnable() {
-             @Override
-             public void run() {
-                 List<String> list=new ArrayList<>();
-                 list.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                 list.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-                 UtilX.applyRight(WeatherActivity.this, new RequestCallback() {
+        TaskNotificationManager.GoService(this);
+        List<String> list=new ArrayList<>();
+        list.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        list.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+         UtilX.readSetFile();
+        UtilX.applyRight(WeatherActivity.this, new RequestCallback() {
                      @Override
                      public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                                 if(!allGranted){
@@ -256,10 +245,29 @@ public class WeatherActivity extends BaseActivity {
                                     UtilX.readSetFile();
                                 }
                      }
-                 },);
+                 });
+            startService();
              }
-         }).start();
-     }
+
+    private void startService(){
+        Intent intent=new Intent(this, TaskManageNotificationService.class);
+        startService(intent);
+        bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+                TaskManageNotificationService.LocalBinder localBinder=
+                        (TaskManageNotificationService.LocalBinder) iBinder;
+                TaskNotificationManager.getInstance().onSetActivityListener=localBinder.getService();
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+
+            }
+        }, Context.BIND_AUTO_CREATE);
+    }
 
     private void showEditTextDialog() {
         final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(WeatherActivity.this);

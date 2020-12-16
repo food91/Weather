@@ -14,6 +14,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
 
@@ -179,6 +180,7 @@ public class DetailWeatherActivity extends BaseActivity {
     protected void init() {
         mViewNeedOffset = findViewById(R.id.view_need_offset);
         mTextViewRidus = findViewById(R.id.md_wap);
+        StatusBarUtil.setTranslucent(this,0);
         showContent();
         getData();
         setSupportActionBar(mToolbar);

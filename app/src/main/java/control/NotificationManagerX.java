@@ -35,17 +35,17 @@ public class NotificationManagerX {
     public  void sendChatMsg(Context context,String title,String text) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(Constant.CHANNEL_1, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
+            NotificationChannel mChannel = new NotificationChannel(Constant.CHANNEL_1, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
             mChannel.setDescription("notication channel");
             mChannel.setVibrationPattern(new long[]{100, 200, 100, 200});
             manager .createNotificationChannel(mChannel);
         }
-        Notification notification = new NotificationCompat.Builder(this, Constant.CHANNEL_1)
+        Notification notification = new NotificationCompat.Builder(context, Constant.CHANNEL_1)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                         R.drawable.ic_launcher_background))
                 .setAutoCancel(true)
                 .setNumber(2)
