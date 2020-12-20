@@ -177,7 +177,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/weather_toolbar"
             android:layout_width="match_parent"
@@ -189,8 +188,6 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
 
 </RelativeLayout>
 </ScrollView>

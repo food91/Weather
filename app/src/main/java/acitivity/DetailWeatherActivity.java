@@ -2,12 +2,17 @@ package acitivity;
 
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -18,10 +23,20 @@ import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
 
+import AndroidDAO.CityRoomDatabase;
+import Entity.UserData;
+import Entity.UserEntity;
 import Entity.WeatherData;
 import adapter.DetailWeatherRVAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import util.UtilX;
 import view.TextViewRidus;
 import view.WeatherDetailsView;
@@ -203,6 +218,7 @@ public class DetailWeatherActivity extends BaseActivity {
 
     private void setToolbar() {
         mToolbar.setTitle(weatherData.getCity());
+        mToolbar.setTitleTextColor(Color.BLUE);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,5 +254,72 @@ public class DetailWeatherActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail_weather_main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id=item.getItemId();
+        if(id==R.id.activity_detailweather_settingadd){
+            careCity(weatherData.getCity());
+            Toast.makeText(this,"添加成功",Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void careCity(String city){
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
+                UserEntity userEntity=CityRoomDatabase.getDatabase(DetailWeatherActivity.this).
+                        wordDao().getUser(UserData.
+                        getUserData().getName());
+                Boolean IsNoExistCity=userEntity.addCityfavorite(city);
+                if(IsNoExistCity){
+                    CityRoomDatabase.getDatabase(DetailWeatherActivity.this).wordDao().
+                            updateUsers(userEntity);
+                }
+                emitter.onNext(IsNoExistCity);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if(aBoolean){
+                            Toast.makeText(DetailWeatherActivity.this,
+                                    DetailWeatherActivity.this.getResources().getString(R.string.view_pop_favior_success),
+                                    Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(DetailWeatherActivity.this,
+                                    DetailWeatherActivity.this.getResources().getString(R.string.view_pop_faviored),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.getMessage());
+                        Toast.makeText(DetailWeatherActivity.this,
+                                DetailWeatherActivity.this.getResources().getString(R.string.view_pop_favior_fail),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
 
 }

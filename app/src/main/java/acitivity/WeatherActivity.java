@@ -66,7 +66,6 @@ public class WeatherActivity extends BaseActivity {
 
     @BindView(R.id.weather_main_toolbar)
     Toolbar toolbar;
-
     @BindView(R.id.footer_item_setting)
     TextView footerItemSetting;
     @BindView(R.id.footer_item_out)
@@ -221,13 +220,11 @@ public class WeatherActivity extends BaseActivity {
     }
 
     public void init() {
-
         showContent();
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_format_list_bulleted_black_24dp);
         setDrawerLayout();
         setNavigationView();
-
         //读配置文件
         List<String> list = new ArrayList<>();
         list.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);

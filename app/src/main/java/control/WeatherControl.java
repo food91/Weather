@@ -191,7 +191,6 @@ public class WeatherControl {
         staggeredGridAdapter.ClearData();
         staggeredGridAdapter.notifyDataSetChanged();
         cityp = new int[500];
-
         threadPoolExecutor = new ThreadPoolExecutor(4, 5, 1, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(500));
         //设置线程池回收
@@ -311,7 +310,6 @@ public class WeatherControl {
                         Logger.d("onNext==" + weaterData.toString());
                         adapter.AddWeatherData(weaterData);
                         adapter.updateView();
-
                     }
 
                     @Override
