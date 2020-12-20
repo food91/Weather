@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.orhanobut.logger.Logger;
 import com.xiekun.myapplication.R;
 
+import Entity.MycareViewModel;
 import Entity.UserEntity;
 import adapter.MycareRecyclerviewAdapter;
 import butterknife.BindView;

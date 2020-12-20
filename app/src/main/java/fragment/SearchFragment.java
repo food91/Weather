@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.xiekun.myapplication.R;
 
+import Entity.SearchViewModel;
 import Entity.WeatherData;
 import acitivity.DetailWeatherActivity;
 import butterknife.BindView;

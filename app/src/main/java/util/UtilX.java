@@ -176,7 +176,7 @@ public class UtilX {
                     public void onExplainReason(ExplainScope scope, List<String> deniedList, boolean beforeRequest) {
                         scope.showRequestReasonDialog(deniedList,
                                 "即将申请的权限是程序必须依赖的权限",
-                                "我已明白"
+                                "重新申请"
                                 ,"取消");
                     }
                 })

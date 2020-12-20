@@ -51,7 +51,7 @@
     <dimen name="App_title">32sp</dimen>
     <dimen name="App_big">44sp</dimen>
     <dimen name="card_title">24sp</dimen>
-    <dimen name="card_text">16sp</dimen>
+    <dimen name="card_text">14sp</dimen>
     <dimen name="card_text_small">12sp</dimen>
     <dimen name="card_one">48dp</dimen>
     <dimen name="card_three">88dp</dimen>

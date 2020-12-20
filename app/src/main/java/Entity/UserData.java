@@ -11,6 +11,9 @@ public class UserData {
     private SetActivityBean setActivityBean=null;
 
     public SetActivityBean getSetActivityBean() {
+        if(setActivityBean==null){
+            setActivityBean=new SetActivityBean();
+        }
         return setActivityBean;
     }
 

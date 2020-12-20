@@ -138,7 +138,7 @@ public class SetActivity extends BaseActivity {
         xsSetAcWarm.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){
@@ -166,7 +166,7 @@ public class SetActivity extends BaseActivity {
         xsSetAbnormalTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){
@@ -194,7 +194,7 @@ public class SetActivity extends BaseActivity {
         xsSetNightTip.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){
@@ -222,7 +222,7 @@ public class SetActivity extends BaseActivity {
         xsSetAcNightupdate.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){
@@ -250,7 +250,7 @@ public class SetActivity extends BaseActivity {
         xsSetAcWarm.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
-                UtilX.applyRight(this, new RequestCallback() {
+                UtilX.applyRight(SetActivity.this, new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if(allGranted){

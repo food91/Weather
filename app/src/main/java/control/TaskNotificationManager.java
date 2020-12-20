@@ -131,7 +131,7 @@ public class TaskNotificationManager {
     }
 
     public void recevierWeatherInfo(Context context,int day){
-        TaskNotificationManager.getInstance().getWeather(this,
+        TaskNotificationManager.getInstance().getWeather(context,
                 new Observer<Object>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -172,13 +172,13 @@ public class TaskNotificationManager {
         Intent intent=new Intent(context, NotificationReceiverBroadcast.class);
         intent.setAction(Constant.ACTION_NOTIFICATION);
         intent.putExtra(Constant.BROADCAST_NOTIFICATION_DAY,day);
-        PendingIntent contentIntent = PendingIntent.getActivity( this , 0 ,intent, 0 );
+        PendingIntent contentIntent = PendingIntent.getActivity( context , 0 ,intent, 0 );
         manager.setInexactRepeating(type, triggerAtMillis, intervalMillis, contentIntent);
     }
 
-    public static void GoService(Context constant){
+    public static void GoService(Context constant,ServiceConnection serviceConnection){
         Intent intent=new Intent(constant, TaskManageNotificationService.class);
-        constant.startService(intent);
+
         constant.bindService(intent, new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -192,5 +192,6 @@ public class TaskNotificationManager {
 
             }
         }, Context.BIND_AUTO_CREATE);
+        constant.startService(intent);
     }
 }

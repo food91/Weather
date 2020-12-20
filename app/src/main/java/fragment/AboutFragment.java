@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.xiekun.myapplication.R;
 
+import Entity.AboutViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

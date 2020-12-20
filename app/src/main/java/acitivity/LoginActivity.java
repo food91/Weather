@@ -90,25 +90,7 @@ public class LoginActivity extends BaseActivity {
         onclick();
     }
 
-    private void startService(){
-        Intent intent=new Intent(this, TaskManageNotificationService.class);
-        startService(intent);
-        bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
 
-                TaskManageNotificationService.LocalBinder localBinder=
-                        (TaskManageNotificationService.LocalBinder) iBinder;
-                TaskNotificationManager.getInstance().onSetActivityListener=localBinder.getService();
-
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName componentName) {
-
-            }
-        }, Context.BIND_AUTO_CREATE);
-    }
 
    @Override
     protected void onPause() {
@@ -254,7 +236,6 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void init() {
-        startService();
         showContent();
         SharedPreferences sharedPreferences= getSharedPreferences(LoginData.LOGIN, Context.MODE_APPEND);
         String userId=sharedPreferences.getString(LoginData.LOGINDATA,"");
