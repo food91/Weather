@@ -47,6 +47,4 @@ public class MyApplication extends Application {
         UtilX.isDebug=true;
     }
 
-
-
 }

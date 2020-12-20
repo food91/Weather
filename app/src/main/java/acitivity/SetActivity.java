@@ -78,6 +78,9 @@ public class SetActivity extends BaseActivity {
                 finish();
             }
         });
+        if(UserData.getUserData()==null||UserData.getUserData().getSetActivityBean()==null){
+            return;
+        }
         xsSetAcTip.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_WeatherReport());
         xsSetAbnormalTip.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_WeatherAbnormal());
         xsSetAcNightupdate.setOpened(UserData.getUserData().getSetActivityBean().isSetAc_NightUpdate());
@@ -247,7 +250,7 @@ public class SetActivity extends BaseActivity {
             }
         });
         //天气音效
-        xsSetAcWarm.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
+        xsSetAcWeathervocie.setOnStateChangedListener(new XSwitchView.OnStateChangedListener() {
             @Override
             public void toggleToOn(XSwitchView view) {
                 UtilX.applyRight(SetActivity.this, new RequestCallback() {

@@ -6,7 +6,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.IBinder;
+
+import androidx.annotation.RequiresApi;
 
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
@@ -27,7 +30,7 @@ import service.TaskManageNotificationService;
 import util.Constant;
 import util.UtilX;
 
-public class TaskNotificationManager {
+public class TaskNotificationManager{
 
     public static TaskNotificationManager instance=null;
 
@@ -40,38 +43,7 @@ public class TaskNotificationManager {
 
     private TaskNotificationManager(){};
 
-    public OnSetActivityListener onSetActivityListener=new OnSetActivityListener() {
-        @Override
-        public void OpenWeatherTip(boolean open, int... h) {
-            onSetActivityListener.OpenWeatherTip(open, Constant.NOTIFICATIONTIME,
-                    Constant.NOTIFICATIONTIME2);
-        }
-
-        @Override
-        public void OpenWeatherDamage(boolean open) {
-            onSetActivityListener.OpenWeatherDamage(open);
-        }
-
-        @Override
-        public void abnormalWeatherTip(boolean open) {
-            onSetActivityListener.abnormalWeatherTip(open);
-        }
-
-        @Override
-        public void nightStop(boolean open) {
-            onSetActivityListener.nightStop(open);
-        }
-
-        @Override
-        public void nightUpdate(boolean open) {
-            onSetActivityListener.nightUpdate(open);
-        }
-
-        @Override
-        public void WeatherVoice(boolean open) {
-            onSetActivityListener.WeatherVoice(open);
-        }
-    };
+    public OnSetActivityListener onSetActivityListener;
 
 
     public void getWeather(Context context,Observer<Object> objectObserver){
@@ -138,6 +110,7 @@ public class TaskNotificationManager {
 
                     }
 
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onNext(Object o) {
                         WeatherData weatherData= (WeatherData) o;

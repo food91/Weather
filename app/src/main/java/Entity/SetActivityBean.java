@@ -10,12 +10,12 @@ import java.io.Serializable;
  */
 public class SetActivityBean implements Serializable {
 
-    private boolean SetAc_WeatherReport;
-    private boolean SetAc_WeatherDamage;
-    private boolean SetAc_WeatherAbnormal;
-    private boolean SetAc_NightStop;
-    private boolean SetAc_NightUpdate;
-    private boolean WeatherVoice;
+    private boolean SetAc_WeatherReport=false;
+    private boolean SetAc_WeatherDamage=false;
+    private boolean SetAc_WeatherAbnormal=false;
+    private boolean SetAc_NightStop=false;
+    private boolean SetAc_NightUpdate=false;
+    private boolean WeatherVoice=false;
 
     public boolean isSetAc_WeatherReport() {
         return SetAc_WeatherReport;

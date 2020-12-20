@@ -32,7 +32,6 @@ public class AboutFragment extends Fragment {
     @BindView(R.id.about_app_name)
     TextView aboutAppName;
     private AboutViewModel toolsViewModel;
-
     private Unbinder unbinder;
     private static final String url="https://cn.bing.com/th?id=OHR.WanderingAlbatross_ZH-CN3609426361_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp";
 

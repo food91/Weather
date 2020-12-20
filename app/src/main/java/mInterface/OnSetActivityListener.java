@@ -2,7 +2,7 @@ package mInterface;
 
 public interface OnSetActivityListener {
 
-    public void OpenWeatherTip(boolean open, int ...h);
+    public void OpenWeatherTip(boolean open);
     public void OpenWeatherDamage(boolean open);
     public void abnormalWeatherTip(boolean open);
     public void nightStop(boolean open);
