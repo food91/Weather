@@ -27,12 +27,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import AndroidDAO.CityRoomDatabase;
 import Entity.CityBean;
+import Entity.UserData;
+import Entity.UserEntity;
 import Entity.WeatherData;
 import acitivity.DetailWeatherActivity;
+import acitivity.MyApplication;
 import adapter.StaggeredGridAdapter;
 import adapter.WeatherBaseAdapter;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -172,7 +178,42 @@ public class WeatherControl {
     //防止无限下拉刷新，造成的BUG
     private static volatile boolean isloading = false;
     volatile int t = 0;
+
     private void rondomcity() {
+        Observable.create(new ObservableOnSubscribe<UserEntity>() {
+            @Override
+            public void subscribe(ObservableEmitter<UserEntity> emitter) throws Exception {
+                UserEntityRepository userEntityRepository = new UserEntityRepository(MyApplication.getApplicationInstance());
+                UserEntity userData = userEntityRepository.QueryId(UserData.getUserData().getName());
+                emitter.onNext(userData);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UserEntity>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(UserEntity userEntity) {
+                        if (userEntity.getFavoritecity() != null) {
+                            for (int i = 0; i < userEntity.getFavoritecity().size(); i++) {
+                                getCity(userEntity.getFavoritecity().get(i));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
         int num = 0;
         int cityid_position = 0;
         while (cityid_position < cityId.size() && (!Thread.interrupted())) {

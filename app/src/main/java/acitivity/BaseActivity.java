@@ -89,6 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void showContent(){
         UtilX.LogX("show Content");
         try {
+
             statusLayoutManager.showContent();
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,7 +123,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void showLoading(){
         try {
             statusLayoutManager.showLoading();
-            StatusBarUtil.setTranslucent(this,0);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

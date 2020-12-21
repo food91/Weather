@@ -1,14 +1,13 @@
 package acitivity;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.os.IBinder;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,16 +22,13 @@ import Entity.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import control.Login;
-import control.TaskNotificationManager;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import service.TaskManageNotificationService;
 import util.GsonUtilX;
 import util.UtilX;
 
 /**
  * The type Login activity.
- *
  */
 public class LoginActivity extends BaseActivity {
 
@@ -77,6 +73,9 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.checkBox_keepuser)
     CheckBox checkBoxKeepuser;
 
+    @BindView(R.id.activity_main_ll)
+    LinearLayout activityMainLl;
+
     @Override
     protected void setContentViewLayout(int... i) {
         super.setContentViewLayout(R.layout.activity_main);
@@ -84,15 +83,14 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        StatusBarUtil.setTranslucentForImageView(this, 0, null);
+
         ButterKnife.bind(this);
         init();
         onclick();
     }
 
 
-
-   @Override
+    @Override
     protected void onPause() {
         super.onPause();
         statusLayoutManager.goneLoading();
@@ -128,7 +126,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void onclick() {
-         buttonLoginRegister.setOnClickListener(new View.OnClickListener() {
+        buttonLoginRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String user = loginUserText.getText().toString();
@@ -136,7 +134,7 @@ public class LoginActivity extends BaseActivity {
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-               showLoading();
+                showLoading();
                 try {
                     Login.register(LoginActivity.this, user, password, new Observer<String>() {
                         @Override
@@ -152,7 +150,7 @@ public class LoginActivity extends BaseActivity {
                                 e.printStackTrace();
                             }
                             Toast.makeText(LoginActivity.this,
-                                   LoginActivity.this.getResources().getString(R.string.login_register_success)
+                                    LoginActivity.this.getResources().getString(R.string.login_register_success)
                                     , Toast.LENGTH_SHORT).show();
                         }
 
@@ -189,8 +187,8 @@ public class LoginActivity extends BaseActivity {
                     return;
                 }
                 showLoading();
-                Login login = new Login(user, password,keepuser,keeppassword);
-                Observer<Boolean> observer=new Observer<Boolean>() {
+                Login login = new Login(user, password, keepuser, keeppassword);
+                Observer<Boolean> observer = new Observer<Boolean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
@@ -198,7 +196,7 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onNext(Boolean aBoolean) {
-                        if(aBoolean) {
+                        if (aBoolean) {
 
                             UtilX.LogX("on activity");
                             UserData.getUserData().setName(user);
@@ -209,7 +207,7 @@ public class LoginActivity extends BaseActivity {
                             startActivity(intent);
 
                             finish();
-                        }else {
+                        } else {
                             Toast.makeText(LoginActivity.this,
                                     getResources().getString(R.string.login_Wrong)
                                     , Toast.LENGTH_SHORT).show();
@@ -230,28 +228,34 @@ public class LoginActivity extends BaseActivity {
 
                     }
                 };
-                login.IsUser(user,password,observer);
+                login.IsUser(user, password, observer);
             }
         });
     }
 
+    @Override
+    protected void showContent() {
+
+        super.showContent();
+        StatusBarUtil.setTranslucentForImageView(this,0,null);
+    }
+
     protected void init() {
         showContent();
-        SharedPreferences sharedPreferences= getSharedPreferences(LoginData.LOGIN, Context.MODE_APPEND);
-        String userId=sharedPreferences.getString(LoginData.LOGINDATA,"");
-        if(!userId.equals("")){
-            Logger.d("user==="+userId);
-            LoginData loginData= GsonUtilX.parseJsonWithGson(userId,LoginData.class);
-            if(loginData.isKeepuser()){
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginData.LOGIN, Context.MODE_APPEND);
+        String userId = sharedPreferences.getString(LoginData.LOGINDATA, "");
+        if (!userId.equals("")) {
+            Logger.d("user===" + userId);
+            LoginData loginData = GsonUtilX.parseJsonWithGson(userId, LoginData.class);
+            if (loginData.isKeepuser()) {
                 loginUserText.setText(loginData.getUser());
                 checkBoxKeepuser.setChecked(true);
             }
-            if(loginData.isKeeppassword()){
+            if (loginData.isKeeppassword()) {
                 loginPasswordText.setText(loginData.getPassword());
                 checkBoxKeeppassword.setChecked(true);
             }
         }
-
     }
 
     @Override
