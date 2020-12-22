@@ -45,37 +45,36 @@ import control.WeatherControl;
 /**
  * The type Staggered grid adapter.
  */
-public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements WeatherBaseAdapter{
+public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements WeatherBaseAdapter {
 
     private Context mContext;
     private ArrayList<WeatherData> weatherData;
-    private int widthPixels=0;
-    private final static int VIEW_ONE=101;
-    private final static int VIEW_TWO=102;
-    private final static int VIEW_THREE=103;
-    public final static int DIV_NUM=11;
+    private int widthPixels = 0;
+    private final static int VIEW_ONE = 101;
+    private final static int VIEW_TWO = 102;
+    private final static int VIEW_THREE = 103;
+    public final static int DIV_NUM = 7 ;
     private RecyclerView.ViewHolder holder;
     private int position;
     private OnItemClickListener onItemClickListener;
-    QMUIPopup  mNormalPopup;
+    QMUIPopup mNormalPopup;
     private List<String> strtext_view_onlongclick;
     private List<Integer> intview_view_onlongclick;
     private List<PopItemBean> popItemBean;
 
-    private void init(){
-       strtext_view_onlongclick=new ArrayList<String>();
-       strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_favior));
-       strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_share));
-       strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_remark));
-       strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_about));
-
-        intview_view_onlongclick=new ArrayList<Integer>();
+    private void init() {
+        strtext_view_onlongclick = new ArrayList<String>();
+        strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_favior));
+        strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_share));
+        strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_remark));
+        strtext_view_onlongclick.add(mContext.getResources().getString(R.string.view_pop_about));
+        intview_view_onlongclick = new ArrayList<Integer>();
         intview_view_onlongclick.add(R.drawable.ic_favorite_border_black_24dp);
         intview_view_onlongclick.add(R.drawable.ic_view_share);
         intview_view_onlongclick.add(R.drawable.ic_remarks);
         intview_view_onlongclick.add(R.drawable.ic_about);
-        popItemBean=new ArrayList<PopItemBean>();
-        for(int i=0;i<strtext_view_onlongclick.size();i++){
+        popItemBean = new ArrayList<PopItemBean>();
+        for (int i = 0; i < strtext_view_onlongclick.size(); i++) {
             popItemBean.add(new PopItemBean(intview_view_onlongclick.get(i),
                     strtext_view_onlongclick.get(i)));
         }
@@ -83,16 +82,16 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onClick(int position);
     }
 
-    public interface OnItemLongClickListenerX{
+    public interface OnItemLongClickListenerX {
         void onLongClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
-        this.onItemClickListener=onItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
 
@@ -101,7 +100,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
      *
      * @param weaterData the weater data
      */
-    public void AddWeatherData(WeatherData weaterData){
+    public void AddWeatherData(WeatherData weaterData) {
 
         weatherData.add(weaterData);
 
@@ -114,12 +113,11 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
-
-    public WeatherData GetWeaterData(int position){
+    public WeatherData GetWeaterData(int position) {
         return weatherData.get(position);
     }
 
-    public void ClearData(){
+    public void ClearData() {
         weatherData.clear();
     }
 
@@ -127,15 +125,15 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view=null;
-        if(viewType==VIEW_TWO){
-            view =LayoutInflater.from(parent.getContext()).
+        View view = null;
+        if (viewType == VIEW_TWO) {
+            view = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.layout_staggere_goun_one_item,
-                    parent,
-                    false);
+                            parent,
+                            false);
             return new ItemViewHolder_One(view);
 
-        }else{
+        } else {
             view = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.layout_staggere_grud_item,
                             parent,
@@ -146,15 +144,13 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
-
-
     @Override
     public int getItemViewType(int position) {
-         if(position%DIV_NUM!=0){
+        if (position % DIV_NUM != 0) {
             return VIEW_ONE;
-        }else {
-             return VIEW_TWO;
-         }
+        } else {
+            return VIEW_TWO;
+        }
     }
 
     /**
@@ -167,7 +163,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     public StaggeredGridAdapter(Context mContext) {
 
         this.mContext = mContext;
-        weatherData=new ArrayList<WeatherData>();
+        weatherData = new ArrayList<WeatherData>();
         DisplayMetrics outMetrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(outMetrics);
@@ -175,15 +171,15 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         init();
     }
 
-    private void care(int i){
+    private void care(int i) {
         Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
-                UserEntity userEntity=CityRoomDatabase.getDatabase(mContext).
+                UserEntity userEntity = CityRoomDatabase.getDatabase(mContext).
                         wordDao().getUser(UserData.
                         getUserData().getName());
-                Boolean IsNoExistCity=userEntity.addCityfavorite(weatherData.get(i).getCity());
-                if(IsNoExistCity){
+                Boolean IsNoExistCity = userEntity.addCityfavorite(weatherData.get(i).getCity());
+                if (IsNoExistCity) {
                     CityRoomDatabase.getDatabase(mContext).wordDao().updateUsers(userEntity);
                 }
                 emitter.onNext(IsNoExistCity);
@@ -200,11 +196,11 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                     @Override
                     public void onNext(Boolean aBoolean) {
-                        if(aBoolean){
+                        if (aBoolean) {
                             Toast.makeText(mContext,
                                     mContext.getResources().getString(R.string.view_pop_favior_success),
                                     Toast.LENGTH_LONG).show();
-                        }else{
+                        } else {
                             Toast.makeText(mContext,
                                     mContext.getResources().getString(R.string.view_pop_faviored),
                                     Toast.LENGTH_LONG).show();
@@ -233,101 +229,100 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         try {
-        int data= (int) (position)%30+1;
-        if(holder instanceof ItemViewHolder_One){
-            ItemViewHolder_One itemViewHolder= (ItemViewHolder_One) holder;
-            WeatherControl.GetImageViewHttpCacheStrategy(mContext,itemViewHolder.iv_weather,data);
-            itemViewHolder.textView_city.setText(weatherData.get(position).getCity());
-            int[] num=new int[3];
-            num[0]= UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem());
-            num[1]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem2());
-            num[2]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
-            itemViewHolder.textView_weathertip.setText(weatherData.get(position).getData().get(0).getAir_tips());
-            String s_wea=weatherData.get(position).getData().get(0).getWea_img();
-            Logger.d("s_wea---"+s_wea);
-            WeatherControl.LoadLocalWeatherIcon(mContext,itemViewHolder.iv_wea,
-                    s_wea);
-        }
-        if(holder instanceof ItemViewHolder_two){
-            ItemViewHolder_two itemViewHolder= (ItemViewHolder_two) holder;
-            WeatherControl.GetImageViewHttpCacheStrategy(mContext,itemViewHolder.mImageView,data);
-            int[] num=new int[3];
-            num[0]= UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem());
-            num[1]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem2());
-            num[2]=UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
-            itemViewHolder.weatherTextView.setText(UtilX.minint(num)+"--"+UtilX.maxint(num));
-            Logger.d("data=="+weatherData.get(position).getData().get(0).getAir_tips());
-            itemViewHolder.ciytText.setText(weatherData.get(position).getCity());
-            itemViewHolder.dataTextView.setText(weatherData.get(position).getData().get(0).getWea());
-        }
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(onItemClickListener!=null){
-                        onItemClickListener.onClick(position);
+            int data = (int) (position) % 30 + 1;
+            if (holder instanceof ItemViewHolder_One) {
+                ItemViewHolder_One itemViewHolder = (ItemViewHolder_One) holder;
+                WeatherControl.GetImageViewHttpCacheStrategy(mContext, itemViewHolder.iv_weather, data);
+                itemViewHolder.textView_city.setText(weatherData.get(position).getCity());
+                int[] num = new int[3];
+                num[0] = UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem());
+                num[1] = UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem2());
+                num[2] = UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
+                itemViewHolder.textView_weathertip.setText(weatherData.get(position).getData().get(0).getAir_tips());
+                String s_wea = weatherData.get(position).getData().get(0).getWea_img();
+                Logger.d("s_wea---" + s_wea);
+                WeatherControl.LoadLocalWeatherIcon(mContext, itemViewHolder.iv_wea,
+                        s_wea);
+            }
+            if (holder instanceof ItemViewHolder_two) {
+                ItemViewHolder_two itemViewHolder = (ItemViewHolder_two) holder;
+                WeatherControl.GetImageViewHttpCacheStrategy(mContext, itemViewHolder.mImageView, data);
+                int[] num = new int[3];
+                num[0] = UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem());
+                num[1] = UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem2());
+                num[2] = UtilX.CentigradeStringToInt(weatherData.get(position).getData().get(0).getTem1());
+                itemViewHolder.weatherTextView.setText(UtilX.minint(num) + "--" + UtilX.maxint(num));
+                Logger.d("data==" + weatherData.get(position).getData().get(0).getAir_tips());
+                itemViewHolder.ciytText.setText(weatherData.get(position).getCity());
+                itemViewHolder.dataTextView.setText(weatherData.get(position).getData().get(0).getWea());
+            }
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onClick(position);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
+
                 }
+            });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
 
-            }
-        });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+                    WeatherViewClcikLong weatherViewClcikLong = new WeatherViewClcikLong(popItemBean, mContext);
 
-                WeatherViewClcikLong weatherViewClcikLong=new WeatherViewClcikLong(popItemBean,mContext);
-
-                AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Logger.d("i==="+i);
-                     if(i==0){
-                         care(position);
-                     }
-                     if(i==1){
-                            UtilX.allShare(mContext);
-                        }
-                        if (mNormalPopup != null) {
-                            mNormalPopup.dismiss();
-                        }
-                    }
-                };
-                  mNormalPopup = QMUIPopups.listPopup(mContext,
-                        QMUIDisplayHelper.dp2px(mContext, 120),
-                        QMUIDisplayHelper.dp2px(mContext, 160)
-                        ,weatherViewClcikLong
-                        ,onItemClickListener)
-                        .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
-                        .edgeProtection(QMUIDisplayHelper.dp2px(mContext, 20))
-                        .offsetX(QMUIDisplayHelper.dp2px(mContext, 20))
-                        .offsetYIfBottom(QMUIDisplayHelper.dp2px(mContext, 5))
-                        .shadow(true)
-                        .arrow(true)
-                        .animStyle(QMUIPopup.ANIM_GROW_FROM_CENTER)
-                        .onDismiss(new PopupWindow.OnDismissListener() {
-                            @Override
-                            public void onDismiss() {
-
+                    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Logger.d("i===" + i);
+                            if (i == 0) {
+                                care(position);
                             }
-                        })
-                        .show(v);
-                return true;
-            }
-        });
-        }catch (Exception e){
+                            if (i == 1) {
+                                UtilX.allShare(mContext);
+                            }
+                            if (mNormalPopup != null) {
+                                mNormalPopup.dismiss();
+                            }
+                        }
+                    };
+                    mNormalPopup = QMUIPopups.listPopup(mContext,
+                            QMUIDisplayHelper.dp2px(mContext, 120),
+                            QMUIDisplayHelper.dp2px(mContext, 160)
+                            , weatherViewClcikLong
+                            , onItemClickListener)
+                            .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
+                            .edgeProtection(QMUIDisplayHelper.dp2px(mContext, 20))
+                            .offsetX(QMUIDisplayHelper.dp2px(mContext, 20))
+                            .offsetYIfBottom(QMUIDisplayHelper.dp2px(mContext, 5))
+                            .shadow(true)
+                            .arrow(true)
+                            .animStyle(QMUIPopup.ANIM_GROW_FROM_CENTER)
+                            .onDismiss(new PopupWindow.OnDismissListener() {
+                                @Override
+                                public void onDismiss() {
+
+                                }
+                            })
+                            .show(v);
+                    return true;
+                }
+            });
+        } catch (Exception e) {
             Logger.d(e.getMessage());
         }
     }
 
 
-
     @Override
     public int getItemCount() {
-        int size=0;
-        if(weatherData!= null) {
-            size=weatherData.size();
+        int size = 0;
+        if (weatherData != null) {
+            size = weatherData.size();
         }
         return size;
     }
@@ -336,7 +331,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
     /**
      * The type Item view holder two.
      */
-    class ItemViewHolder_two extends RecyclerView.ViewHolder{
+    class ItemViewHolder_two extends RecyclerView.ViewHolder {
 
         private TextView weatherTextView;
 
@@ -344,13 +339,13 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
          * The Ciyt text.
          */
         @BindView(R.id.city_text_two)
-         TextView ciytText;
+        TextView ciytText;
 
         /**
          * The Data text view.
          */
         @BindView(R.id.wind_text)
-         TextView dataTextView;
+        TextView dataTextView;
         private int data;
         /**
          * The M image view.
@@ -365,16 +360,16 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         public ItemViewHolder_two(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            weatherTextView=itemView.findViewById(R.id.weatherday_textview);
+            weatherTextView = itemView.findViewById(R.id.weatherday_textview);
 
-            data=-1;
+            data = -1;
         }
     }
 
     /**
      * The type Item view holder one.
      */
-    class ItemViewHolder_One extends  RecyclerView.ViewHolder{
+    class ItemViewHolder_One extends RecyclerView.ViewHolder {
 
         /**
          * The Iv weather.
@@ -410,7 +405,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<RecyclerView.View
         public ItemViewHolder_One(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            iv_wea=itemView.findViewById(R.id.iv_wind);
+            iv_wea = itemView.findViewById(R.id.iv_wind);
         }
     }
 
