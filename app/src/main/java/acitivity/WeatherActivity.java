@@ -148,6 +148,7 @@ public class WeatherActivity extends BaseActivity {
         tv_head_id.setText(UserData.getUserData().getName());
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             FragmentTransaction fragmentTransaction;
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawer(Gravity.START);
@@ -205,7 +206,7 @@ public class WeatherActivity extends BaseActivity {
         )
                 .setDrawerLayout(drawerLayout)
                 .build();
-        StatusBarUtil.setTranslucentForDrawerLayout(this,drawerLayout,0);
+        StatusBarUtil.setTranslucentForDrawerLayout(this, drawerLayout, 0);
     }
 
     public void init() {
@@ -233,7 +234,7 @@ public class WeatherActivity extends BaseActivity {
                 } else {
                     UtilX.LogX("read userfile ");
                     UtilX.readSetFile();
-                    TaskNotificationManager.GoService(WeatherActivity.this,serviceConnection);
+                    TaskNotificationManager.GoService(WeatherActivity.this, serviceConnection);
                 }
             }
         });
@@ -268,7 +269,6 @@ public class WeatherActivity extends BaseActivity {
     private ServiceConnection serviceConnection;
 
 
-
     @Override
     protected void onDestroy() {
         unbindService(serviceConnection);
@@ -284,42 +284,42 @@ public class WeatherActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_tool,menu);
+        getMenuInflater().inflate(R.menu.activity_main_tool, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id=item.getItemId();
-        if(id==R.id.activity_detailweather_settingadd){
+        int id = item.getItemId();
+        if (id == R.id.activity_detailweather_settingadd) {
             new IntentIntegrator(this).initiateScan();
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
+        if (result != null) {
+            if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-             new QMUIDialog.EditTextDialogBuilder(this)
-                       .setTitle("扫描结果")
-                       .setDefaultText(result.getContents())
-               .addAction("确定", new QMUIDialogAction.ActionListener() {
-                    @Override
-                    public void onClick(QMUIDialog dialog, int index) {
-                        CharSequence text = builder.getEditText().getText();
-                        if (text != null && text.length() > 0) {
-                            Toast.makeText(WeatherActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        } else {
-                            Toast.makeText(WeatherActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                       .create(mCurrentDialogStyle).show();
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(this);
+                builder.setTitle("扫描结果")
+                        .setDefaultText(result.getContents())
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                CharSequence text = builder.getEditText().getText();
+                                if (text != null && text.length() > 0) {
+                                    Toast.makeText(WeatherActivity.this, "扫描完毕", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(WeatherActivity.this, "扫描失败", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

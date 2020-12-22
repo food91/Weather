@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.xiekun.myapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -29,6 +30,9 @@
     <!-- 用于 log 日志 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <application
         android:name="acitivity.MyApplication"
         android:allowBackup="true"
@@ -56,6 +60,10 @@
 
 
         </activity>
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            tools:replace="screenOrientation" />
         <service android:name="service.TaskManageNotificationService" android:label="消息推送">
 
         </service>
