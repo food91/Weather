@@ -3,86 +3,91 @@ package acitivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.room.util.StringUtil;
+
+import com.blankj.utilcode.util.BarUtils;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.xiekun.myapplication.R;
+
+import java.util.Random;
 
 import Entity.LoginData;
 import Entity.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import control.Login;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import retrofit2.http.Url;
 import util.GsonUtilX;
+import util.MMKVUtils;
 import util.UtilX;
+import view.FullScreenVideoView;
 
 /**
  * The type Login activity.
  */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends CommonActivity {
 
-    /**
-     * The Login sure button.
-     */
-    @BindView(R.id.login_sure_button)
-    QMUIRoundButton loginSureButton;
-    /**
-     * The Button login register.
-     */
-    @BindView(R.id.button_login_register)
-    QMUIRoundButton buttonLoginRegister;
-    /**
-     * The Login password text.
-     */
-    @BindView(R.id.login_password_text)
-    TextInputEditText loginPasswordText;
-    /**
-     * The Login user text.
-     */
-    @BindView(R.id.login_user_text)
-    TextInputEditText loginUserText;
-    /**
-     * The Image view 2.
-     */
-    @BindView(R.id.imageView2)
-    ImageView imageView2;
-    /**
-     * The Text view 2.
-     */
-    @BindView(R.id.textView2)
-    TextView textView2;
-    /**
-     * The Check box keeppassword.
-     */
-    @BindView(R.id.checkBox_keeppassword)
-    CheckBox checkBoxKeeppassword;
-    /**
-     * The Check box keepuser.
-     */
-    @BindView(R.id.checkBox_keepuser)
-    CheckBox checkBoxKeepuser;
 
-    @BindView(R.id.activity_main_ll)
-    LinearLayout activityMainLl;
+    @BindView(R.id.activity_login_videoview)
+    FullScreenVideoView activityLoginVideoview;
+    @BindView(R.id.activity_login_user)
+    EditText activityLoginUser;
+    @BindView(R.id.activity_login_ps)
+    EditText activityLoginPs;
+    @BindView(R.id.activity_login_sure)
+    Button activityLoginSure;
+    @BindView(R.id.activity_login_regist)
+    TextView activityLoginRegist;
+    @BindView(R.id.activity_login_privacy)
+    CheckBox activityLoginPrivacy;
+    String[] video_path;
 
     @Override
-    protected void setContentViewLayout(int... i) {
-        super.setContentViewLayout(R.layout.activity_main);
+    public boolean showSystemWindows() {
+        return false;
     }
 
     @Override
-    protected void initView() {
+    public int getLayoutResId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void initView(Bundle var1) {
+        setTitle("BaseActivity");//设置标题
+        initView();
+    }
+
+
+
+
+    private void initView() {
 
         ButterKnife.bind(this);
         init();
@@ -93,7 +98,15 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        statusLayoutManager.goneLoading();
+        activityLoginVideoview.pause();
+        activityLoginVideoview.stopPlayback();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activityLoginVideoview.resume();
+        activityLoginVideoview.start();
     }
 
     private boolean userisnull(String user, String password) {
@@ -126,44 +139,35 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void onclick() {
-        buttonLoginRegister.setOnClickListener(new View.OnClickListener() {
+        activityLoginRegist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user = loginUserText.getText().toString();
-                String password = loginPasswordText.getText().toString();
+                String user = activityLoginUser.getText().toString();
+                String password = activityLoginPs.getText().toString();
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-                showLoading();
+                if(!activityLoginPrivacy.isChecked()){
+                    ToastUtils.showLong("请同意下方隐私协议");
+                    return;
+                }
                 try {
-                    Login.register(LoginActivity.this, user, password, new Observer<String>() {
+                    showLoading();
+                    Login.register( user, password, new Observer<String>() {
                         @Override
                         public void onSubscribe(Disposable d) {
-
                         }
 
                         @Override
                         public void onNext(String string) {
-                            try {
-                                showContent();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            Toast.makeText(LoginActivity.this,
-                                    LoginActivity.this.getResources().getString(R.string.login_register_success)
-                                    , Toast.LENGTH_SHORT).show();
+                            showSuccess();
+                            ToastUtils.showLong("   注册成功  ");
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            try {
-                                showNetworkError();
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                            Toast.makeText(LoginActivity.this,
-                                    LoginActivity.this.getResources().getString(R.string.login_register_fail)
-                                    , Toast.LENGTH_SHORT).show();
+                            BarUtils.setStatusBarVisibility(LoginActivity.this,true);
+                            showLoadFailed("注册失败:"+e.getMessage(),R.drawable.loading);
                         }
 
                         @Override
@@ -176,18 +180,15 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-        loginSureButton.setOnClickListener(new View.OnClickListener() {
+        activityLoginSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user = loginUserText.getText().toString();
-                String password = loginPasswordText.getText().toString();
-                boolean keepuser = checkBoxKeepuser.isChecked();
-                boolean keeppassword = checkBoxKeeppassword.isChecked();
+                String user = activityLoginUser.getText().toString();
+                String password = activityLoginPs.getText().toString();
                 if (!user_pw_check(user, password)) {
                     return;
                 }
-                showLoading();
-                Login login = new Login(user, password, keepuser, keeppassword);
+                Login login = new Login(user, password,LoginActivity.this);
                 Observer<Boolean> observer = new Observer<Boolean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -197,30 +198,24 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onNext(Boolean aBoolean) {
                         if (aBoolean) {
-
                             UtilX.LogX("on activity");
                             UserData.getUserData().setName(user);
                             UserData.getUserData().setPassword(password);
-                            login.wirteDate(LoginActivity.this);
                             Intent intent = new Intent(LoginActivity.this, WeatherActivity.class);
                             //启动
                             startActivity(intent);
 
                             finish();
                         } else {
-                            Toast.makeText(LoginActivity.this,
-                                    getResources().getString(R.string.login_Wrong)
-                                    , Toast.LENGTH_SHORT).show();
-                            showContent();
+                            showSuccess();
+                            ToastUtils.showLong("用户名或密码错误");
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(LoginActivity.this,
-                                getResources().getString(R.string.login_unknwon_Wrong)
-                                , Toast.LENGTH_SHORT).show();
-                        showContent();
+                        showLoadFailed();
+                        ToastUtils.showLong("登录失败 "+e.getMessage());
                     }
 
                     @Override
@@ -228,39 +223,37 @@ public class LoginActivity extends BaseActivity {
 
                     }
                 };
+                showLoading();
                 login.IsUser(user, password, observer);
+            }
+        });
+        activityLoginVideoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                Random random=new Random();
+                int n=random.nextInt(video_path.length);
+                activityLoginVideoview.setVideoPath(video_path[n]);
+                activityLoginVideoview.start();
             }
         });
     }
 
-    @Override
-    protected void showContent() {
-
-        super.showContent();
-        StatusBarUtil.setTranslucentForImageView(this,0,null);
+    protected void showLoadFailed(String text,int image) {
+        initLoadingStatusViewIfNeed();
+        mHolder.showLoadFailed(text,image);
     }
 
     protected void init() {
-        showContent();
-        SharedPreferences sharedPreferences = getSharedPreferences(LoginData.LOGIN, Context.MODE_APPEND);
-        String userId = sharedPreferences.getString(LoginData.LOGINDATA, "");
-        if (!userId.equals("")) {
-            Logger.d("user===" + userId);
-            LoginData loginData = GsonUtilX.parseJsonWithGson(userId, LoginData.class);
-            if (loginData.isKeepuser()) {
-                loginUserText.setText(loginData.getUser());
-                checkBoxKeepuser.setChecked(true);
-            }
-            if (loginData.isKeeppassword()) {
-                loginPasswordText.setText(loginData.getPassword());
-                checkBoxKeeppassword.setChecked(true);
-            }
-        }
+        video_path=new String[1];
+        video_path[0]= Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login_v2).toString();
+        activityLoginVideoview.setVideoPath(video_path[0]);
+        activityLoginVideoview.start();
     }
 
     @Override
     protected void onDestroy() {
-
         super.onDestroy();
     }
+
+
 }

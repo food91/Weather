@@ -71,4 +71,12 @@ dependencies {
     implementation 'com.permissionx.guolindev:permissionx:1.4.0'
     //二维码扫描
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
+    //腾讯mmkv
+    implementation 'com.tencent:mmkv-static:1.2.7'
+
+    //util
+    implementation 'com.blankj:utilcodex:1.30.5'
+
+    //rxjava生命周期管理
+    implementation 'com.rxjava.rxlife:rxlife-x:1.0.8'
 }

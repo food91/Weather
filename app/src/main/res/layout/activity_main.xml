@@ -1,113 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center"
-    android:background="@mipmap/loginback">
+    >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+    <view.FullScreenVideoView
+        android:id="@+id/activity_login_videoview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="30dp"
+        android:paddingEnd="30dp"
+        android:orientation="vertical"
+        >
+
+    <TextView
+        android:layout_marginTop="120dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="密码登录"
+        />
+
+        <EditText
+            android:id="@+id/activity_login_user"
+            android:layout_marginTop="40dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:hint="请输入用户名"
+            android:background="@drawable/edit_translucent"
+            />
 
+        <EditText
+            android:id="@+id/activity_login_ps"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:hint="请输入密码"
+            android:background="@drawable/edit_translucent"
+            />
 
+        <Button
+            android:id="@+id/activity_login_sure"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_circle_shap"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            />
 
-      <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-          android:id="@+id/login_sure_button"
-          android:layout_width="100dp"
-          android:layout_height="wrap_content"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintHorizontal_bias="0.1"
-          android:layout_marginBottom="30dp"
-          app:layout_constraintTop_toBottomOf="@id/login_password_text"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:qmui_backgroundColor="@color/colorPrimary"
-          android:layout_marginTop="43dp"
-          android:textColor="@color/white"
-          android:padding="10dp"
-          android:text="@string/login_sure" />
+        <TextView
+            android:id="@+id/activity_login_regist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="注册"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            />
 
-          <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-              android:id="@+id/button_login_register"
-              android:layout_width="100dp"
-              android:layout_height="wrap_content"
-              app:qmui_backgroundColor="@color/colorPrimary"
-              app:layout_constraintBottom_toBottomOf="@id/login_sure_button"
-              android:layout_marginStart="100dp"
-              android:background="@color/colorPrimary"
-              android:textColor="@color/white"
-              app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintRight_toRightOf="parent"
-              app:layout_constraintHorizontal_bias="0.85"
-              android:padding="10dp"
-              android:text="@string/login_register" />
+        <CheckBox
+            android:theme="@style/My_CheckBox"
+            android:id="@+id/activity_login_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我已经同意XX用户协议和隐私政策"
+            android:textColor="@color/white"
+            android:layout_marginTop="220dp"
 
-      <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/login_password_text"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:layout_constraintTop_toBottomOf="@id/login_user_text"
-          app:layout_constraintStart_toStartOf="@id/login_user_text"
-          android:layout_marginTop="25dp"
-          android:hint="@string/login_tip_password"
-          android:inputType="textPassword"
-          android:layout_marginStart="@dimen/margin"
-          android:padding="10dp"
-          android:textAppearance="?android:attr/textAppearanceButton" />
+            />
 
-      <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/login_user_text"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:layout_constraintTop_toBottomOf="@+id/imageView2"
-          app:layout_constraintLeft_toLeftOf="parent"
-          android:inputType="textCapCharacters"
-          android:layout_marginTop="25dp"
-          android:layout_marginStart="@dimen/margin"
-          android:hint="@string/login_tip_user"
-          android:padding="10dp"
-          android:textAppearance="?android:attr/textAppearanceButton" />
-      <ImageView
-          android:id="@+id/imageView2"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          app:layout_constraintTop_toTopOf="parent"
-          android:layout_marginTop="20dp"
-          android:src="@drawable/ic_login_24dp" />
-
-      <TextView
-          android:id="@+id/textView2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          app:layout_constraintBottom_toTopOf="@id/login_user_text"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          android:textSize="@dimen/card_text"
-          android:textColor="@color/black"
-          android:text="@string/app_name" />
-
-      <CheckBox
-          android:id="@+id/checkBox_keeppassword"
-          app:layout_constraintBottom_toTopOf="@+id/button_login_register"
-          app:layout_constraintTop_toBottomOf="@+id/login_password_text"
-          app:layout_constraintStart_toStartOf="@+id/button_login_register"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/login_keep_password" />
-
-      <CheckBox
-          android:id="@+id/checkBox_keepuser"
-          app:layout_constraintBottom_toTopOf="@+id/login_password_text"
-          app:layout_constraintTop_toBottomOf="@+id/button_login_register"
-           app:layout_constraintStart_toStartOf="@+id/login_sure_button"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/login_keep_user" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -5,9 +5,14 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.widget.Toast;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.widget.QMUIEmptyView;
+import com.rxjava.rxlife.BaseScope;
+import com.rxjava.rxlife.RxLife;
+import com.rxjava.rxlife.ScopeViewModel;
 import com.xiekun.myapplication.R;
 
 import Entity.LoginData;
@@ -22,70 +27,29 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import util.GsonUtilX;
+import util.MMKVUtils;
 
 /**
  * The type Login.
  * SharedPreferences只存储用户状态，不对身份验证
  * 数据库对身份验证
  */
-public class Login {
+public class Login extends BaseScope  {
 
     private LoginData mloginData;
 
-    /**
-     * Instantiates a new Login.
-     *
-     * @param u  the u
-     * @param p  the p
-     * @param ub the ub
-     * @param pb the pb
-     */
-    public Login(String u,String p,boolean ub,boolean pb){
-        mloginData=new LoginData(u,p,ub,pb);
+    public Login(LifecycleOwner owner) {
+        super(owner);
     }
 
-    /**
-     * Instantiates a new Login.
-     */
-    public  Login() {
+    public Login(String user,String pw,LifecycleOwner owner){
+        super(owner);
+        String mmk=MMKVUtils.getLoginData();
+        mloginData=GsonUtilX.parseJsonWithGson(mmk,LoginData.class);
     }
 
 
-    /**
-     * Instantiates a new Login.
-     *
-     * @param loginData the login data
-     */
-    public Login(LoginData loginData){
-        this.mloginData=loginData;
-    }
 
-    /**
-     * Instantiates a new Login.
-     *
-     * @param context the context
-     */
-    public Login(Context context){
-        SharedPreferences sharedPreferences= context.getSharedPreferences("data", Context .MODE_PRIVATE);
-    }
-
-    /**
-     * Instantiates a new Login.
-     *
-     * @param user     the user
-     * @param password the password
-     */
-    public Login(String user, String password){
-
-        mloginData=new LoginData(user,password);
-    }
-
-    /**
-     * Is user boolean.
-     *
-     * @param context the context
-     * @return the boolean
-     */
     public void  IsUser(String id,String pw,
     Observer<Boolean> b){
 
@@ -105,6 +69,7 @@ public class Login {
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .as(RxLife.as(this))
                 .subscribe(b);
 
     }
@@ -118,21 +83,12 @@ public class Login {
      * @param context  the context
      * @return
      */
-    public Login wirteDate(Context context) {
-        //步骤1：创建一个SharedPreferences对象
-        SharedPreferences sharedPreferences = context.getSharedPreferences(LoginData.LOGIN, Context.MODE_PRIVATE);
-        //步骤2： 实例化SharedPreferences.Editor对象
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        //步骤3：将获取过来的值放入文件
-
-        editor.putString(LoginData.LOGINDATA,mloginData.toString());
-        //步骤4：提交
-        editor.commit();
-        return this;
+    public void wirteDate() {
+        MMKVUtils.setLoginData(mloginData.toString());
     }
 
 
-    public static void register(Context context, String u, String p, Observer<String> observer)
+    public static void register( String u, String p, Observer<String> observer)
     throws  Exception{
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -140,7 +96,7 @@ public class Login {
                 Thread.sleep(2500);
                 UserEntityRepository  userEntityRepository=new UserEntityRepository(MyApplication.getApplicationInstance());
                 userEntityRepository.InsertId(u,p);
-                emitter.onNext("123");
+                emitter.onNext("注册成功");
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
